@@ -153,29 +153,7 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
 
     static {
         INV_SQRT_COEFF_M1 = new long[] { 2, 0, 0, 0 };
-        /*
-        // First digit is 1.
-        final long[] sqval = Arrays.copyOf(INV_SQRT_COEFF_M1, NUM_DIGITS);
 
-        // Second digit is 0.
-        squareDigits(sqval);
-
-        // All the remaining digits are 1.
-        for(int i = 3; i < 219; i++) {
-            squareDigits(sqval);
-            mulDigits(INV_SQRT_COEFF_M1, sqval, INV_SQRT_COEFF_M1);
-        }
-
-        // 219th digit is 0.
-        squareDigits(sqval);
-
-        // Remaining digit is 1.
-        squareDigits(sqval);
-        mulDigits(INV_SQRT_COEFF_M1, sqval, INV_SQRT_COEFF_M1);
-
-        subDigits(INV_SQRT_COEFF_M1, 1, INV_SQRT_COEFF_M1);
-        normalizeDigits(INV_SQRT_COEFF_M1);
-        */
         legendreQuarticPowerDigits(INV_SQRT_COEFF_M1);
         invDigits(INV_SQRT_COEFF_M1);
         subDigits(INV_SQRT_COEFF_M1, 1, INV_SQRT_COEFF_M1);
@@ -323,7 +301,7 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
      * {@inheritDoc}
      */
     @Override
-    public void add(final long[] b) {
+    protected void add(final long[] b) {
         addDigits(digits, b, digits);
     }
 
@@ -347,7 +325,7 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
      * {@inheritDoc}
      */
     @Override
-    public void sub(final long[] b) {
+    protected void sub(final long[] b) {
         subDigits(digits, b, digits);
     }
 
@@ -363,7 +341,7 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
      * {@inheritDoc}
      */
     @Override
-    public void mul(final long[] b) {
+    protected void mul(final long[] b) {
         mulDigits(digits, b, digits);
     }
 
@@ -406,7 +384,7 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
      * {@inheritDoc}
      */
     @Override
-    public void div(final long[] b) {
+    protected void div(final long[] b) {
         final long[] copied = Arrays.copyOf(b, NUM_DIGITS);
 
         invDigits(copied);
