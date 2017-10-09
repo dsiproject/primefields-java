@@ -1757,14 +1757,18 @@ public final class Utils {
      * @param a The number to test.
      */
     public static <P extends PrimeField<P>> void invSqrtMulTest(final P a) {
-        final P val = a.clone();
-        final P b = a.clone();
+        final int leg = a.legendre();
 
-        val.invSqrt();
-        b.sqrt();
-        b.inv();
+        if (leg == 1) {
+            final P val = a.clone();
+            final P b = a.clone();
 
-        Assert.assertEquals(val, b);
+            val.invSqrt();
+            b.sqrt();
+            b.inv();
+
+            Assert.assertEquals(val, b);
+        }
     }
 
     /**

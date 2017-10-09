@@ -12,7 +12,6 @@ import java.util.Arrays;
  * This field is the foundation of the M-221 curve.
  */
 public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
-
     /**
      * Number of bits in a value.
      */
@@ -130,7 +129,9 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
 
     /**
      * The value {@code 2 ^ ((MODULUS - 1) / 4) - 1}.  Used in the
-     * computation of square roots.
+     * computation of square roots.  The value of this is one less
+     * than {@code
+     * 0x08c06d788863cdd6e73800ee6c4e4e461267b23c06b158a371015618}.
      */
     private static final long[] SQRT_COEFF_M1;
 
@@ -144,15 +145,39 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
 
     /**
      * The value {@code 2 ^ (3 * (MODULUS - 1) / 4) - 1}.  Used in the
-     * computation of inverse square roots.
+     * computation of inverse square roots.  The value of this is one
+     * less than {@code
+     * 0x173f9287779c322918c7ff1193b1b1b9ed984dc3f94ea75c8efea9e5}.
      */
     private static final long[] INV_SQRT_COEFF_M1;
 
     static {
         INV_SQRT_COEFF_M1 = new long[] { 2, 0, 0, 0 };
+        /*
+        // First digit is 1.
+        final long[] sqval = Arrays.copyOf(INV_SQRT_COEFF_M1, NUM_DIGITS);
 
+        // Second digit is 0.
+        squareDigits(sqval);
+
+        // All the remaining digits are 1.
+        for(int i = 3; i < 219; i++) {
+            squareDigits(sqval);
+            mulDigits(INV_SQRT_COEFF_M1, sqval, INV_SQRT_COEFF_M1);
+        }
+
+        // 219th digit is 0.
+        squareDigits(sqval);
+
+        // Remaining digit is 1.
+        squareDigits(sqval);
+        mulDigits(INV_SQRT_COEFF_M1, sqval, INV_SQRT_COEFF_M1);
+
+        subDigits(INV_SQRT_COEFF_M1, 1, INV_SQRT_COEFF_M1);
+        normalizeDigits(INV_SQRT_COEFF_M1);
+        */
         legendreQuarticPowerDigits(INV_SQRT_COEFF_M1);
-        mulDigits(INV_SQRT_COEFF_M1, (short)3, INV_SQRT_COEFF_M1);
+        invDigits(INV_SQRT_COEFF_M1);
         subDigits(INV_SQRT_COEFF_M1, 1, INV_SQRT_COEFF_M1);
         normalizeDigits(INV_SQRT_COEFF_M1);
     }
@@ -553,28 +578,12 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
         // Legendre's formula for 5 mod 8 primes.
         final byte leg = legendreQuartic();
 
-        // First digit is 1.
-        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
-
-        // All digits up to 218 are 1.
-        for(int i = 3; i < 221; i++) {
-            squareDigits(sqval);
-            mulDigits(digits, sqval, digits);
-        }
-
-        // 218th digit is 0.
-        squareDigits(sqval);
-
-        // Remaining two digits are 1.
-        squareDigits(sqval);
-        mulDigits(digits, sqval, digits);
-        squareDigits(sqval);
-        mulDigits(digits, sqval, digits);
+        invSqrtPowerDigits(digits);
 
         final byte onezero = (byte)((-leg + 1) / 2);
         final long[] coeff = INV_SQRT_COEFF_M1.clone();
 
-        // Multiply 2 ^ ((P - 1) / 4) - 1 by 0 for quartic residue, 1
+        // Multiply 2 ^ ((3P - 3) / 4) - 1 by 0 for quartic residue, 1
         // otherwise.
         mulDigits(coeff, onezero, coeff);
         // Add 1, now 1 for quartic residue, 2 ^ ((P - 1) / 4) otherwise.
@@ -601,19 +610,9 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
      */
     @Override
     public byte legendre() {
-        // First digit is zero
-
-        // Second digit is one
         final long[] out = Arrays.copyOf(digits, NUM_DIGITS);
-        squareDigits(out);
-        final long[] sqval = Arrays.copyOf(out, NUM_DIGITS);
 
-        // All the remaining digits are 1.
-        for(int i = 2; i < 220; i++) {
-            squareDigits(sqval);
-            mulDigits(out, sqval, out);
-        }
-
+        legendrePowerDigits(out);
         normalizeDigits(out);
 
         final long low = (out[0] << CARRY_BITS) >>> CARRY_BITS;
@@ -1371,6 +1370,45 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
         addDigits(digits, val, digits);
     }
 
+    private static void invSqrtPowerDigits(final long[] digits) {
+        // First two digits are 0.
+        squareDigits(digits);
+        squareDigits(digits);
+
+        // Third digit is 1
+        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
+        squareDigits(sqval);
+
+        // All digits up to 218 are 1.
+        for(int i = 3; i < 218; i++) {
+            mulDigits(digits, sqval, digits);
+            squareDigits(sqval);
+        }
+
+        // 218th digit is 0.
+        squareDigits(sqval);
+
+        // Remaining two digits are 1.
+        mulDigits(digits, sqval, digits);
+        squareDigits(sqval);
+        mulDigits(digits, sqval, digits);
+    }
+
+
+    private static void legendrePowerDigits(final long[] digits) {
+        // First digit is zero
+        squareDigits(digits);
+
+        // Second digit is one
+        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
+
+        // All the remaining digits are 1.
+        for(int i = 2; i < 220; i++) {
+            squareDigits(sqval);
+            mulDigits(digits, sqval, digits);
+        }
+    }
+
     private static void legendreQuarticPowerDigits(final long[] digits) {
         // First digit is 1.
         final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
@@ -1386,6 +1424,7 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
         final long[] digitscpy = Arrays.copyOf(digits, NUM_DIGITS);
         final byte[] bytes = new byte[PACKED_BYTES];
 
+        normalizeDigits(digitscpy);
         packDigits(digitscpy, bytes, 0);
 
         return PrimeField.packedToString(bytes);

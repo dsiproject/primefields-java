@@ -401,6 +401,22 @@ public class ModE221M3Test {
         Assert.assertEquals(mfive(), s25);
     }
 
+    @Test
+    public static void invSqrtTest() {
+        final ModE221M3 srm4 = mfour();
+        final ModE221M3 srm5 = mfive();
+        final ModE221M3 s16 = sixteen();
+        final ModE221M3 s25 = twentyFive();
+
+        srm4.inv();
+        srm5.inv();
+        s16.invSqrt();
+        s25.invSqrt();
+
+        Assert.assertEquals(s16, srm4);
+        Assert.assertEquals(s25, srm5);
+    }
+
     private static final int[] primes = new int[] {
         2, 3, 71, 103, 809,
         3907, 7919, 50821, 93719, 199933
