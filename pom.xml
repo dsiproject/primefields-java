@@ -6,9 +6,9 @@
   <groupId>net.metricspace</groupId>
   <packaging>war</packaging>
   <version>1.0.0</version>
-  <artifactId>safecurves-java</artifactId>
-  <name>SafeCurves-Java</name>
-  <description>An implementation of Elliptic-Curve primitives over curves certified by the SafeCurves project</description>
+  <artifactId>primefields</artifactId>
+  <name>PrimeFields-Java</name>
+  <description>An implementation of prime field arithmetic over cryptographically useful primes</description>
 
   <properties>
     <slf4j.version>1.7.21</slf4j.version>
