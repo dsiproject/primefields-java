@@ -466,7 +466,6 @@ public class ModE221M3Test {
         }
     }
 
-    /*
     @Test
     public static void mulDivTest() {
         for(int i = 0; i < values.length; i++) {
@@ -475,7 +474,6 @@ public class ModE221M3Test {
             }
         }
     }
-    */
 
     @Test
     public static void mulSquareTest() {
