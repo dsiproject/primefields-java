@@ -8,8 +8,8 @@ Poly1305 MAC.
 
 ## Prime Field Support
 
-In order to support the list of curves, SafeCurves-Java must provide prime-field
-arithmetic for the following prime-order fields:
+PrimeFields-Java aims to provide prime field arithmetic for the following
+prime-order fields:
 
 * `2^130 - 5`
 * `2^221 - 3`
@@ -24,7 +24,7 @@ arithmetic for the following prime-order fields:
 
 ### Prime Field Operations
 
-SafeCurves-Java aims to support the following prime-field operations for all
+PrimeFields-Java aims to support the following prime field operations for all
 fields:
 
 * Basic field operations (add, subtract, multiply, divide)
