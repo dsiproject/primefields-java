@@ -1,6 +1,6 @@
-# Contributing to Safecurves-Java
+# Contributing to PrimeFields-Java
 
-Contributions to Krypton should abide by the following guidelines:
+Contributions to PrimeFields should abide by the following guidelines:
 
 ## Git Conventions
 
