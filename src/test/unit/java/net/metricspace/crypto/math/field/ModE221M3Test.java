@@ -32,9 +32,10 @@
 package net.metricspace.crypto.math.field;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-public class ModE221M3Test {
+public class ModE221M3Test extends PrimeField1Mod4UnitTest<ModE221M3> {
     private static final long[] TWO_DATA = new long[] { 2, 0, 0, 0 };
     private static final long[] M_TWO_DATA =
         new long[] { 0x03fffffffffffffbL, 0x03ffffffffffffffL,
@@ -73,7 +74,7 @@ public class ModE221M3Test {
                      0x03ffffffffffffffL, 0x00007fffffffffffL };
     private static final long[] TWENTY_FIVE_DATA = new long[] { 25, 0, 0, 0 };
     private static final long[] M_TWENTY_FIVE_DATA =
-        new long[] { 0x03ffffffffffffe3L, 0x03ffffffffffffffL,
+        new long[] { 0x03ffffffffffffe4L, 0x03ffffffffffffffL,
                      0x03ffffffffffffffL, 0x00007fffffffffffL };
 
     private static ModE221M3 two() {
@@ -156,138 +157,155 @@ public class ModE221M3Test {
         return ModE221M3.create(M_TWENTY_FIVE_DATA);
     }
 
-    @Test
-    public static final void testConstants() {
-        Assert.assertEquals(new ModE221M3(0), ModE221M3.zero());
-        Assert.assertEquals(new ModE221M3(1), ModE221M3.one());
-        Assert.assertEquals(new ModE221M3(-1), ModE221M3.mone());
-        Assert.assertEquals(new ModE221M3(2), two());
-        Assert.assertEquals(new ModE221M3(-2), mtwo());
-        Assert.assertEquals(new ModE221M3(3), three());
-        Assert.assertEquals(new ModE221M3(-3), mthree());
-        Assert.assertEquals(new ModE221M3(4), four());
-        Assert.assertEquals(new ModE221M3(-4), mfour());
-        Assert.assertEquals(new ModE221M3(5), five());
-        Assert.assertEquals(new ModE221M3(-5), mfive());
-        Assert.assertEquals(new ModE221M3(6), six());
-        Assert.assertEquals(new ModE221M3(-6), msix());
-        Assert.assertEquals(new ModE221M3(7), seven());
-        Assert.assertEquals(new ModE221M3(-7), mseven());
-        Assert.assertEquals(new ModE221M3(8), eight());
-        Assert.assertEquals(new ModE221M3(-8), meight());
-        Assert.assertEquals(new ModE221M3(9), nine());
-        Assert.assertEquals(new ModE221M3(-9), mnine());
-        Assert.assertEquals(new ModE221M3(16), sixteen());
-        Assert.assertEquals(new ModE221M3(25), twentyFive());
-    }
-
-    private static final byte[][] PACK_UNPACK_TEST_CASES = new byte[][] {
-        new byte[] { (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00 },
-        new byte[] { (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0x1f },
-        new byte[] { (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0x0a },
-        new byte[] { (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x15 },
-        new byte[] { (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0x0a },
-        new byte[] { (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00 },
-        new byte[] { (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0x1f },
-        new byte[] { (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x15 }
+    private static final Object[][] TEST_CONSTANTS_TEST_CASES = new Object[][] {
+        new Object[] { new ModE221M3(0), ModE221M3.zero() },
+        new Object[] { new ModE221M3(1), ModE221M3.one() },
+        new Object[] { new ModE221M3(-1), ModE221M3.mone() },
+        new Object[] { new ModE221M3(2), two() },
+        new Object[] { new ModE221M3(-2), mtwo() },
+        new Object[] { new ModE221M3(3), three() },
+        new Object[] { new ModE221M3(-3), mthree() },
+        new Object[] { new ModE221M3(4), four() },
+        new Object[] { new ModE221M3(-4), mfour() },
+        new Object[] { new ModE221M3(5), five() },
+        new Object[] { new ModE221M3(-5), mfive() },
+        new Object[] { new ModE221M3(6), six() },
+        new Object[] { new ModE221M3(-6), msix() },
+        new Object[] { new ModE221M3(7), seven() },
+        new Object[] { new ModE221M3(-7), mseven() },
+        new Object[] { new ModE221M3(8), eight() },
+        new Object[] { new ModE221M3(-8), meight() },
+        new Object[] { new ModE221M3(9), nine() },
+        new Object[] { new ModE221M3(-9), mnine() },
+        new Object[] { new ModE221M3(16), sixteen() },
+        new Object[] { new ModE221M3(-16), msixteen() },
+        new Object[] { new ModE221M3(25), twentyFive() },
+        new Object[] { new ModE221M3(-25), mtwentyFive() }
     };
 
-    private static void packUnpackTestCase(final byte[] testcase) {
-        final ModE221M3 unpacked = new ModE221M3(testcase);
-        final byte[] packed = unpacked.packed();
+    @DataProvider(name = "testConstants")
+    public Object[][] testConstantsProvider() {
+        return TEST_CONSTANTS_TEST_CASES;
+    }
 
-        for(int i = 0; i < ModE221M3.PACKED_BYTES; i++) {
-            Assert.assertEquals(packed[i], testcase[i]);
+    private static final Object[][] PACK_UNPACK_TEST_CASES = new Object [][] {
+        new Object[] {
+            new byte[] { (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00 }
+        },
+        new Object[] {
+            new byte[] { (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0x1f }
+        },
+        new Object[] {
+            new byte[] { (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0x0a }
+        },
+        new Object[] {
+            new byte[] { (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x15 }
+        },
+        new Object[] {
+            new byte[] { (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0x0a }
+        },
+        new Object[] {
+            new byte[] { (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00 }
+        },
+        new Object[] {
+            new byte[] { (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0x1f }
+        },
+        new Object[] {
+            new byte[] { (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x15 }
         }
-    }
-
-    @Test
-    public static void packUnpackTest() {
-        for(int i = 0; i < PACK_UNPACK_TEST_CASES.length; i++) {
-            packUnpackTestCase(PACK_UNPACK_TEST_CASES[i]);
-        }
-    }
-
-    private static void unpackPackTestCase(final long[] testcase) {
-        final ModE221M3 expected = new ModE221M3(testcase);
-        final byte[] packed = expected.packed();
-        final ModE221M3 actual = new ModE221M3(packed);
-
-        Assert.assertEquals(actual, expected);
-    }
-
-    private static final long[][] UNPACK_PACK_TEST_CASES = new long[][] {
-        new long[] { 0x03ffffffffffffffL, 0x0000000000000000L,
-                     0x03ffffffffffffffL, 0x0000000000000000L },
-        new long[] { 0x0000000000000000L, 0x03ffffffffffffffL,
-                     0x0000000000000000L, 0x00007fffffffffffL },
-        new long[] { 0x02aaaaaaaaaaaaaaL, 0x0155555555555555L,
-                     0x02aaaaaaaaaaaaaaL, 0x0000555555555555L },
-        new long[] { 0x0155555555555555L, 0x02aaaaaaaaaaaaaaL,
-                     0x0155555555555555L, 0x00002aaaaaaaaaaaL },
-        new long[] { 0x02aaaaaaaaaaaaaaL, 0x0000000000000000L,
-                     0x02aaaaaaaaaaaaaaL, 0x0000000000000000L },
-        new long[] { 0x0000000000000000L, 0x02aaaaaaaaaaaaaaL,
-                     0x0000000000000000L, 0x00002aaaaaaaaaaaL },
-        new long[] { 0x03ffffffffffffffL, 0x0155555555555555L,
-                     0x03ffffffffffffffL, 0x0000555555555555L },
-        new long[] { 0x0155555555555555L, 0x03ffffffffffffffL,
-                     0x0155555555555555L, 0x00007fffffffffffL }
     };
 
-    @Test
-    public static void unpackPackTest() {
-        for(int i = 0; i < UNPACK_PACK_TEST_CASES.length; i++) {
-            unpackPackTestCase(UNPACK_PACK_TEST_CASES[i]);
+    @DataProvider(name = "packUnpack")
+    public Object[][] packUnpackProvider() {
+        return PACK_UNPACK_TEST_CASES;
+    }
+
+    private static final Object[][] UNPACK_PACK_TEST_CASES = new Object[][] {
+        new Object[] {
+            new long[] { 0x03ffffffffffffffL, 0x0000000000000000L,
+                         0x03ffffffffffffffL, 0x0000000000000000L }
+        },
+        new Object[] {
+            new long[] { 0x0000000000000000L, 0x03ffffffffffffffL,
+                         0x0000000000000000L, 0x00007fffffffffffL }
+        },
+        new Object[] {
+            new long[] { 0x02aaaaaaaaaaaaaaL, 0x0155555555555555L,
+                         0x02aaaaaaaaaaaaaaL, 0x0000555555555555L }
+        },
+        new Object[] {
+            new long[] { 0x0155555555555555L, 0x02aaaaaaaaaaaaaaL,
+                         0x0155555555555555L, 0x00002aaaaaaaaaaaL }
+        },
+        new Object[] {
+            new long[] { 0x02aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                         0x02aaaaaaaaaaaaaaL, 0x0000000000000000L }
+        },
+        new Object[] {
+            new long[] { 0x0000000000000000L, 0x02aaaaaaaaaaaaaaL,
+                         0x0000000000000000L, 0x00002aaaaaaaaaaaL }
+        },
+        new Object[] {
+            new long[] { 0x03ffffffffffffffL, 0x0155555555555555L,
+                         0x03ffffffffffffffL, 0x0000555555555555L }
+        },
+        new Object[] {
+            new long[] { 0x0155555555555555L, 0x03ffffffffffffffL,
+                         0x0155555555555555L, 0x00007fffffffffffL }
         }
+    };
+
+    @DataProvider(name = "unpackPack")
+    public Object[][] unpackPackProvider() {
+        return UNPACK_PACK_TEST_CASES;
     }
 
     private static final ModE221M3[][] startTier = new ModE221M3[][] {
@@ -301,243 +319,136 @@ public class ModE221M3Test {
     };
 
     @Test
-    public static void addTest() {
-        final ModE221M3[][] tierOne = Utils.addTier(startTier);
-        final ModE221M3[][] tierTwo = Utils.addTier(tierOne);
-        final ModE221M3[][] tierThree = Utils.addTier(tierTwo);
+    public void addTest() {
+        final ModE221M3[][] tierOne = addTier(startTier);
+        final ModE221M3[][] tierTwo = addTier(tierOne);
+        final ModE221M3[][] tierThree = addTier(tierTwo);
     }
 
     @Test
-    public static void subTest() {
-        final ModE221M3[][] tierOne = Utils.subTier(startTier);
-        final ModE221M3[][] tierTwo = Utils.subTier(tierOne);
-        final ModE221M3[][] tierThree = Utils.subTier(tierTwo);
+    public void subTest() {
+        final ModE221M3[][] tierOne = subTier(startTier);
+        final ModE221M3[][] tierTwo = subTier(tierOne);
+        final ModE221M3[][] tierThree = subTier(tierTwo);
     }
 
     @Test
-    public static void mulTest() {
-        final ModE221M3[][] tierOne = Utils.mulTier(startTier);
-        final ModE221M3[][] tierTwo = Utils.mulTier(tierOne);
-        final ModE221M3[][] tierThree = Utils.mulTier(tierTwo);
+    public void mulTest() {
+        final ModE221M3[][] tierOne = mulTier(startTier);
+        final ModE221M3[][] tierTwo = mulTier(tierOne);
+        final ModE221M3[][] tierThree = mulTier(tierTwo);
     }
 
     @Test
-    public static void divTest() {
-        final ModE221M3[][] tierOne = Utils.divTier(startTier);
-        final ModE221M3[][] tierTwo = Utils.divTier(tierOne);
-        final ModE221M3[][] tierThree = Utils.divTier(tierTwo);
+    public void divTest() {
+        final ModE221M3[][] tierOne = divTier(startTier);
+        final ModE221M3[][] tierTwo = divTier(tierOne);
+        final ModE221M3[][] tierThree = divTier(tierTwo);
     }
 
-    @Test
-    public static void squareTest() {
-        final ModE221M3 s0 = ModE221M3.zero();
-        final ModE221M3 s1 = ModE221M3.one();
-        final ModE221M3 s2 = two();
-        final ModE221M3 s3 = three();
-        final ModE221M3 s4 = four();
-        final ModE221M3 s5 = five();
-        final ModE221M3 sm1 = ModE221M3.mone();
-        final ModE221M3 sm2 = mtwo();
-        final ModE221M3 sm3 = mthree();
-        final ModE221M3 sm4 = mfour();
-        final ModE221M3 sm5 = mfive();
-
-        s0.square();
-        s1.square();
-        s2.square();
-        s3.square();
-        s4.square();
-        s5.square();
-        sm1.square();
-        sm2.square();
-        sm3.square();
-        sm4.square();
-        sm5.square();
-
-        Assert.assertEquals(s0, ModE221M3.zero());
-        Assert.assertEquals(s1, ModE221M3.one());
-        Assert.assertEquals(s2, four());
-        Assert.assertEquals(s3, nine());
-        Assert.assertEquals(s4, sixteen());
-        Assert.assertEquals(s5, twentyFive());
-        Assert.assertEquals(sm1, ModE221M3.one());
-        Assert.assertEquals(sm2, four());
-        Assert.assertEquals(sm3, nine());
-        Assert.assertEquals(sm4, sixteen());
-        Assert.assertEquals(sm5, twentyFive());
-    }
-
-    @Test
-    public static void legendreTest() {
-        Assert.assertEquals(ModE221M3.zero().legendre(), 0);
-        Assert.assertEquals(ModE221M3.one().legendre(), 1);
-        Assert.assertEquals(two().legendre(), -1);
-        Assert.assertEquals(three().legendre(), -1);
-        Assert.assertEquals(four().legendre(), 1);
-        Assert.assertEquals(five().legendre(), 1);
-        Assert.assertEquals(six().legendre(), 1);
-        Assert.assertEquals(seven().legendre(), 1);
-        Assert.assertEquals(eight().legendre(), -1);
-        Assert.assertEquals(nine().legendre(), 1);
-        Assert.assertEquals(sixteen().legendre(), 1);
-        Assert.assertEquals(twentyFive().legendre(), 1);
-        Assert.assertEquals(ModE221M3.mone().legendre(), 1);
-        Assert.assertEquals(mtwo().legendre(), -1);
-        Assert.assertEquals(mthree().legendre(), -1);
-        Assert.assertEquals(mfour().legendre(), 1);
-        Assert.assertEquals(mfive().legendre(), 1);
-        Assert.assertEquals(msix().legendre(), 1);
-        Assert.assertEquals(mseven().legendre(), 1);
-        Assert.assertEquals(meight().legendre(), -1);
-        Assert.assertEquals(mnine().legendre(), 1);
-        Assert.assertEquals(msixteen().legendre(), 1);
-        Assert.assertEquals(mtwentyFive().legendre(), -1);
-    }
-
-    @Test
-    public static void legendreQuarticTest() {
-        Assert.assertEquals(ModE221M3.zero().legendreQuartic(), 0);
-        Assert.assertEquals(ModE221M3.one().legendreQuartic(), 1);
-        Assert.assertEquals(four().legendreQuartic(), -1);
-        Assert.assertEquals(five().legendreQuartic(), -1);
-        Assert.assertEquals(six().legendreQuartic(), -1);
-        Assert.assertEquals(seven().legendreQuartic(), 1);
-        Assert.assertEquals(nine().legendreQuartic(), -1);
-        Assert.assertEquals(sixteen().legendreQuartic(), 1);
-        Assert.assertEquals(twentyFive().legendreQuartic(), 1);
-        Assert.assertEquals(ModE221M3.mone().legendreQuartic(), -1);
-        Assert.assertEquals(mfour().legendreQuartic(), 1);
-        Assert.assertEquals(mfive().legendreQuartic(), 1);
-        Assert.assertEquals(msix().legendreQuartic(), 1);
-        Assert.assertEquals(mseven().legendreQuartic(), -1);
-        Assert.assertEquals(mnine().legendreQuartic(), 1);
-        Assert.assertEquals(msixteen().legendreQuartic(), -1);
-    }
-
-    @Test
-    public static void sqrtTest() {
-        final ModE221M3 s0 = ModE221M3.zero();
-        final ModE221M3 s1 = ModE221M3.one();
-        final ModE221M3 s16 = sixteen();
-        final ModE221M3 s25 = twentyFive();
-
-        s0.sqrt();
-        s1.sqrt();
-        s16.sqrt();
-        s25.sqrt();
-
-        Assert.assertEquals(ModE221M3.zero(), s0);
-        Assert.assertEquals(ModE221M3.one(), s1);
-        Assert.assertEquals(mfour(), s16);
-        Assert.assertEquals(mfive(), s25);
-    }
-
-    @Test
-    public static void invSqrtTest() {
-        final ModE221M3 srm4 = mfour();
-        final ModE221M3 srm5 = mfive();
-        final ModE221M3 s16 = sixteen();
-        final ModE221M3 s25 = twentyFive();
-
-        srm4.inv();
-        srm5.inv();
-        s16.invSqrt();
-        s25.invSqrt();
-
-        Assert.assertEquals(s16, srm4);
-        Assert.assertEquals(s25, srm5);
-    }
-
-    private static final int[] primes = new int[] {
-        2, 3, 71, 103, 809,
-        3907, 7919, 50821, 93719, 199933
+    private static final Object[][] SQUARE_TEST_CASES = new Object[][] {
+        new Object[] { ModE221M3.zero(), ModE221M3.zero() },
+        new Object[] { ModE221M3.one(), ModE221M3.one() },
+        new Object[] { two(), four() },
+        new Object[] { three(), nine() },
+        new Object[] { four(), sixteen() },
+        new Object[] { five(), twentyFive() },
+        new Object[] { ModE221M3.mone(), ModE221M3.one() },
+        new Object[] { mtwo(), four() },
+        new Object[] { mthree(), nine() },
+        new Object[] { mfour(), sixteen() },
+        new Object[] { mfive(), twentyFive() },
     };
 
-    private static final ModE221M3[][] primePowers = new ModE221M3[4][10];
-    private static final ModE221M3[] values = new ModE221M3[10000];
+    @DataProvider(name = "square")
+    public Object[][] squareProvider() {
+        return SQUARE_TEST_CASES;
+    }
+
+    private static final Object[][] LEGENDRE_TEST_CASES = new Object[][] {
+        new Object[] { ModE221M3.zero(), new Integer(0) },
+        new Object[] { ModE221M3.one(), new Integer(1) },
+        new Object[] { two(), new Integer(-1) },
+        new Object[] { three(), new Integer(-1) },
+        new Object[] { four(), new Integer(1) },
+        new Object[] { five(), new Integer(1) },
+        new Object[] { six(), new Integer(1) },
+        new Object[] { seven(), new Integer(1) },
+        new Object[] { eight(), new Integer(-1) },
+        new Object[] { nine(), new Integer(1) },
+        new Object[] { sixteen(), new Integer(1) },
+        new Object[] { twentyFive(), new Integer(1) },
+        new Object[] { ModE221M3.mone(), new Integer(1) },
+        new Object[] { mtwo(), new Integer(-1) },
+        new Object[] { mthree(), new Integer(-1) },
+        new Object[] { mfour(), new Integer(1) },
+        new Object[] { mfive(), new Integer(1) },
+        new Object[] { msix(), new Integer(1) },
+        new Object[] { mseven(), new Integer(1) },
+        new Object[] { meight(), new Integer(-1) },
+        new Object[] { mnine(), new Integer(1) },
+        new Object[] { msixteen(), new Integer(1) },
+        new Object[] { mtwentyFive(), new Integer(1) },
+    };
+
+    @DataProvider(name = "legendre", parallel = true)
+    public Object[][] legendreProvider() {
+        return LEGENDRE_TEST_CASES;
+    }
+
+    private static final Object[][] QUARTIC_LEGENDRE_TEST_CASES =
+        new Object[][] {
+        new Object[] { ModE221M3.zero(), new Integer(0) },
+        new Object[] { ModE221M3.one(), new Integer(1) },
+        new Object[] { four(), new Integer(-1) },
+        new Object[] { five(), new Integer(-1) },
+        new Object[] { six(), new Integer(-1) },
+        new Object[] { seven(), new Integer(1) },
+        new Object[] { nine(), new Integer(-1) },
+        new Object[] { sixteen(), new Integer(1) },
+        new Object[] { twentyFive(), new Integer(1) },
+        new Object[] { ModE221M3.mone(), new Integer(-1) },
+        new Object[] { mfour(), new Integer(1) },
+        new Object[] { mfive(), new Integer(1) },
+        new Object[] { msix(), new Integer(1) },
+        new Object[] { mseven(), new Integer(-1) },
+        new Object[] { mnine(), new Integer(1) },
+        new Object[] { msixteen(), new Integer(-1) },
+        new Object[] { mtwentyFive(), new Integer(-1) },
+    };
+
+    @DataProvider(name = "legendreQuartic", parallel = true)
+    public Object[][] legendreQuarticProvider() {
+        return QUARTIC_LEGENDRE_TEST_CASES;
+    }
+
+    private static final Object[][] SQRT_TEST_CASES = new Object[][] {
+        new Object[] { ModE221M3.zero(), ModE221M3.zero() },
+        new Object[] { ModE221M3.one(), ModE221M3.one() },
+        new Object[] { sixteen(), mfour() },
+        new Object[] { twentyFive(), mfive() },
+    };
+
+    @DataProvider(name = "sqrt", parallel = true)
+    public Object[][] sqrtProvider() {
+        return SQRT_TEST_CASES;
+    }
+
+    private static final Object[][] INV_SQRT_TEST_CASES = new Object[][] {
+        new Object[] { ModE221M3.zero(), ModE221M3.zero() },
+        new Object[] { ModE221M3.one(), ModE221M3.one() },
+        new Object[] { sixteen(), mfour() },
+        new Object[] { twentyFive(), mfive() },
+    };
 
     static {
-        for(int i = 0; i < primePowers.length; i++) {
-            for(int j = 0; j < primePowers[i].length; j++) {
-                final int power = 1 << i;
-                final ModE221M3 val = new ModE221M3(primes[j]);
-
-                for(int k = 1; k < power; k++) {
-                    val.square();
-                }
-
-                primePowers[i][j] = val;
-            }
+        for(int i = 0; i < INV_SQRT_TEST_CASES.length; i++) {
+            ((ModE221M3)INV_SQRT_TEST_CASES[i][1]).inv();
         }
+    };
 
-        for(int i = 0; i < primePowers[0].length; i++) {
-            for(int j = 0; j < primePowers[1].length; j++) {
-                for(int k = 0; k < primePowers[2].length; k++) {
-                    for(int l = 0; l < primePowers[3].length; l++) {
-                        final ModE221M3 val = primePowers[0][i].clone();
-                        final int idx = (1000 * i) + (100 * j) + (10 * k) + l;
-
-                        val.add(primePowers[1][j]);
-                        val.add(primePowers[2][k]);
-                        val.add(primePowers[3][l]);
-
-                        values[idx] = val;
-                    }
-                }
-            }
-        }
-    }
-
-    @Test
-    public static void addSubTest() {
-        for(int i = 0; i < values.length; i++) {
-            for(int j = 0; j < values.length; j++) {
-                Utils.addSubTest(values[i], values[j]);
-            }
-        }
-    }
-
-    @Test
-    public static void mulDivTest() {
-        for(int i = 0; i < values.length; i++) {
-            for(int j = 0; j < values.length; j++) {
-                Utils.mulDivTest(values[i], values[j]);
-            }
-        }
-    }
-
-    @Test
-    public static void mulSquareTest() {
-        for(int i = 0; i < values.length; i++) {
-            Utils.mulSquareTest(values[i]);
-        }
-    }
-
-    @Test
-    public static void invSqrtMulTest() {
-        for(int i = 0; i < values.length; i++) {
-            Utils.invSqrtMulTest(values[i]);
-        }
-    }
-
-    @Test
-    public static void quadraticResidueTest() {
-        for(int i = 0; i < values.length; i++) {
-            Utils.quadraticResidueTest(values[i]);
-        }
-    }
-
-    @Test
-    public static void quarticResidueTest() {
-        for(int i = 0; i < values.length; i++) {
-            Utils.quarticResidueTest(values[i]);
-        }
-    }
-
-    @Test
-    public static void absTest() {
-        for(int i = 0; i < values.length; i++) {
-            Utils.absTest(values[i]);
-        }
+    @DataProvider(name = "invSqrt", parallel = true)
+    public Object[][] invSqrtProvider() {
+        return INV_SQRT_TEST_CASES;
     }
 }

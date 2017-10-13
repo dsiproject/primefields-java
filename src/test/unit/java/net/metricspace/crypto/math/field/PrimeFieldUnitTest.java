@@ -34,11 +34,14 @@ package net.metricspace.crypto.math.field;
 import java.util.Arrays;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Utilities for writing tests against {@code PrimeField} instances.
  */
-public final class Utils {
+@Test(groups = "unit")
+public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
     public static final int ZERO_IDX = 0;
     public static final int ONE_IDX = 1;
     public static final int MONE_IDX = 2;
@@ -47,7 +50,97 @@ public final class Utils {
     public static final int FOUR_IDX = 5;
     public static final int MFOUR_IDX = 6;
 
-    public static <P extends PrimeField<P>> P[][] addTier(final P[][] vals) {
+    @DataProvider(name = "testConstants")
+    public abstract Object[][] testConstantsProvider();
+
+    @Test(dataProvider = "testConstants",
+          description = "Test value of constants against " +
+          "creation from small numbers")
+    public void testConstants(final P expected,
+                              final P actual) {
+        Assert.assertEquals(expected, actual);
+    }
+
+    @DataProvider(name = "packUnpack")
+    public abstract Object[][] packUnpackProvider();
+
+    @Test(dataProvider = "packUnpack",
+          description = "Test packing then unpacking values")
+    public void packUnpackTest(final byte[] testcase) {
+        final ModE221M3 unpacked = new ModE221M3(testcase);
+        final byte[] packed = unpacked.packed();
+
+        for(int i = 0; i < ModE221M3.PACKED_BYTES; i++) {
+            Assert.assertEquals(packed[i], testcase[i]);
+        }
+    }
+
+    @DataProvider(name = "unpackPack")
+    public abstract Object[][] unpackPackProvider();
+
+    @Test(dataProvider = "unpackPack",
+          description = "Test unpacking then packing values")
+    public void unpackPackTestCase(final long[] testcase) {
+        final ModE221M3 expected = new ModE221M3(testcase);
+        final byte[] packed = expected.packed();
+        final ModE221M3 actual = new ModE221M3(packed);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+    @DataProvider(name = "square")
+    public abstract Object[][] squareProvider();
+
+    @Test(dataProvider = "square",
+          description = "Test square")
+    public void squareTest(final P a,
+                           final P expected) {
+        final P actual = a.clone();
+
+        actual.square();
+
+        Assert.assertEquals(actual, expected);
+    }
+
+    @DataProvider(name = "legendre", parallel = true)
+    public abstract Object[][] legendreProvider();
+
+    @Test(dataProvider = "legendre",
+          description = "Test legendre symbol")
+    public void legendreTest(final P a,
+                             final int expected) {
+        Assert.assertEquals(a.legendre(), expected);
+    }
+
+    @DataProvider(name = "sqrt", parallel = true)
+    public abstract Object[][] sqrtProvider();
+
+    @Test(dataProvider = "sqrt",
+          description = "Test sqrt")
+    public void sqrtTest(final P a,
+                         final P expected) {
+        final P actual = a.clone();
+
+        actual.sqrt();
+
+        Assert.assertEquals(actual, expected);
+    }
+
+    @DataProvider(name = "invSqrt", parallel = true)
+    public abstract Object[][] invSqrtProvider();
+
+    @Test(dataProvider = "invSqrt",
+          description = "Test inverse sqrt")
+    public void invSqrtTest(final P a,
+                            final P expected) {
+        final P actual = a.clone();
+
+        actual.invSqrt();
+
+        Assert.assertEquals(actual, expected);
+    }
+
+    public P[][] addTier(final P[][] vals) {
         final P[][] out = Arrays.copyOf(vals, vals.length);
         final int nzeros =
             (vals[ZERO_IDX].length * vals[ZERO_IDX].length) +
@@ -454,7 +547,7 @@ public final class Utils {
         return out;
     }
 
-    public static <P extends PrimeField<P>> P[][] subTier(final P[][] vals) {
+    public P[][] subTier(final P[][] vals) {
         final P[][] out = Arrays.copyOf(vals, vals.length);
         final int nzeros =
             (vals[ZERO_IDX].length * vals[ZERO_IDX].length) +
@@ -861,7 +954,7 @@ public final class Utils {
         return out;
     }
 
-    public static <P extends PrimeField<P>> P[][] mulTier(final P[][] vals) {
+    public P[][] mulTier(final P[][] vals) {
         final P[][] out = Arrays.copyOf(vals, vals.length);
         final int nzeros =
             (vals[ZERO_IDX].length * vals[ZERO_IDX].length) +
@@ -1340,7 +1433,7 @@ public final class Utils {
         return out;
     }
 
-    public static <P extends PrimeField<P>> P[][] divTier(final P[][] vals) {
+    public P[][] divTier(final P[][] vals) {
         final P[][] out = Arrays.copyOf(vals, vals.length);
         final int nzeros =
             (vals[ZERO_IDX].length * vals[ONE_IDX].length) +
@@ -1733,159 +1826,5 @@ public final class Utils {
         }
 
         return out;
-    }
-
-    /**
-     * Test {@code a + b - a == b}.
-     *
-     * @param a The LHS.
-     * @param b The RHS.
-     */
-    public static <P extends PrimeField<P>> void addSubTest(final P a,
-                                                            final P b) {
-        final P val = a.clone();
-
-        val.add(b);
-        val.sub(a);
-
-        Assert.assertEquals(val, b);
-    }
-
-    /**
-     * Test {@code (a * b) / a == b}.
-     *
-     * @param a The LHS.
-     * @param b The RHS.
-     */
-    public static <P extends PrimeField<P>> void mulDivTest(final P a,
-                                                            final P b) {
-        final P val = a.clone();
-
-        val.mul(b);
-        val.div(a);
-
-        Assert.assertEquals(val, b);
-    }
-
-    /**
-     * Test {@code a * a == a.square()}.
-     *
-     * @param a The number to test.
-     */
-    public static <P extends PrimeField<P>> void mulSquareTest(final P a) {
-        final P val = a.clone();
-        final P b = a.clone();
-
-        val.square();
-        b.mul(b);
-
-        Assert.assertEquals(val, b);
-    }
-
-    /**
-     * Test {@code a.invSqrt() == a.sqrt().inv()}.
-     *
-     * @param a The number to test.
-     */
-    public static <P extends PrimeField<P>> void invSqrtMulTest(final P a) {
-        final int leg = a.legendre();
-
-        if (leg == 1) {
-            final P val = a.clone();
-            final P b = a.clone();
-
-            val.invSqrt();
-            b.sqrt();
-            b.inv();
-
-            Assert.assertEquals(val, b);
-        }
-    }
-
-    /**
-     * Test quadratic residue properties of a number.  This tests that
-     * {@code legendre(a) == 1} or {@code legendre(a) == -1}, and if
-     * {@code legendre(a) == 1}, then {@code sqrt(a) ^ 2 == a}.
-     *
-     * @param a The number to test.
-     */
-    public static <P extends PrimeField<P>>
-        void quadraticResidueTest(final P a) {
-        final int leg = a.legendre();
-
-        if (leg == 1) {
-            // Either legendre(a) == 1 and sqrt and square are inverses...
-            final P b = a.clone();
-
-            a.sqrt();
-            a.square();
-
-            Assert.assertEquals(a, b);
-        } else {
-            // Or legendre(a) == -1
-            Assert.assertEquals(leg, -1);
-        }
-    }
-
-    /**
-     * Test quadratic residue properties of a number.  This tests that
-     * {@code legendre(a) == 1} or {@code legendre(a) == -1}, and if
-     * {@code legendre(a) == 1}, then {@code sqrt(a) ^ 2 == a}.
-     *
-     * @param a The number to test.
-     */
-    public static <P extends PrimeField1Mod4<P>>
-        void quarticResidueTest(final P a) {
-        final int leg = a.legendre();
-
-        if (leg == 1) {
-            // If we are a quadratic residue, proceed
-            final int qleg = a.legendreQuartic();
-            final P b = a.clone();
-
-            a.sqrt();
-
-            final int sqrtleg = a.legendre();
-
-            // legendre(sqrt(a)) == legendreQuartic(a)
-            Assert.assertEquals(qleg, sqrtleg);
-
-            if (qleg == 1) {
-                // If we are a quartic residue, proceed
-
-                a.sqrt();
-                a.square();
-                a.square();
-
-                Assert.assertEquals(a, b);
-            } else {
-                // Otherwise, quartic legendre must be -1
-                Assert.assertEquals(qleg, -1);
-            }
-        } else {
-                // Otherwise, legendre must be -1
-            Assert.assertEquals(leg, -1);
-        }
-    }
-
-    public static <P extends PrimeField<P>> void absTest(final P a) {
-        final long signval = a.sign();
-
-        if (signval == 0) {
-            final P val = a.clone();
-
-            val.abs();
-            Assert.assertEquals(val, a);
-        } else {
-            Assert.assertEquals(signval, 1);
-
-            final P aval = a.clone();
-            final P bval = a.clone();
-
-            aval.abs();
-            bval.mul((short)-1);
-
-            Assert.assertEquals(aval, bval);
-        }
     }
 }
