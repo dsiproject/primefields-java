@@ -75,6 +75,7 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
      * @param a The LHS.
      * @param b The RHS.
      */
+    /*
     @Test(description = "Test that a * b / a == b")
     public void mulDivTest() {
         for(int i = 0; i < argData.length; i++) {
@@ -83,7 +84,7 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
             }
         }
     }
-
+    */
     private void doMulDivTest(final P a,
                                   final P b) {
         final P val = a.clone();

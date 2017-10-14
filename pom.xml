@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.metricspace</groupId>
   <packaging>jar</packaging>
@@ -9,6 +9,14 @@
   <artifactId>primefields</artifactId>
   <name>PrimeFields-Java</name>
   <description>An implementation of prime field arithmetic over cryptographically useful primes</description>
+
+  <developers>
+    <developer>
+      <id>eric.mccorkle</id>
+      <name>Eric L. McCorkle</name>
+      <email>eric@metricspace.net</email>
+    </developer>
+  </developers>
 
   <properties>
     <jcov.jar>${basedir}/lib/jcov.jar</jcov.jar>
@@ -25,27 +33,39 @@
     <test.unit.srcs>${test.unit.dir}/java</test.unit.srcs>
     <test.unit.resources>${test.unit.dir}/resources</test.unit.resources>
     <test.unit.testng.xml>${test.unit.resources}/testng.xml</test.unit.testng.xml>
-    <test.unit.classes>target/unit-test-classes</test.unit.classes>
+    <target.dir>target</target.dir>
+    <test.unit.classes>${target}/unit-test-classes</test.unit.classes>
+    <test.perf.srcs>src/test/perf/java</test.perf.srcs>
     <test.stress.dir>src/test/stress</test.stress.dir>
     <test.stress.srcs>${test.stress.dir}/java</test.stress.srcs>
     <test.stress.resources>${test.stress.dir}/resources</test.stress.resources>
     <test.stress.testng.xml>${test.stress.resources}/testng.xml</test.stress.testng.xml>
     <jcov.stress.result.xml>${project.build.directory}/stress-result.xml</jcov.stress.result.xml>
     <jcov.stress.coverage.xml>${project.build.directory}/stress-coverage.xml</jcov.stress.coverage.xml>
-    <jcov.report.dir>target/coverage</jcov.report.dir>
+    <jcov.report.dir>${target.dir}/coverage</jcov.report.dir>
+    <benchmarks.name>benchmarks</benchmarks.name>
+    <benchmarks.jar>${target.dir}/${benchmarks.name}.jar</benchmarks.jar>
+    <jmh.version>1.19</jmh.version>
+    <testng.version>6.1.1</testng.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.1.1</version>
+      <version>${testng.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>${slf4j.version}</version>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-core</artifactId>
+      <version>${jmh.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-generator-annprocess</artifactId>
+      <version>${jmh.version}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -58,12 +78,9 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.6.0</version>
         <configuration>
+          <compilerVersion>${java.version}</compilerVersion>
           <source>${java.version}</source>
           <target>${java.version}</target>
-          <compilerArgs>
-            <arg>-Xlint:all</arg>
-            <arg>-Werror</arg>
-          </compilerArgs>
         </configuration>
       </plugin>
 
@@ -92,13 +109,14 @@
             <configuration>
               <sources>
                 <source>${test.stress.srcs}</source>
+                <source>${test.perf.srcs}</source>
               </sources>
             </configuration>
           </execution>
         </executions>
       </plugin>
 
-      <!-- Skip ordinary unit tests and just do integration tests.   -->
+      <!-- Ordinary tests just run the unit test suite. -->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.14</version>
@@ -138,7 +156,7 @@
           <!-- System properties needed by jcov -->
           <systemPropertyVariables>
             <jcov.template>${jcov.template.xml}</jcov.template>
-            <jcov.file>${jcov.unit.result.xml}</jcov.file>
+            <jcov.file>${jcov.stress.result.xml}</jcov.file>
           </systemPropertyVariables>
         </configuration>
         <executions>
@@ -150,10 +168,43 @@
         </executions>
       </plugin>
 
-          <!-- Raw execution -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <finalName>${benchmarks.name}</finalName>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>org.openjdk.jmh.Main</mainClass>
+                </transformer>
+              </transformers>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+            <!-- Raw execution -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
         <executions>
           <!-- Instrument the build classes -->
           <execution>
@@ -194,6 +245,27 @@
                 <argument>${jcov.unit.coverage.xml}</argument>
                 <argument>${jcov.template.xml}</argument>
                 <argument>${jcov.unit.result.xml}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <!-- Merge the stress test results with the template -->
+          <execution>
+            <id>merge-stress-coverage</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>-jar</argument>
+                <argument>${jcov.jar}</argument>
+                <argument>Merger</argument>
+                <argument>-o</argument>
+                <argument>${jcov.stress.coverage.xml}</argument>
+                <argument>${jcov.template.xml}</argument>
+                <argument>${jcov.stress.result.xml}</argument>
               </arguments>
             </configuration>
           </execution>

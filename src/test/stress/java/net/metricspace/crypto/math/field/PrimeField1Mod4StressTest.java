@@ -48,8 +48,7 @@ public abstract class PrimeField1Mod4StressTest<P extends PrimeField1Mod4<P>>
      *
      * @param a The number to test.
      */
-    @Test(dataProvider = "oneArg",
-          description = "Test properties of quartic residues")
+    @Test(description = "Test properties of quartic residues")
     public void quarticResidueTest() {
         for(int i = 0; i < argData.length; i++) {
             doQuarticResidueTest(argData[i]);
