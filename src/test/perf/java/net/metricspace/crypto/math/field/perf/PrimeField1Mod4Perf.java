@@ -29,12 +29,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.metricspace.crypto.math.field;
+package net.metricspace.crypto.math.field.perf;
 
 import java.math.BigInteger;
 import java.util.EnumMap;
 
-public abstract class PrimeField1Mod4Perf<P extends PrimeField<P>>
+import net.metricspace.crypto.math.field.PrimeField1Mod4;
+
+public abstract class PrimeField1Mod4Perf<P extends PrimeField1Mod4<P>>
     extends PrimeFieldPerf<P> {
     protected PrimeField1Mod4Perf(final EnumMap<DataKind, P> params,
                                   final EnumMap<DataKind, BigInteger>

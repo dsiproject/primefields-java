@@ -29,11 +29,13 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.metricspace.crypto.math.field;
+package net.metricspace.crypto.math.field.perf;
 
 import java.math.BigInteger;
 import java.util.EnumMap;
 import java.util.Random;
+
+import net.metricspace.crypto.math.field.ModE221M3;
 
 public class ModE221M3Perf extends PrimeField1Mod4Perf<ModE221M3> {
     private static Random random = new Random();

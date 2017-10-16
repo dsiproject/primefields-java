@@ -29,7 +29,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.metricspace.crypto.math.field;
+package net.metricspace.crypto.math.field.perf;
 
 import java.math.BigInteger;
 import java.util.EnumMap;
@@ -41,6 +41,8 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.infra.Blackhole;
+
+import net.metricspace.crypto.math.field.PrimeField;
 
 @State(Scope.Benchmark)
 public abstract class PrimeFieldPerf<P extends PrimeField<P>> {
