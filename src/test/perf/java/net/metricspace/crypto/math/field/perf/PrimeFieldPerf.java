@@ -114,8 +114,89 @@ public abstract class PrimeFieldPerf<P extends PrimeField<P>> {
     }
 
     @Benchmark
+    public void addNormalizeTest(final TwoArgs args) {
+        final P val = params.get(args.a);
+
+        val.add(params.get(args.b));
+        val.normalize();
+    }
+
+    @Benchmark
     public void smallAddTest(final IntArg args) {
         params.get(args.a).add(params.get(args.b));
+    }
+
+    @Benchmark
+    public void smallAddNormalizeTest(final IntArg args) {
+        final P val = params.get(args.a);
+
+        val.add(params.get(args.b));
+        val.normalize();
+    }
+
+    @Benchmark
+    public void subTest(final TwoArgs args) {
+        params.get(args.a).sub(params.get(args.b));
+    }
+
+    @Benchmark
+    public void subNormalizeTest(final TwoArgs args) {
+        final P val = params.get(args.a);
+
+        val.sub(params.get(args.b));
+        val.normalize();
+    }
+
+    @Benchmark
+    public void smallSubTest(final IntArg args) {
+        params.get(args.a).sub(params.get(args.b));
+    }
+
+    @Benchmark
+    public void smallSubNormalizeTest(final IntArg args) {
+        final P val = params.get(args.a);
+
+        val.sub(params.get(args.b));
+        val.normalize();
+    }
+
+    @Benchmark
+    public void mulTest(final TwoArgs args) {
+        params.get(args.a).mul(params.get(args.b));
+    }
+
+    @Benchmark
+    public void mulNormalizeTest(final TwoArgs args) {
+        final P val = params.get(args.a);
+
+        val.mul(params.get(args.b));
+        val.normalize();
+    }
+
+    @Benchmark
+    public void smallMulTest(final IntArg args) {
+        params.get(args.a).mul(params.get(args.b));
+    }
+
+    @Benchmark
+    public void smallMulNormalizeTest(final IntArg args) {
+        final P val = params.get(args.a);
+
+        val.mul(params.get(args.b));
+        val.normalize();
+    }
+
+    @Benchmark
+    public void divTest(final TwoArgs args) {
+        params.get(args.a).div(params.get(args.b));
+    }
+
+    @Benchmark
+    public void divNormalizeTest(final TwoArgs args) {
+        final P val = params.get(args.a);
+
+        val.div(params.get(args.b));
+        val.normalize();
     }
 
     @Benchmark
@@ -123,6 +204,30 @@ public abstract class PrimeFieldPerf<P extends PrimeField<P>> {
                               final TwoArgs args) {
         bh.consume(bigintParams.get(args.a)
                    .add(bigintParams.get(args.b))
+                   .mod(modulus));
+    }
+
+    @Benchmark
+    public void subBigIntTest(final Blackhole bh,
+                              final TwoArgs args) {
+        bh.consume(bigintParams.get(args.a)
+                   .subtract(bigintParams.get(args.b))
+                   .mod(modulus));
+    }
+
+    @Benchmark
+    public void mulBigIntTest(final Blackhole bh,
+                              final TwoArgs args) {
+        bh.consume(bigintParams.get(args.a)
+                   .multiply(bigintParams.get(args.b))
+                   .mod(modulus));
+    }
+
+    @Benchmark
+    public void divBigIntTest(final Blackhole bh,
+                              final TwoArgs args) {
+        bh.consume(bigintParams.get(args.a)
+                   .divide(bigintParams.get(args.b))
                    .mod(modulus));
     }
 
