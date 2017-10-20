@@ -475,9 +475,9 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
     }
 
     private static final Object[][] INV_SQRT_TEST_CASES = new Object[][] {
-        //new Object[] { ModE255M19.zero(), ModE255M19.zero() },
-        //new Object[] { ModE255M19.one(), ModE255M19.one() },
-        //new Object[] { sixteen(), mfour() },
+        new Object[] { ModE255M19.zero(), ModE255M19.zero() },
+        new Object[] { ModE255M19.one(), ModE255M19.one() },
+        new Object[] { sixteen(), mfour() },
         new Object[] { twentyFive(), five() },
     };
 
