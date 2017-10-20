@@ -64,13 +64,17 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
     @DataProvider(name = "packUnpack")
     public abstract Object[][] packUnpackProvider();
 
+    protected abstract P unpack(final byte[] data);
+
     @Test(dataProvider = "packUnpack",
           description = "Test packing then unpacking values")
     public void packUnpackTest(final byte[] testcase) {
-        final ModE221M3 unpacked = new ModE221M3(testcase);
+        final P unpacked = unpack(testcase);
         final byte[] packed = unpacked.packed();
 
-        for(int i = 0; i < ModE221M3.PACKED_BYTES; i++) {
+        Assert.assertEquals(packed.length, testcase.length);
+
+        for(int i = 0; i < testcase.length; i++) {
             Assert.assertEquals(packed[i], testcase[i]);
         }
     }
@@ -80,10 +84,9 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
 
     @Test(dataProvider = "unpackPack",
           description = "Test unpacking then packing values")
-    public void unpackPackTestCase(final long[] testcase) {
-        final ModE221M3 expected = new ModE221M3(testcase);
+    public void unpackPackTestCase(final P expected) {
         final byte[] packed = expected.packed();
-        final ModE221M3 actual = new ModE221M3(packed);
+        final P actual = unpack(packed);
 
         Assert.assertEquals(actual, expected);
     }
