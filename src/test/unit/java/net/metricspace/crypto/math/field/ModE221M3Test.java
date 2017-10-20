@@ -157,6 +157,11 @@ public class ModE221M3Test extends PrimeField1Mod4UnitTest<ModE221M3> {
         return ModE221M3.create(M_TWENTY_FIVE_DATA);
     }
 
+    @Override
+    protected ModE221M3 unpack(final byte[] data) {
+        return new ModE221M3(data);
+    }
+
     private static final Object[][] TEST_CONSTANTS_TEST_CASES = new Object[][] {
         new Object[] { new ModE221M3(0), ModE221M3.zero() },
         new Object[] { new ModE221M3(1), ModE221M3.one() },
@@ -270,36 +275,44 @@ public class ModE221M3Test extends PrimeField1Mod4UnitTest<ModE221M3> {
 
     private static final Object[][] UNPACK_PACK_TEST_CASES = new Object[][] {
         new Object[] {
-            new long[] { 0x03ffffffffffffffL, 0x0000000000000000L,
-                         0x03ffffffffffffffL, 0x0000000000000000L }
+            new ModE221M3(
+                new long[] { 0x03ffffffffffffffL, 0x0000000000000000L,
+                             0x03ffffffffffffffL, 0x0000000000000000L })
         },
         new Object[] {
-            new long[] { 0x0000000000000000L, 0x03ffffffffffffffL,
-                         0x0000000000000000L, 0x00007fffffffffffL }
+            new ModE221M3(
+                new long[] { 0x0000000000000000L, 0x03ffffffffffffffL,
+                             0x0000000000000000L, 0x00007fffffffffffL })
         },
         new Object[] {
-            new long[] { 0x02aaaaaaaaaaaaaaL, 0x0155555555555555L,
-                         0x02aaaaaaaaaaaaaaL, 0x0000555555555555L }
+            new ModE221M3(
+                new long[] { 0x02aaaaaaaaaaaaaaL, 0x0155555555555555L,
+                             0x02aaaaaaaaaaaaaaL, 0x0000555555555555L })
         },
         new Object[] {
-            new long[] { 0x0155555555555555L, 0x02aaaaaaaaaaaaaaL,
-                         0x0155555555555555L, 0x00002aaaaaaaaaaaL }
+            new ModE221M3(
+                new long[] { 0x0155555555555555L, 0x02aaaaaaaaaaaaaaL,
+                             0x0155555555555555L, 0x00002aaaaaaaaaaaL })
         },
         new Object[] {
-            new long[] { 0x02aaaaaaaaaaaaaaL, 0x0000000000000000L,
-                         0x02aaaaaaaaaaaaaaL, 0x0000000000000000L }
+            new ModE221M3(
+                new long[] { 0x02aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                             0x02aaaaaaaaaaaaaaL, 0x0000000000000000L })
         },
         new Object[] {
-            new long[] { 0x0000000000000000L, 0x02aaaaaaaaaaaaaaL,
-                         0x0000000000000000L, 0x00002aaaaaaaaaaaL }
+            new ModE221M3(
+                new long[] { 0x0000000000000000L, 0x02aaaaaaaaaaaaaaL,
+                             0x0000000000000000L, 0x00002aaaaaaaaaaaL })
         },
         new Object[] {
-            new long[] { 0x03ffffffffffffffL, 0x0155555555555555L,
-                         0x03ffffffffffffffL, 0x0000555555555555L }
+            new ModE221M3(
+                new long[] { 0x03ffffffffffffffL, 0x0155555555555555L,
+                             0x03ffffffffffffffL, 0x0000555555555555L })
         },
         new Object[] {
-            new long[] { 0x0155555555555555L, 0x03ffffffffffffffL,
-                         0x0155555555555555L, 0x00007fffffffffffL }
+            new ModE221M3(
+                new long[] { 0x0155555555555555L, 0x03ffffffffffffffL,
+                             0x0155555555555555L, 0x00007fffffffffffL })
         }
     };
 

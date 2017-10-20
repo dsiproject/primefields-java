@@ -588,7 +588,7 @@ public final class ModE255M19 extends PrimeField1Mod4<ModE255M19> {
      * for {@code 2} if the original number is a quartic non-residue.
      * <p>
      * On this field, the exponent value is {@code
-     * 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe}.
+     * 0x6fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffee}.
      *
      * @see #legendre
      */
@@ -1567,8 +1567,15 @@ public final class ModE255M19 extends PrimeField1Mod4<ModE255M19> {
         // Third digit is 0.
         squareDigits(sqval);
 
+        // Fourth digit is 1.
+        squareDigits(sqval);
+        mulDigits(digits, sqval, digits);
+
+        // Fifth digit is 0.
+        squareDigits(sqval);
+
         // All the remaining digits are 1.
-        for(int i = 3; i < 221; i++) {
+        for(int i = 5; i < 255; i++) {
             squareDigits(sqval);
             mulDigits(digits, sqval, digits);
         }
@@ -1588,16 +1595,33 @@ public final class ModE255M19 extends PrimeField1Mod4<ModE255M19> {
 
     private static void invSqrtPowerDigits(final long[] digits) {
         // First digit is 0.
-
-        // Third digit is 1
         squareDigits(digits);
-        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
 
-        // All digits up to 252 are 1.
-        for(int i = 2; i < 252; i++) {
-            squareDigits(sqval);
+        // Second, third, and fourth digits are 1.
+        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
+        squareDigits(sqval);
+
+        mulDigits(digits, sqval, digits);
+        squareDigits(sqval);
+        mulDigits(digits, sqval, digits);
+        squareDigits(sqval);
+
+        // Fifth digit is 0.
+        squareDigits(sqval);
+
+        // All the remaining digits are 1.
+        for(int i = 5; i < 252; i++) {
             mulDigits(digits, sqval, digits);
+            squareDigits(sqval);
         }
+
+        // Digit 253 is 0.
+        squareDigits(sqval);
+
+        // Last two digits are 1.
+        mulDigits(digits, sqval, digits);
+        squareDigits(sqval);
+        mulDigits(digits, sqval, digits);
     }
 
 

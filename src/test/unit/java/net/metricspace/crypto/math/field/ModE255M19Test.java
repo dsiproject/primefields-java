@@ -168,6 +168,11 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
         return ModE255M19.create(M_TWENTY_FIVE_DATA);
     }
 
+    @Override
+    protected ModE255M19 unpack(final byte[] data) {
+        return new ModE255M19(data);
+    }
+
     private static final Object[][] TEST_CONSTANTS_TEST_CASES = new Object[][] {
         new Object[] { new ModE255M19(0), ModE255M19.zero() },
         new Object[] { new ModE255M19(1), ModE255M19.one() },
@@ -209,7 +214,7 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
                          (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
                          (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
                          (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00 },
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00 }
         },
         new Object[] {
             new byte[] { (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
@@ -219,7 +224,7 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
                          (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
                          (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
                          (byte)0x00, (byte)0xff, (byte)0x00, (byte)0x1f,
-                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0x7f },
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0x7f }
         },
         new Object[] {
             new byte[] { (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
@@ -229,7 +234,7 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
                          (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
                          (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
                          (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0x2a },
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0x2a }
         },
         new Object[] {
             new byte[] { (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
@@ -239,7 +244,7 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
                          (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
                          (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
                          (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55 },
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55 }
         },
         new Object[] {
             new byte[] { (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
@@ -249,7 +254,7 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
                          (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
                          (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
                          (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0x2a },
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0x2a }
         },
         new Object[] {
             new byte[] { (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
@@ -259,7 +264,7 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
                          (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
                          (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
                          (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00 },
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00 }
         },
         new Object[] {
             new byte[] { (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
@@ -269,7 +274,7 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
                          (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
                          (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
                          (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0x7f },
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0x7f }
         },
         new Object[] {
             new byte[] { (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
@@ -291,44 +296,52 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
 
     private static final Object[][] UNPACK_PACK_TEST_CASES = new Object[][] {
         new Object[] {
-            new long[] { 0x00ffffffffffffffL, 0x0000000000000000L,
-                         0x00ffffffffffffffL, 0x0000000000000000L,
-                         0x000000007fffffffL }
+            new ModE255M19(
+                new long[] { 0x00ffffffffffffffL, 0x0000000000000000L,
+                             0x00ffffffffffffffL, 0x0000000000000000L,
+                             0x000000007fffffffL })
         },
         new Object[] {
-            new long[] { 0x0000000000000000L, 0x00ffffffffffffffL,
-                         0x0000000000000000L, 0x00ffffffffffffffL,
-                         0x0000000000000000L },
+            new ModE255M19(
+                new long[] { 0x0000000000000000L, 0x00ffffffffffffffL,
+                             0x0000000000000000L, 0x00ffffffffffffffL,
+                             0x0000000000000000L })
         },
         new Object[] {
-            new long[] { 0x00aaaaaaaaaaaaaaL, 0x0055555555555555L,
-                         0x00aaaaaaaaaaaaaaL, 0x0055555555555555L,
-                         0x000000002aaaaaaaL },
+            new ModE255M19(
+                new long[] { 0x00aaaaaaaaaaaaaaL, 0x0055555555555555L,
+                             0x00aaaaaaaaaaaaaaL, 0x0055555555555555L,
+                             0x000000002aaaaaaaL })
         },
         new Object[] {
-            new long[] { 0x0055555555555555L, 0x00aaaaaaaaaaaaaaL,
-                         0x0055555555555555L, 0x00aaaaaaaaaaaaaaL,
-                         0x0000000055555555L },
+            new ModE255M19(
+                new long[] { 0x0055555555555555L, 0x00aaaaaaaaaaaaaaL,
+                             0x0055555555555555L, 0x00aaaaaaaaaaaaaaL,
+                             0x0000000055555555L })
         },
         new Object[] {
-            new long[] { 0x00aaaaaaaaaaaaaaL, 0x0000000000000000L,
-                         0x00aaaaaaaaaaaaaaL, 0x0000000000000000L,
-                         0x000000002aaaaaaaL },
+            new ModE255M19(
+                new long[] { 0x00aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                             0x00aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                             0x000000002aaaaaaaL })
         },
         new Object[] {
-            new long[] { 0x0000000000000000L, 0x00aaaaaaaaaaaaaaL,
-                         0x0000000000000000L, 0x00aaaaaaaaaaaaaaL,
-                         0x0000000000000000L },
+            new ModE255M19(
+                new long[] { 0x0000000000000000L, 0x00aaaaaaaaaaaaaaL,
+                             0x0000000000000000L, 0x00aaaaaaaaaaaaaaL,
+                             0x0000000000000000L })
         },
         new Object[] {
-            new long[] { 0x00ffffffffffffffL, 0x0055555555555555L,
-                         0x00ffffffffffffffL, 0x0055555555555555L,
-                         0x000000007fffffffL },
+            new ModE255M19(
+                new long[] { 0x00ffffffffffffffL, 0x0055555555555555L,
+                             0x00ffffffffffffffL, 0x0055555555555555L,
+                             0x000000007fffffffL })
         },
         new Object[] {
-            new long[] { 0x0055555555555555L, 0x00ffffffffffffffL,
-                         0x0055555555555555L, 0x00ffffffffffffffL,
-                         0x0000000055555555L }
+            new ModE255M19(
+                new long[] { 0x0055555555555555L, 0x00ffffffffffffffL,
+                             0x0055555555555555L, 0x00ffffffffffffffL,
+                             0x0000000055555555L })
         }
     };
 
@@ -462,9 +475,9 @@ public class ModE255M19Test extends PrimeField1Mod4UnitTest<ModE255M19> {
     }
 
     private static final Object[][] INV_SQRT_TEST_CASES = new Object[][] {
-        new Object[] { ModE255M19.zero(), ModE255M19.zero() },
-        new Object[] { ModE255M19.one(), ModE255M19.one() },
-        new Object[] { sixteen(), mfour() },
+        //new Object[] { ModE255M19.zero(), ModE255M19.zero() },
+        //new Object[] { ModE255M19.one(), ModE255M19.one() },
+        //new Object[] { sixteen(), mfour() },
         new Object[] { twentyFive(), five() },
     };
 
