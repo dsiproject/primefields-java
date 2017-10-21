@@ -545,10 +545,7 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
         // Legendre's formula for 5 mod 8 primes.
         final byte leg = legendreQuartic();
 
-        // All digits are 0 except the last.
-        for (int i = 0; i < 218; i++) {
-            square();
-        }
+        sqrtPowerDigits(digits);
 
         final byte onezero = (byte)((-leg + 1) / 2);
         final long[] coeff = SQRT_COEFF_M1.clone();
@@ -1374,6 +1371,13 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
                                    final int val) {
         Arrays.fill(digits, 0);
         addDigits(digits, val, digits);
+    }
+
+    private static void sqrtPowerDigits(final long[] digits) {
+        // All digits are 0 except the last.
+        for (int i = 0; i < 218; i++) {
+            squareDigits(digits);
+        }
     }
 
     private static void invSqrtPowerDigits(final long[] digits) {

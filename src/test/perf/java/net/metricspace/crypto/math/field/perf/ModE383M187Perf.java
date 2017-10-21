@@ -35,9 +35,9 @@ import java.math.BigInteger;
 import java.util.EnumMap;
 import java.util.Random;
 
-import net.metricspace.crypto.math.field.ModE255M19;
+import net.metricspace.crypto.math.field.ModE383M187;
 
-public class ModE255M19Perf extends PrimeField1Mod4Perf<ModE255M19> {
+public class ModE383M187Perf extends PrimeField1Mod4Perf<ModE383M187> {
     private static Random random = new Random();
 
     private static final byte[] ASCENDING_DATA =
@@ -48,9 +48,17 @@ public class ModE255M19Perf extends PrimeField1Mod4Perf<ModE255M19> {
                      (byte)0x10, (byte)0x11, (byte)0x12, (byte)0x13,
                      (byte)0x14, (byte)0x15, (byte)0x16, (byte)0x17,
                      (byte)0x18, (byte)0x19, (byte)0x1a, (byte)0x1b,
-                     (byte)0x1c, (byte)0x1d, (byte)0x1e, (byte)0x1f };
+                     (byte)0x1c, (byte)0x1d, (byte)0x1e, (byte)0x1f,
+                     (byte)0x20, (byte)0x21, (byte)0x22, (byte)0x23,
+                     (byte)0x24, (byte)0x25, (byte)0x26, (byte)0x27,
+                     (byte)0x28, (byte)0x29, (byte)0x2a, (byte)0x2b,
+                     (byte)0x2c, (byte)0x2d, (byte)0x2e, (byte)0x2f };
     private static final byte[] DESCENDING_DATA =
-        new byte[] { (byte)0x1f, (byte)0x1e, (byte)0x1d, (byte)0x1c,
+        new byte[] { (byte)0x2f, (byte)0x2e, (byte)0x2d, (byte)0x2c,
+                     (byte)0x2b, (byte)0x2a, (byte)0x29, (byte)0x28,
+                     (byte)0x27, (byte)0x26, (byte)0x25, (byte)0x24,
+                     (byte)0x23, (byte)0x22, (byte)0x21, (byte)0x20,
+                     (byte)0x1f, (byte)0x1e, (byte)0x1d, (byte)0x1c,
                      (byte)0x1b, (byte)0x1a, (byte)0x19, (byte)0x18,
                      (byte)0x17, (byte)0x16, (byte)0x15, (byte)0x14,
                      (byte)0x13, (byte)0x12, (byte)0x11, (byte)0x10,
@@ -63,6 +71,10 @@ public class ModE255M19Perf extends PrimeField1Mod4Perf<ModE255M19> {
                      (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
                      (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
                      (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+                     (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+                     (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+                     (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
+                     (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
                      (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
                      (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
                      (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
@@ -72,6 +84,10 @@ public class ModE255M19Perf extends PrimeField1Mod4Perf<ModE255M19> {
                      (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
                      (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
                      (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
+                     (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
+                     (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
+                     (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+                     (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
                      (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
                      (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
                      (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
@@ -84,11 +100,15 @@ public class ModE255M19Perf extends PrimeField1Mod4Perf<ModE255M19> {
                      (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
                      (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
                      (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
                      (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00 };
-    private static final byte[] RANDOM_1 = new byte[ModE255M19.PACKED_BYTES];
-    private static final byte[] RANDOM_2 = new byte[ModE255M19.PACKED_BYTES];
-    private static final byte[] RANDOM_3 = new byte[ModE255M19.PACKED_BYTES];
-    private static final byte[] RANDOM_4 = new byte[ModE255M19.PACKED_BYTES];
+    private static final byte[] RANDOM_1 = new byte[ModE383M187.PACKED_BYTES];
+    private static final byte[] RANDOM_2 = new byte[ModE383M187.PACKED_BYTES];
+    private static final byte[] RANDOM_3 = new byte[ModE383M187.PACKED_BYTES];
+    private static final byte[] RANDOM_4 = new byte[ModE383M187.PACKED_BYTES];
 
     private static final BigInteger MODULUS =
         new BigInteger(new byte[] {
@@ -99,10 +119,14 @@ public class ModE255M19Perf extends PrimeField1Mod4Perf<ModE255M19> {
                 (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
                 (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
                 (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
-                (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xed
+                (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
+                (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
+                (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
+                (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff,
+                (byte)0xff, (byte)0xff, (byte)0xff, (byte)0x45
             });
 
-    private static final EnumMap<DataKind, ModE255M19> PARAMS =
+    private static final EnumMap<DataKind, ModE383M187> PARAMS =
         new EnumMap<>(DataKind.class);
 
     static {
@@ -110,18 +134,18 @@ public class ModE255M19Perf extends PrimeField1Mod4Perf<ModE255M19> {
         random.nextBytes(RANDOM_2);
         random.nextBytes(RANDOM_3);
         random.nextBytes(RANDOM_4);
-        PARAMS.put(DataKind.ZERO, ModE255M19.zero());
-        PARAMS.put(DataKind.ONE, ModE255M19.one());
-        PARAMS.put(DataKind.MONE, ModE255M19.mone());
-        PARAMS.put(DataKind.ASCENDING, new ModE255M19(ASCENDING_DATA));
-        PARAMS.put(DataKind.DESCENDING, new ModE255M19(DESCENDING_DATA));
-        PARAMS.put(DataKind.HALF_HI, new ModE255M19(HALF_HI));
-        PARAMS.put(DataKind.HALF_LO, new ModE255M19(HALF_LO));
-        PARAMS.put(DataKind.HALF_SMALL, new ModE255M19(HALF_SMALL));
-        PARAMS.put(DataKind.RANDOM_1, new ModE255M19(RANDOM_1));
-        PARAMS.put(DataKind.RANDOM_2, new ModE255M19(RANDOM_2));
-        PARAMS.put(DataKind.RANDOM_3, new ModE255M19(RANDOM_3));
-        PARAMS.put(DataKind.RANDOM_4, new ModE255M19(RANDOM_4));
+        PARAMS.put(DataKind.ZERO, ModE383M187.zero());
+        PARAMS.put(DataKind.ONE, ModE383M187.one());
+        PARAMS.put(DataKind.MONE, ModE383M187.mone());
+        PARAMS.put(DataKind.ASCENDING, new ModE383M187(ASCENDING_DATA));
+        PARAMS.put(DataKind.DESCENDING, new ModE383M187(DESCENDING_DATA));
+        PARAMS.put(DataKind.HALF_HI, new ModE383M187(HALF_HI));
+        PARAMS.put(DataKind.HALF_LO, new ModE383M187(HALF_LO));
+        PARAMS.put(DataKind.HALF_SMALL, new ModE383M187(HALF_SMALL));
+        PARAMS.put(DataKind.RANDOM_1, new ModE383M187(RANDOM_1));
+        PARAMS.put(DataKind.RANDOM_2, new ModE383M187(RANDOM_2));
+        PARAMS.put(DataKind.RANDOM_3, new ModE383M187(RANDOM_3));
+        PARAMS.put(DataKind.RANDOM_4, new ModE383M187(RANDOM_4));
     };
 
     private static final EnumMap<DataKind, BigInteger> BIGINT_PARAMS =
@@ -151,7 +175,7 @@ public class ModE255M19Perf extends PrimeField1Mod4Perf<ModE255M19> {
                    new BigInteger(swapByteOrder(RANDOM_4)));
     };
 
-    public ModE255M19Perf() {
+    public ModE383M187Perf() {
         super(PARAMS, BIGINT_PARAMS, MODULUS);
 
     }

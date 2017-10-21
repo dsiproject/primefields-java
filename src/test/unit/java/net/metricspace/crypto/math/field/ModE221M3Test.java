@@ -335,28 +335,28 @@ public class ModE221M3Test extends PrimeField1Mod4UnitTest<ModE221M3> {
     public void addTest() {
         final ModE221M3[][] tierOne = addTier(startTier);
         final ModE221M3[][] tierTwo = addTier(tierOne);
-        final ModE221M3[][] tierThree = addTier(tierTwo);
+        //final ModE221M3[][] tierThree = addTier(tierTwo);
     }
 
     @Test
     public void subTest() {
         final ModE221M3[][] tierOne = subTier(startTier);
         final ModE221M3[][] tierTwo = subTier(tierOne);
-        final ModE221M3[][] tierThree = subTier(tierTwo);
+        //final ModE221M3[][] tierThree = subTier(tierTwo);
     }
 
     @Test
     public void mulTest() {
         final ModE221M3[][] tierOne = mulTier(startTier);
         final ModE221M3[][] tierTwo = mulTier(tierOne);
-        final ModE221M3[][] tierThree = mulTier(tierTwo);
+        //final ModE221M3[][] tierThree = mulTier(tierTwo);
     }
 
     @Test
     public void divTest() {
         final ModE221M3[][] tierOne = divTier(startTier);
         final ModE221M3[][] tierTwo = divTier(tierOne);
-        final ModE221M3[][] tierThree = divTier(tierTwo);
+        //final ModE221M3[][] tierThree = divTier(tierTwo);
     }
 
     private static final Object[][] SQUARE_TEST_CASES = new Object[][] {
