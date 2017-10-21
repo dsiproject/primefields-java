@@ -152,37 +152,55 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             (vals[TWO_IDX].length * vals[MTWO_IDX].length) +
             (vals[MTWO_IDX].length * vals[TWO_IDX].length) +
             (vals[FOUR_IDX].length * vals[MFOUR_IDX].length) +
-            (vals[MFOUR_IDX].length * vals[FOUR_IDX].length);
+            (vals[MFOUR_IDX].length * vals[FOUR_IDX].length) +
+            vals[ZERO_IDX].length + vals[ONE_IDX].length +
+            vals[MONE_IDX].length + vals[TWO_IDX].length +
+            vals[MTWO_IDX].length + vals[FOUR_IDX].length +
+            vals[MFOUR_IDX].length;
         final int nones =
             (vals[ZERO_IDX].length * vals[ONE_IDX].length) +
             (vals[ONE_IDX].length * vals[ZERO_IDX].length) +
             (vals[MONE_IDX].length * vals[TWO_IDX].length) +
-            (vals[TWO_IDX].length * vals[MONE_IDX].length);
+            (vals[TWO_IDX].length * vals[MONE_IDX].length) +
+            vals[ZERO_IDX].length + vals[ONE_IDX].length +
+            vals[MONE_IDX].length + vals[TWO_IDX].length;
         final int nmones =
             (vals[ZERO_IDX].length * vals[MONE_IDX].length) +
             (vals[MONE_IDX].length * vals[ZERO_IDX].length) +
             (vals[ONE_IDX].length * vals[MTWO_IDX].length) +
-            (vals[MTWO_IDX].length * vals[ONE_IDX].length);
+            (vals[MTWO_IDX].length * vals[ONE_IDX].length) +
+            vals[ZERO_IDX].length + vals[MONE_IDX].length +
+            vals[ONE_IDX].length + vals[MTWO_IDX].length;
         final int ntwos =
             (vals[ZERO_IDX].length * vals[TWO_IDX].length) +
             (vals[TWO_IDX].length * vals[ZERO_IDX].length) +
             (vals[ONE_IDX].length * vals[ONE_IDX].length) +
             (vals[FOUR_IDX].length * vals[MTWO_IDX].length) +
-            (vals[MTWO_IDX].length * vals[FOUR_IDX].length);
+            (vals[MTWO_IDX].length * vals[FOUR_IDX].length) +
+            vals[ZERO_IDX].length + vals[TWO_IDX].length +
+            vals[ONE_IDX].length + vals[FOUR_IDX].length +
+            vals[MTWO_IDX].length;
         final int nmtwos =
             (vals[ZERO_IDX].length * vals[MTWO_IDX].length) +
             (vals[MTWO_IDX].length * vals[ZERO_IDX].length) +
             (vals[MONE_IDX].length * vals[MONE_IDX].length) +
             (vals[FOUR_IDX].length * vals[TWO_IDX].length) +
-            (vals[TWO_IDX].length * vals[FOUR_IDX].length);
+            (vals[TWO_IDX].length * vals[FOUR_IDX].length) +
+            vals[ZERO_IDX].length + vals[MTWO_IDX].length +
+            vals[MONE_IDX].length + vals[FOUR_IDX].length +
+            vals[TWO_IDX].length;
         final int nfours =
             (vals[ZERO_IDX].length * vals[FOUR_IDX].length) +
             (vals[FOUR_IDX].length * vals[ZERO_IDX].length) +
-            (vals[TWO_IDX].length * vals[TWO_IDX].length);
+            (vals[TWO_IDX].length * vals[TWO_IDX].length) +
+            vals[ZERO_IDX].length + vals[FOUR_IDX].length +
+            vals[TWO_IDX].length;
         final int nmfours =
             (vals[ZERO_IDX].length * vals[MFOUR_IDX].length) +
             (vals[MFOUR_IDX].length * vals[ZERO_IDX].length) +
-            (vals[MTWO_IDX].length * vals[MTWO_IDX].length);
+            (vals[MTWO_IDX].length * vals[MTWO_IDX].length) +
+            vals[ZERO_IDX].length + vals[MFOUR_IDX].length +
+            vals[MTWO_IDX].length;
         int idx;
 
         out[ZERO_IDX] = Arrays.copyOf(vals[ZERO_IDX], nzeros);
@@ -265,6 +283,71 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.add(0);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.add(-1);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.add(1);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.add(-2);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.add(2);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.add(-4);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.add(4);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+
         out[ONE_IDX] = Arrays.copyOf(vals[ONE_IDX], nones);
 
         idx = 0;
@@ -312,6 +395,42 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.add(1);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.add(0);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.add(2);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.add(-1);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
         out[MONE_IDX] = Arrays.copyOf(vals[MONE_IDX], nmones);
 
         idx = 0;
@@ -357,6 +476,42 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
                 out[MONE_IDX][idx++] = val;
                 Assert.assertEquals(val, vals[MONE_IDX][0]);
             }
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.add(-1);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.add(0);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.add(-2);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.add(1);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
         }
 
         out[TWO_IDX] = Arrays.copyOf(vals[TWO_IDX], ntwos);
@@ -417,6 +572,52 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.add(0);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.add(2);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.add(1);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.add(4);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.add(-2);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
         out[MTWO_IDX] = Arrays.copyOf(vals[MTWO_IDX], nmtwos);
 
         idx = 0;
@@ -475,6 +676,52 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.add(0);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.add(-2);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.add(-1);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.add(-4);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.add(2);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
         out[FOUR_IDX] = Arrays.copyOf(vals[FOUR_IDX], nfours);
 
         idx = 0;
@@ -511,6 +758,33 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.add(0);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.add(4);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.add(2);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
         out[MFOUR_IDX] = Arrays.copyOf(vals[MFOUR_IDX], nmfours);
 
         idx = 0;
@@ -545,6 +819,33 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
                 out[MFOUR_IDX][idx++] = val;
                 Assert.assertEquals(val, vals[MFOUR_IDX][0]);
             }
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.add(0);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.add(-4);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.add(-2);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
         }
 
         return out;
@@ -559,37 +860,55 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             (vals[TWO_IDX].length * vals[TWO_IDX].length) +
             (vals[MTWO_IDX].length * vals[MTWO_IDX].length) +
             (vals[FOUR_IDX].length * vals[FOUR_IDX].length) +
-            (vals[MFOUR_IDX].length * vals[MFOUR_IDX].length);
+            (vals[MFOUR_IDX].length * vals[MFOUR_IDX].length) +
+            vals[ZERO_IDX].length + vals[ONE_IDX].length +
+            vals[MONE_IDX].length + vals[TWO_IDX].length +
+            vals[MTWO_IDX].length + vals[FOUR_IDX].length +
+            vals[MFOUR_IDX].length;
         final int nones =
             (vals[ZERO_IDX].length * vals[MONE_IDX].length) +
             (vals[ONE_IDX].length * vals[ZERO_IDX].length) +
             (vals[MONE_IDX].length * vals[MTWO_IDX].length) +
-            (vals[TWO_IDX].length * vals[ONE_IDX].length);
+            (vals[TWO_IDX].length * vals[ONE_IDX].length) +
+            vals[ZERO_IDX].length + vals[ONE_IDX].length +
+            vals[MONE_IDX].length + vals[TWO_IDX].length;
         final int nmones =
             (vals[ZERO_IDX].length * vals[ONE_IDX].length) +
             (vals[MONE_IDX].length * vals[ZERO_IDX].length) +
             (vals[ONE_IDX].length * vals[TWO_IDX].length) +
-            (vals[MTWO_IDX].length * vals[MONE_IDX].length);
+            (vals[MTWO_IDX].length * vals[MONE_IDX].length) +
+            vals[ZERO_IDX].length + vals[MONE_IDX].length +
+            vals[ONE_IDX].length + vals[MTWO_IDX].length;
         final int ntwos =
             (vals[ZERO_IDX].length * vals[MTWO_IDX].length) +
             (vals[TWO_IDX].length * vals[ZERO_IDX].length) +
             (vals[MONE_IDX].length * vals[MONE_IDX].length) +
             (vals[FOUR_IDX].length * vals[TWO_IDX].length) +
-            (vals[MTWO_IDX].length * vals[MFOUR_IDX].length);
+            (vals[MTWO_IDX].length * vals[MFOUR_IDX].length) +
+            vals[ZERO_IDX].length + vals[TWO_IDX].length +
+            vals[MONE_IDX].length + vals[FOUR_IDX].length +
+            vals[MTWO_IDX].length;
         final int nmtwos =
             (vals[ZERO_IDX].length * vals[TWO_IDX].length) +
             (vals[MTWO_IDX].length * vals[ZERO_IDX].length) +
             (vals[ONE_IDX].length * vals[ONE_IDX].length) +
             (vals[MFOUR_IDX].length * vals[MTWO_IDX].length) +
-            (vals[TWO_IDX].length * vals[FOUR_IDX].length);
+            (vals[TWO_IDX].length * vals[FOUR_IDX].length) +
+            vals[ZERO_IDX].length + vals[MTWO_IDX].length +
+            vals[ONE_IDX].length + vals[MFOUR_IDX].length +
+            vals[TWO_IDX].length;
         final int nfours =
             (vals[ZERO_IDX].length * vals[FOUR_IDX].length) +
             (vals[FOUR_IDX].length * vals[ZERO_IDX].length) +
-            (vals[TWO_IDX].length * vals[MTWO_IDX].length);
+            (vals[TWO_IDX].length * vals[MTWO_IDX].length) +
+            vals[ZERO_IDX].length + vals[FOUR_IDX].length +
+            vals[TWO_IDX].length;
         final int nmfours =
             (vals[ZERO_IDX].length * vals[MFOUR_IDX].length) +
             (vals[MFOUR_IDX].length * vals[ZERO_IDX].length) +
-            (vals[MTWO_IDX].length * vals[TWO_IDX].length);
+            (vals[MTWO_IDX].length * vals[TWO_IDX].length) +
+            vals[ZERO_IDX].length + vals[MFOUR_IDX].length +
+            vals[MTWO_IDX].length;
         int idx;
 
         out[ZERO_IDX] = Arrays.copyOf(vals[ZERO_IDX], nzeros);
@@ -672,6 +991,69 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.sub(0);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.sub(1);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.sub(-1);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.sub(2);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.sub(-2);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.sub(4);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.sub(-4);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
         out[ONE_IDX] = Arrays.copyOf(vals[ONE_IDX], nones);
 
         idx = 0;
@@ -719,6 +1101,42 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.sub(-1);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.sub(0);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.sub(-2);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.sub(1);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
         out[MONE_IDX] = Arrays.copyOf(vals[MONE_IDX], nmones);
 
         idx = 0;
@@ -764,6 +1182,42 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
                 out[MONE_IDX][idx++] = val;
                 Assert.assertEquals(val, vals[MONE_IDX][0]);
             }
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.sub(1);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.sub(0);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.sub(2);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.sub(-1);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
         }
 
         out[TWO_IDX] = Arrays.copyOf(vals[TWO_IDX], ntwos);
@@ -824,6 +1278,51 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.sub(0);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.sub(-2);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.sub(-1);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.sub(-4);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.sub(2);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
         out[MTWO_IDX] = Arrays.copyOf(vals[MTWO_IDX], nmtwos);
 
         idx = 0;
@@ -882,6 +1381,51 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.sub(0);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.sub(2);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.sub(1);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.sub(4);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.sub(-2);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
         out[FOUR_IDX] = Arrays.copyOf(vals[FOUR_IDX], nfours);
 
         idx = 0;
@@ -918,6 +1462,33 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.sub(0);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.sub(-4);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.sub(-2);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
         out[MFOUR_IDX] = Arrays.copyOf(vals[MFOUR_IDX], nmfours);
 
         idx = 0;
@@ -952,6 +1523,33 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
                 out[MFOUR_IDX][idx++] = val;
                 Assert.assertEquals(val, vals[MFOUR_IDX][0]);
             }
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.sub(0);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.sub(4);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.sub(2);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
         }
 
         return out;
@@ -972,37 +1570,56 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             (vals[ZERO_IDX].length * vals[TWO_IDX].length) +
             (vals[ZERO_IDX].length * vals[MTWO_IDX].length) +
             (vals[ZERO_IDX].length * vals[FOUR_IDX].length) +
-            (vals[ZERO_IDX].length * vals[MFOUR_IDX].length);
+            (vals[ZERO_IDX].length * vals[MFOUR_IDX].length) +
+            vals[ZERO_IDX].length + vals[ONE_IDX].length +
+            vals[MONE_IDX].length + vals[TWO_IDX].length +
+            vals[MTWO_IDX].length + vals[FOUR_IDX].length +
+            vals[MFOUR_IDX].length + vals[ZERO_IDX].length +
+            vals[ZERO_IDX].length + vals[ZERO_IDX].length +
+            vals[ZERO_IDX].length + vals[ZERO_IDX].length +
+            vals[ZERO_IDX].length;
         final int nones =
             (vals[ONE_IDX].length * vals[ONE_IDX].length) +
-            (vals[MONE_IDX].length * vals[MONE_IDX].length);
+            (vals[MONE_IDX].length * vals[MONE_IDX].length) +
+            vals[ONE_IDX].length + vals[MONE_IDX].length;
         final int nmones =
             (vals[ONE_IDX].length * vals[MONE_IDX].length) +
-            (vals[MONE_IDX].length * vals[ONE_IDX].length);
+            (vals[MONE_IDX].length * vals[ONE_IDX].length) +
+            vals[ONE_IDX].length + vals[MONE_IDX].length;
         final int ntwos =
             (vals[ONE_IDX].length * vals[TWO_IDX].length) +
             (vals[TWO_IDX].length * vals[ONE_IDX].length) +
             (vals[MONE_IDX].length * vals[MTWO_IDX].length) +
-            (vals[MTWO_IDX].length * vals[MONE_IDX].length);
+            (vals[MTWO_IDX].length * vals[MONE_IDX].length) +
+            vals[ONE_IDX].length + vals[TWO_IDX].length +
+            vals[MONE_IDX].length + vals[MTWO_IDX].length;
         final int nmtwos =
             (vals[ONE_IDX].length * vals[MTWO_IDX].length) +
             (vals[TWO_IDX].length * vals[MONE_IDX].length) +
             (vals[MONE_IDX].length * vals[TWO_IDX].length) +
-            (vals[MTWO_IDX].length * vals[ONE_IDX].length);
+            (vals[MTWO_IDX].length * vals[ONE_IDX].length) +
+            vals[ONE_IDX].length + vals[TWO_IDX].length +
+            vals[MONE_IDX].length + vals[MTWO_IDX].length;
         final int nfours =
             (vals[ONE_IDX].length * vals[FOUR_IDX].length) +
             (vals[FOUR_IDX].length * vals[ONE_IDX].length) +
             (vals[MONE_IDX].length * vals[MFOUR_IDX].length) +
             (vals[MFOUR_IDX].length * vals[MONE_IDX].length) +
             (vals[TWO_IDX].length * vals[TWO_IDX].length) +
-            (vals[MTWO_IDX].length * vals[MTWO_IDX].length);
+            (vals[MTWO_IDX].length * vals[MTWO_IDX].length) +
+            vals[ONE_IDX].length + vals[FOUR_IDX].length +
+            vals[MONE_IDX].length + vals[MFOUR_IDX].length +
+            vals[TWO_IDX].length + vals[MTWO_IDX].length;
         final int nmfours =
             (vals[ONE_IDX].length * vals[MFOUR_IDX].length) +
             (vals[FOUR_IDX].length * vals[MONE_IDX].length) +
             (vals[MONE_IDX].length * vals[FOUR_IDX].length) +
             (vals[MFOUR_IDX].length * vals[ONE_IDX].length) +
             (vals[TWO_IDX].length * vals[MTWO_IDX].length) +
-            (vals[MTWO_IDX].length * vals[TWO_IDX].length);
+            (vals[MTWO_IDX].length * vals[TWO_IDX].length) +
+            vals[ONE_IDX].length + vals[FOUR_IDX].length +
+            vals[MONE_IDX].length + vals[MFOUR_IDX].length +
+            vals[TWO_IDX].length + vals[MTWO_IDX].length;
         int idx;
 
         out[ZERO_IDX] = Arrays.copyOf(vals[ZERO_IDX], nzeros);
@@ -1151,6 +1768,123 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.mul((short)0);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.mul((short)0);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.mul((short)0);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.mul((short)0);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.mul((short)0);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.mul((short)0);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.mul((short)0);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.mul((short)1);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.mul((short)-1);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.mul((short)2);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.mul((short)-2);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.mul((short)4);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.mul((short)-4);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
         out[ONE_IDX] = Arrays.copyOf(vals[ONE_IDX], nones);
 
         idx = 0;
@@ -1176,6 +1910,24 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.mul((short)1);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.mul((short)-1);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
         out[MONE_IDX] = Arrays.copyOf(vals[MONE_IDX], nmones);
 
         idx = 0;
@@ -1199,6 +1951,24 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
                 out[MONE_IDX][idx++] = val;
                 Assert.assertEquals(val, vals[MONE_IDX][0]);
             }
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.mul((short)-1);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.mul((short)1);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
         }
 
         out[TWO_IDX] = Arrays.copyOf(vals[TWO_IDX], ntwos);
@@ -1248,6 +2018,42 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.mul((short)2);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.mul((short)1);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.mul((short)-2);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.mul((short)-1);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
         out[MTWO_IDX] = Arrays.copyOf(vals[MTWO_IDX], nmtwos);
 
         idx = 0;
@@ -1293,6 +2099,42 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
                 out[MTWO_IDX][idx++] = val;
                 Assert.assertEquals(val, vals[MTWO_IDX][0]);
             }
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.mul((short)-2);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.mul((short)-1);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.mul((short)2);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.mul((short)1);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
         }
 
         out[FOUR_IDX] = Arrays.copyOf(vals[FOUR_IDX], nfours);
@@ -1364,6 +2206,61 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.mul((short)4);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.mul((short)1);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.mul((short)-4);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.mul((short)-1);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.mul((short)2);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.mul((short)-2);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
         out[MFOUR_IDX] = Arrays.copyOf(vals[MFOUR_IDX], nmfours);
 
         idx = 0;
@@ -1431,6 +2328,60 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
                 out[MFOUR_IDX][idx++] = val;
                 Assert.assertEquals(val, vals[MFOUR_IDX][0]);
             }
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.mul((short)-4);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.mul((short)-1);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.mul((short)4);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.mul((short)1);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.mul((short)-2);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.mul((short)2);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
         }
 
         return out;
@@ -1444,37 +2395,52 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             (vals[ZERO_IDX].length * vals[TWO_IDX].length) +
             (vals[ZERO_IDX].length * vals[MTWO_IDX].length) +
             (vals[ZERO_IDX].length * vals[FOUR_IDX].length) +
-            (vals[ZERO_IDX].length * vals[MFOUR_IDX].length);
+            (vals[ZERO_IDX].length * vals[MFOUR_IDX].length) +
+            vals[ZERO_IDX].length + vals[ZERO_IDX].length +
+            vals[ZERO_IDX].length + vals[ZERO_IDX].length +
+            vals[ZERO_IDX].length + vals[ZERO_IDX].length;
         final int nones =
             (vals[ONE_IDX].length * vals[ONE_IDX].length) +
             (vals[MONE_IDX].length * vals[MONE_IDX].length) +
             (vals[TWO_IDX].length * vals[TWO_IDX].length) +
             (vals[MTWO_IDX].length * vals[MTWO_IDX].length) +
             (vals[FOUR_IDX].length * vals[FOUR_IDX].length) +
-            (vals[MFOUR_IDX].length * vals[MFOUR_IDX].length);
+            (vals[MFOUR_IDX].length * vals[MFOUR_IDX].length) +
+            vals[ONE_IDX].length + vals[MONE_IDX].length +
+            vals[TWO_IDX].length + vals[MTWO_IDX].length +
+            vals[FOUR_IDX].length + vals[MFOUR_IDX].length;
         final int nmones =
             (vals[ONE_IDX].length * vals[MONE_IDX].length) +
             (vals[MONE_IDX].length * vals[ONE_IDX].length) +
             (vals[TWO_IDX].length * vals[MTWO_IDX].length) +
             (vals[MTWO_IDX].length * vals[TWO_IDX].length) +
             (vals[FOUR_IDX].length * vals[MFOUR_IDX].length) +
-            (vals[MFOUR_IDX].length * vals[FOUR_IDX].length);
+            (vals[MFOUR_IDX].length * vals[FOUR_IDX].length) +
+            vals[ONE_IDX].length + vals[MONE_IDX].length +
+            vals[TWO_IDX].length + vals[MTWO_IDX].length +
+            vals[FOUR_IDX].length + vals[MFOUR_IDX].length;
         final int ntwos =
             (vals[TWO_IDX].length * vals[ONE_IDX].length) +
             (vals[MTWO_IDX].length * vals[MONE_IDX].length) +
             (vals[FOUR_IDX].length * vals[TWO_IDX].length) +
-            (vals[MFOUR_IDX].length * vals[MTWO_IDX].length);
+            (vals[MFOUR_IDX].length * vals[MTWO_IDX].length) +
+            vals[TWO_IDX].length + vals[MTWO_IDX].length +
+            vals[FOUR_IDX].length + vals[MFOUR_IDX].length;
         final int nmtwos =
             (vals[TWO_IDX].length * vals[MONE_IDX].length) +
             (vals[MTWO_IDX].length * vals[ONE_IDX].length) +
             (vals[FOUR_IDX].length * vals[MTWO_IDX].length) +
-            (vals[MFOUR_IDX].length * vals[TWO_IDX].length);
+            (vals[MFOUR_IDX].length * vals[TWO_IDX].length) +
+            vals[TWO_IDX].length + vals[MTWO_IDX].length +
+            vals[FOUR_IDX].length + vals[MFOUR_IDX].length;
         final int nfours =
             (vals[FOUR_IDX].length * vals[ONE_IDX].length) +
-            (vals[MFOUR_IDX].length * vals[MONE_IDX].length);
+            (vals[MFOUR_IDX].length * vals[MONE_IDX].length) +
+            vals[FOUR_IDX].length + vals[MFOUR_IDX].length;
         final int nmfours =
             (vals[FOUR_IDX].length * vals[MONE_IDX].length) +
-            (vals[MFOUR_IDX].length * vals[ONE_IDX].length);
+            (vals[MFOUR_IDX].length * vals[ONE_IDX].length) +
+            vals[FOUR_IDX].length + vals[MFOUR_IDX].length;
         int idx;
 
         out[ZERO_IDX] = Arrays.copyOf(vals[ZERO_IDX], nzeros);
@@ -1546,6 +2512,61 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.div((short)1);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.div((short)-1);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.div((short)2);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.div((short)-2);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.div((short)4);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[ZERO_IDX].length; i++) {
+            final P val = vals[ZERO_IDX][i].clone();
+
+            val.div((short)-4);
+
+            out[ZERO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ZERO_IDX][0]);
+        }
+
         out[ONE_IDX] = Arrays.copyOf(vals[ONE_IDX], nones);
 
         idx = 0;
@@ -1613,6 +2634,60 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
                 out[ONE_IDX][idx++] = val;
                 Assert.assertEquals(val, vals[ONE_IDX][0]);
             }
+        }
+
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.div((short)1);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.div((short)-1);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.div((short)2);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.div((short)-2);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.div((short)4);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.div((short)-4);
+
+            out[ONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[ONE_IDX][0]);
         }
 
         out[MONE_IDX] = Arrays.copyOf(vals[MONE_IDX], nmones);
@@ -1684,6 +2759,60 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[ONE_IDX].length; i++) {
+            final P val = vals[ONE_IDX][i].clone();
+
+            val.div((short)-1);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MONE_IDX].length; i++) {
+            final P val = vals[MONE_IDX][i].clone();
+
+            val.div((short)1);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.div((short)-2);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.div((short)2);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.div((short)-4);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.div((short)4);
+
+            out[MONE_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MONE_IDX][0]);
+        }
+
         out[TWO_IDX] = Arrays.copyOf(vals[TWO_IDX], ntwos);
 
         idx = 0;
@@ -1729,6 +2858,42 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
                 out[TWO_IDX][idx++] = val;
                 Assert.assertEquals(val, vals[TWO_IDX][0]);
             }
+        }
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.div((short)1);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.div((short)-1);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.div((short)2);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.div((short)-2);
+
+            out[TWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[TWO_IDX][0]);
         }
 
         out[MTWO_IDX] = Arrays.copyOf(vals[MTWO_IDX], nmtwos);
@@ -1778,6 +2943,43 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+
+        for(int i = 0; i < vals[TWO_IDX].length; i++) {
+            final P val = vals[TWO_IDX][i].clone();
+
+            val.div((short)-1);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MTWO_IDX].length; i++) {
+            final P val = vals[MTWO_IDX][i].clone();
+
+            val.div((short)1);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.div((short)-2);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.div((short)2);
+
+            out[MTWO_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MTWO_IDX][0]);
+        }
+
         out[FOUR_IDX] = Arrays.copyOf(vals[FOUR_IDX], nfours);
 
         idx = 0;
@@ -1803,6 +3005,24 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
             }
         }
 
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.div((short)1);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.div((short)-1);
+
+            out[FOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[FOUR_IDX][0]);
+        }
+
         out[MFOUR_IDX] = Arrays.copyOf(vals[MFOUR_IDX], nmfours);
 
         idx = 0;
@@ -1826,6 +3046,24 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
                 out[MFOUR_IDX][idx++] = val;
                 Assert.assertEquals(val, vals[MFOUR_IDX][0]);
             }
+        }
+
+        for(int i = 0; i < vals[FOUR_IDX].length; i++) {
+            final P val = vals[FOUR_IDX][i].clone();
+
+            val.div((short)-1);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
+        }
+
+        for(int i = 0; i < vals[MFOUR_IDX].length; i++) {
+            final P val = vals[MFOUR_IDX][i].clone();
+
+            val.div((short)1);
+
+            out[MFOUR_IDX][idx++] = val;
+            Assert.assertEquals(val, vals[MFOUR_IDX][0]);
         }
 
         return out;

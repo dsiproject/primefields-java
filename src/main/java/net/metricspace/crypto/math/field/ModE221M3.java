@@ -425,7 +425,7 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
      */
     @Override
     public void div(final int b) {
-        final long[] divisor = new long[4];
+        final long[] divisor = new long[NUM_DIGITS];
 
         initDigits(divisor, b);
         div(divisor);
@@ -851,11 +851,11 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
         final long cin = carryOut(a);
         final long s0 = a0 - b + (cin * C_VAL);
         final long c0 = s0 >> DIGIT_BITS;
-        final long s1 = a1 - c0;
+        final long s1 = a1 + c0;
         final long c1 = s1 >> DIGIT_BITS;
-        final long s2 = a2 - c1;
+        final long s2 = a2 + c1;
         final long c2 = s2 >> DIGIT_BITS;
-        final long s3 = a3 - c2;
+        final long s3 = a3 + c2;
 
         out[0] = s0 & DIGIT_MASK;
         out[1] = s1 & DIGIT_MASK;
