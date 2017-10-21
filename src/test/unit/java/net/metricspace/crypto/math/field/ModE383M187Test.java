@@ -517,7 +517,7 @@ public class ModE383M187Test extends PrimeField1Mod4UnitTest<ModE383M187> {
         new Object[] { ModE383M187.zero(), ModE383M187.zero() },
         new Object[] { ModE383M187.one(), ModE383M187.one() },
         new Object[] { sixteen(), mfour() },
-        new Object[] { twentyFive(), five() },
+        new Object[] { twentyFive(), mfive() },
     };
 
     @DataProvider(name = "sqrt", parallel = true)
@@ -529,7 +529,7 @@ public class ModE383M187Test extends PrimeField1Mod4UnitTest<ModE383M187> {
         new Object[] { ModE383M187.zero(), ModE383M187.zero() },
         new Object[] { ModE383M187.one(), ModE383M187.one() },
         new Object[] { sixteen(), mfour() },
-        new Object[] { twentyFive(), five() },
+        new Object[] { twentyFive(), mfive() },
     };
 
     static {
