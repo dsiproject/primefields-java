@@ -173,144 +173,6 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
      * The value {@code 2 ^ ((MODULUS - 1) / 4) - 1}.  Used in the
      * computation of square roots.  The value of this is one less
      * than {@code
-     * 0x0x0000000001ffffffL;
-
-    /**
-     * Number of bits in a multiplication digit.
-     *
-     * @see #digits
-     */
-    static final int MUL_DIGIT_BITS = 27;
-
-    /**
-     * Mask for a multiplication digit.
-     *
-     * @see #digits
-     */
-    static final int MUL_DIGIT_MASK = 0x07ffffff;
-
-    static final int MUL_OVERLAP_BITS = DIGIT_BITS - HIGH_DIGIT_BITS;
-
-    /**
-     * The value {@code c}, in the pseudo-Mersenne prime form {@code 2^n - c}.
-     */
-    static final short C_VAL = 187;
-
-    /**
-     * Data for the value {@code 0}.
-     */
-    private static final long[] ZERO_DATA =
-        new long[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-    /**
-     * Data for the value {@code 1}.
-     */
-    private static final long[] ONE_DATA =
-        new long[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-    /**
-     * Data for the value {@code -1}.
-     */
-    private static final long[] M_ONE_DATA =
-        new long[] { 0x003fffffffffff44L, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x0000000001ffffffL };
-
-    /**
-     * Data for the modulus value {@code 2^511 - 187}.
-     */
-    private static final long[] MODULUS_DATA =
-        new long[] { 0x003fffffffffff45L, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x0000000001ffffffL };
-
-    /**
-     * Data for the value {@code 1/2}.
-     */
-    private static final long[] HALF_DATA =
-        new long[] { 0x003fffffffffffa2L, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x0000000001ffffffL };
-
-    /**
-     * The value {@code 2 ^ ((MODULUS - 1) / 4) - 1}.  Used in the
-     * computation of square roots.  The value of this is one less
-     * than {@code
-     * 0x0x0000000001ffffffL;
-
-    /**
-     * Number of bits in a multiplication digit.
-     *
-     * @see #digits
-     */
-    static final int MUL_DIGIT_BITS = 27;
-
-    /**
-     * Mask for a multiplication digit.
-     *
-     * @see #digits
-     */
-    static final int MUL_DIGIT_MASK = 0x07ffffff;
-
-    static final int MUL_OVERLAP_BITS = DIGIT_BITS - HIGH_DIGIT_BITS;
-
-    /**
-     * The value {@code c}, in the pseudo-Mersenne prime form {@code 2^n - c}.
-     */
-    static final short C_VAL = 187;
-
-    /**
-     * Data for the value {@code 0}.
-     */
-    private static final long[] ZERO_DATA =
-        new long[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-    /**
-     * Data for the value {@code 1}.
-     */
-    private static final long[] ONE_DATA =
-        new long[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-    /**
-     * Data for the value {@code -1}.
-     */
-    private static final long[] M_ONE_DATA =
-        new long[] { 0x003fffffffffff44L, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x0000000001ffffffL };
-
-    /**
-     * Data for the modulus value {@code 2^511 - 187}.
-     */
-    private static final long[] MODULUS_DATA =
-        new long[] { 0x003fffffffffff45L, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x0000000001ffffffL };
-
-    /**
-     * Data for the value {@code 1/2}.
-     */
-    private static final long[] HALF_DATA =
-        new long[] { 0x003fffffffffffa2L, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x003fffffffffffffL,
-                     0x003fffffffffffffL, 0x0000000001ffffffL };
-
-    /**
-     * The value {@code 2 ^ ((MODULUS - 1) / 4) - 1}.  Used in the
-     * computation of square roots.  The value of this is one less
-     * than {@code
      * 0x0ecda5605ac73ca62d360dd35afc67fcb2d9d627c653c0cdcff56cdde9b115862a4216356433c83fdf4744e63847e9b2a6526b3ddabf1019abca2025f19a0806}.
      */
     private static final long[] SQRT_COEFF_M1;
@@ -615,77 +477,77 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
     @Override
     public void unpack(final byte[] bytes,
                        final int idx) {
-        bytes[0] = ((long)bytes[0] & 0x00000000000000ff) |
-                   (((long)bytes[1] << 8) & 0x000000000000ff00) |
-                   (((long)bytes[2] << 16) & 0x0000000000ff0000) |
-                   (((long)bytes[3] << 24) & 0x00000000ff000000) |
-                   (((long)bytes[4] << 32) & 0x000000ff00000000) |
-                   (((long)bytes[5] << 40) & 0x0000ff0000000000) |
-                   (((long)bytes[6] << 48) & 0x003f000000000000);
-        bytes[1] = (((long)bytes[6] >> 6) & 0x0000000000000003) |
-                   (((long)bytes[7] << 2) & 0x00000000000003fc) |
-                   (((long)bytes[8] << 10) & 0x000000000003fc00) |
-                   (((long)bytes[9] << 18) & 0x0000000003fc0000) |
-                   (((long)bytes[10] << 26) & 0x00000003fc000000) |
-                   (((long)bytes[11] << 34) & 0x000003fc00000000) |
-                   (((long)bytes[12] << 42) & 0x0003fc0000000000) |
-                   (((long)bytes[13] << 50) & 0x003c000000000000);
-        bytes[2] = (((long)bytes[13] >> 4) & 0x000000000000000f) |
-                   (((long)bytes[14] << 4) & 0x0000000000000ff0) |
-                   (((long)bytes[15] << 12) & 0x00000000000ff000) |
-                   (((long)bytes[16] << 20) & 0x000000000ff00000) |
-                   (((long)bytes[17] << 28) & 0x0000000ff0000000) |
-                   (((long)bytes[18] << 36) & 0x00000ff000000000) |
-                   (((long)bytes[19] << 44) & 0x000ff00000000000) |
-                   (((long)bytes[20] << 52) & 0x0030000000000000);
-        bytes[3] = (((long)bytes[20] >> 2) & 0x000000000000003f) |
-                   (((long)bytes[21] << 6) & 0x0000000000003fc0) |
-                   (((long)bytes[22] << 14) & 0x00000000003fc000) |
-                   (((long)bytes[23] << 22) & 0x000000003fc00000) |
-                   (((long)bytes[24] << 30) & 0x0000003fc0000000) |
-                   (((long)bytes[25] << 38) & 0x00003fc000000000) |
-                   (((long)bytes[26] << 46) & 0x003fc00000000000);
-        bytes[4] = ((long)bytes[27] & 0x00000000000000ff) |
-                   (((long)bytes[28] << 8) & 0x000000000000ff00) |
-                   (((long)bytes[29] << 16) & 0x0000000000ff0000) |
-                   (((long)bytes[30] << 24) & 0x00000000ff000000) |
-                   (((long)bytes[31] << 32) & 0x000000ff00000000) |
-                   (((long)bytes[32] << 40) & 0x0000ff0000000000) |
-                   (((long)bytes[33] << 48) & 0x003f000000000000);
-        bytes[5] = (((long)bytes[33] >> 6) & 0x0000000000000003) |
-                   (((long)bytes[34] << 2) & 0x00000000000003fc) |
-                   (((long)bytes[35] << 10) & 0x000000000003fc00) |
-                   (((long)bytes[36] << 18) & 0x0000000003fc0000) |
-                   (((long)bytes[37] << 26) & 0x00000003fc000000) |
-                   (((long)bytes[38] << 34) & 0x000003fc00000000) |
-                   (((long)bytes[39] << 42) & 0x0003fc0000000000) |
-                   (((long)bytes[40] << 50) & 0x003c000000000000);
-        bytes[6] = (((long)bytes[40] >> 4) & 0x000000000000000f) |
-                   (((long)bytes[41] << 4) & 0x0000000000000ff0) |
-                   (((long)bytes[42] << 12) & 0x00000000000ff000) |
-                   (((long)bytes[43] << 20) & 0x000000000ff00000) |
-                   (((long)bytes[44] << 28) & 0x0000000ff0000000) |
-                   (((long)bytes[45] << 36) & 0x00000ff000000000) |
-                   (((long)bytes[46] << 44) & 0x000ff00000000000) |
-                   (((long)bytes[47] << 52) & 0x0030000000000000);
-        bytes[7] = (((long)bytes[47] >> 2) & 0x000000000000003f) |
-                   (((long)bytes[48] << 6) & 0x0000000000003fc0) |
-                   (((long)bytes[49] << 14) & 0x00000000003fc000) |
-                   (((long)bytes[50] << 22) & 0x000000003fc00000) |
-                   (((long)bytes[51] << 30) & 0x0000003fc0000000) |
-                   (((long)bytes[52] << 38) & 0x00003fc000000000) |
-                   (((long)bytes[53] << 46) & 0x003fc00000000000);
-        bytes[8] = ((long)bytes[54] & 0x00000000000000ff) |
-                   (((long)bytes[55] << 8) & 0x000000000000ff00) |
-                   (((long)bytes[56] << 16) & 0x0000000000ff0000) |
-                   (((long)bytes[57] << 24) & 0x00000000ff000000) |
-                   (((long)bytes[58] << 32) & 0x000000ff00000000) |
-                   (((long)bytes[59] << 40) & 0x0000ff0000000000) |
-                   (((long)bytes[60] << 48) & 0x003f000000000000);
-        bytes[9] = (((long)bytes[60] >> 6) & 0x0000000000000003) |
-                   (((long)bytes[61] << 2) & 0x00000000000003fc) |
-                   (((long)bytes[62] << 10) & 0x000000000003fc00) |
-                   (((long)bytes[63] << 18) & 0x0000000001fc0000);
+        digits[0] = ((long)bytes[0] & 0x00000000000000ffL) |
+                    (((long)bytes[1] << 8) & 0x000000000000ff00L) |
+                    (((long)bytes[2] << 16) & 0x0000000000ff0000L) |
+                    (((long)bytes[3] << 24) & 0x00000000ff000000L) |
+                    (((long)bytes[4] << 32) & 0x000000ff00000000L) |
+                    (((long)bytes[5] << 40) & 0x0000ff0000000000L) |
+                    (((long)bytes[6] << 48) & 0x003f000000000000L);
+        digits[1] = (((long)bytes[6] >> 6) & 0x0000000000000003L) |
+                    (((long)bytes[7] << 2) & 0x00000000000003fcL) |
+                    (((long)bytes[8] << 10) & 0x000000000003fc00L) |
+                    (((long)bytes[9] << 18) & 0x0000000003fc0000L) |
+                    (((long)bytes[10] << 26) & 0x00000003fc000000L) |
+                    (((long)bytes[11] << 34) & 0x000003fc00000000L) |
+                    (((long)bytes[12] << 42) & 0x0003fc0000000000L) |
+                    (((long)bytes[13] << 50) & 0x003c000000000000L);
+        digits[2] = (((long)bytes[13] >> 4) & 0x000000000000000fL) |
+                    (((long)bytes[14] << 4) & 0x0000000000000ff0L) |
+                    (((long)bytes[15] << 12) & 0x00000000000ff000L) |
+                    (((long)bytes[16] << 20) & 0x000000000ff00000L) |
+                    (((long)bytes[17] << 28) & 0x0000000ff0000000L) |
+                    (((long)bytes[18] << 36) & 0x00000ff000000000L) |
+                    (((long)bytes[19] << 44) & 0x000ff00000000000L) |
+                    (((long)bytes[20] << 52) & 0x0030000000000000L);
+        digits[3] = (((long)bytes[20] >> 2) & 0x000000000000003fL) |
+                    (((long)bytes[21] << 6) & 0x0000000000003fc0L) |
+                    (((long)bytes[22] << 14) & 0x00000000003fc000L) |
+                    (((long)bytes[23] << 22) & 0x000000003fc00000L) |
+                    (((long)bytes[24] << 30) & 0x0000003fc0000000L) |
+                    (((long)bytes[25] << 38) & 0x00003fc000000000L) |
+                    (((long)bytes[26] << 46) & 0x003fc00000000000L);
+        digits[4] = ((long)bytes[27] & 0x00000000000000ffL) |
+                    (((long)bytes[28] << 8) & 0x000000000000ff00L) |
+                    (((long)bytes[29] << 16) & 0x0000000000ff0000L) |
+                    (((long)bytes[30] << 24) & 0x00000000ff000000L) |
+                    (((long)bytes[31] << 32) & 0x000000ff00000000L) |
+                    (((long)bytes[32] << 40) & 0x0000ff0000000000L) |
+                    (((long)bytes[33] << 48) & 0x003f000000000000L);
+        digits[5] = (((long)bytes[33] >> 6) & 0x0000000000000003L) |
+                    (((long)bytes[34] << 2) & 0x00000000000003fcL) |
+                    (((long)bytes[35] << 10) & 0x000000000003fc00L) |
+                    (((long)bytes[36] << 18) & 0x0000000003fc0000L) |
+                    (((long)bytes[37] << 26) & 0x00000003fc000000L) |
+                    (((long)bytes[38] << 34) & 0x000003fc00000000L) |
+                    (((long)bytes[39] << 42) & 0x0003fc0000000000L) |
+                    (((long)bytes[40] << 50) & 0x003c000000000000L);
+        digits[6] = (((long)bytes[40] >> 4) & 0x000000000000000fL) |
+                    (((long)bytes[41] << 4) & 0x0000000000000ff0L) |
+                    (((long)bytes[42] << 12) & 0x00000000000ff000L) |
+                    (((long)bytes[43] << 20) & 0x000000000ff00000L) |
+                    (((long)bytes[44] << 28) & 0x0000000ff0000000L) |
+                    (((long)bytes[45] << 36) & 0x00000ff000000000L) |
+                    (((long)bytes[46] << 44) & 0x000ff00000000000L) |
+                    (((long)bytes[47] << 52) & 0x0030000000000000L);
+        digits[7] = (((long)bytes[47] >> 2) & 0x000000000000003fL) |
+                    (((long)bytes[48] << 6) & 0x0000000000003fc0L) |
+                    (((long)bytes[49] << 14) & 0x00000000003fc000L) |
+                    (((long)bytes[50] << 22) & 0x000000003fc00000L) |
+                    (((long)bytes[51] << 30) & 0x0000003fc0000000L) |
+                    (((long)bytes[52] << 38) & 0x00003fc000000000L) |
+                    (((long)bytes[53] << 46) & 0x003fc00000000000L);
+        digits[8] = ((long)bytes[54] & 0x00000000000000ffL) |
+                    (((long)bytes[55] << 8) & 0x000000000000ff00L) |
+                    (((long)bytes[56] << 16) & 0x0000000000ff0000L) |
+                    (((long)bytes[57] << 24) & 0x00000000ff000000L) |
+                    (((long)bytes[58] << 32) & 0x000000ff00000000L) |
+                    (((long)bytes[59] << 40) & 0x0000ff0000000000L) |
+                    (((long)bytes[60] << 48) & 0x003f000000000000L);
+        digits[9] = (((long)bytes[60] >> 6) & 0x0000000000000003L) |
+                    (((long)bytes[61] << 2) & 0x00000000000003fcL) |
+                    (((long)bytes[62] << 10) & 0x000000000003fc00L) |
+                    (((long)bytes[63] << 18) & 0x0000000001fc0000L);
 
     }
 
@@ -890,24 +752,24 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         bytes[idx + 3] = (byte)((digits[0] >> 24) & 0xff);
         bytes[idx + 4] = (byte)((digits[0] >> 32) & 0xff);
         bytes[idx + 5] = (byte)((digits[0] >> 40) & 0xff);
-        bytes[idx + 6] = ((byte)((digits[0] >> 48) & 0x3f) |
-                          (byte)((digits[1] << 6) & 0xc0));
+        bytes[idx + 6] = (byte)(((digits[0] >> 48) & 0x3f) |
+                                ((digits[1] << 6) & 0xc0));
         bytes[idx + 7] = (byte)((digits[1] >> 2) & 0xff);
         bytes[idx + 8] = (byte)((digits[1] >> 10) & 0xff);
         bytes[idx + 9] = (byte)((digits[1] >> 18) & 0xff);
         bytes[idx + 10] = (byte)((digits[1] >> 26) & 0xff);
         bytes[idx + 11] = (byte)((digits[1] >> 34) & 0xff);
         bytes[idx + 12] = (byte)((digits[1] >> 42) & 0xff);
-        bytes[idx + 13] = ((byte)((digits[1] >> 50) & 0x0f) |
-                           (byte)((digits[2] << 4) & 0xf0));
+        bytes[idx + 13] = (byte)(((digits[1] >> 50) & 0x0f) |
+                                 ((digits[2] << 4) & 0xf0));
         bytes[idx + 14] = (byte)((digits[2] >> 4) & 0xff);
         bytes[idx + 15] = (byte)((digits[2] >> 12) & 0xff);
         bytes[idx + 16] = (byte)((digits[2] >> 20) & 0xff);
         bytes[idx + 17] = (byte)((digits[2] >> 28) & 0xff);
         bytes[idx + 18] = (byte)((digits[2] >> 36) & 0xff);
         bytes[idx + 19] = (byte)((digits[2] >> 44) & 0xff);
-        bytes[idx + 20] = ((byte)((digits[2] >> 52) & 0x03) |
-                           (byte)((digits[3] << 2) & 0xfc));
+        bytes[idx + 20] = (byte)(((digits[2] >> 52) & 0x03) |
+                                 ((digits[3] << 2) & 0xfc));
         bytes[idx + 21] = (byte)((digits[3] >> 6) & 0xff);
         bytes[idx + 22] = (byte)((digits[3] >> 14) & 0xff);
         bytes[idx + 23] = (byte)((digits[3] >> 22) & 0xff);
@@ -920,24 +782,24 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         bytes[idx + 30] = (byte)((digits[4] >> 24) & 0xff);
         bytes[idx + 31] = (byte)((digits[4] >> 32) & 0xff);
         bytes[idx + 32] = (byte)((digits[4] >> 40) & 0xff);
-        bytes[idx + 33] = ((byte)((digits[4] >> 48) & 0x3f) |
-                           (byte)((digits[5] << 6) & 0xc0));
+        bytes[idx + 33] = (byte)(((digits[4] >> 48) & 0x3f) |
+                                 ((digits[5] << 6) & 0xc0));
         bytes[idx + 34] = (byte)((digits[5] >> 2) & 0xff);
         bytes[idx + 35] = (byte)((digits[5] >> 10) & 0xff);
         bytes[idx + 36] = (byte)((digits[5] >> 18) & 0xff);
         bytes[idx + 37] = (byte)((digits[5] >> 26) & 0xff);
         bytes[idx + 38] = (byte)((digits[5] >> 34) & 0xff);
         bytes[idx + 39] = (byte)((digits[5] >> 42) & 0xff);
-        bytes[idx + 40] = ((byte)((digits[5] >> 50) & 0x0f) |
-                           (byte)((digits[6] << 4) & 0xf0));
+        bytes[idx + 40] = (byte)(((digits[5] >> 50) & 0x0f) |
+                                 ((digits[6] << 4) & 0xf0));
         bytes[idx + 41] = (byte)((digits[6] >> 4) & 0xff);
         bytes[idx + 42] = (byte)((digits[6] >> 12) & 0xff);
         bytes[idx + 43] = (byte)((digits[6] >> 20) & 0xff);
         bytes[idx + 44] = (byte)((digits[6] >> 28) & 0xff);
         bytes[idx + 45] = (byte)((digits[6] >> 36) & 0xff);
         bytes[idx + 46] = (byte)((digits[6] >> 44) & 0xff);
-        bytes[idx + 47] = ((byte)((digits[6] >> 52) & 0x03) |
-                           (byte)((digits[7] << 2) & 0xfc));
+        bytes[idx + 47] = (byte)(((digits[6] >> 52) & 0x03) |
+                                 ((digits[7] << 2) & 0xfc));
         bytes[idx + 48] = (byte)((digits[7] >> 6) & 0xff);
         bytes[idx + 49] = (byte)((digits[7] >> 14) & 0xff);
         bytes[idx + 50] = (byte)((digits[7] >> 22) & 0xff);
@@ -950,8 +812,8 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         bytes[idx + 57] = (byte)((digits[8] >> 24) & 0xff);
         bytes[idx + 58] = (byte)((digits[8] >> 32) & 0xff);
         bytes[idx + 59] = (byte)((digits[8] >> 40) & 0xff);
-        bytes[idx + 60] = ((byte)((digits[8] >> 48) & 0x3f) |
-                           (byte)((digits[9] << 6) & 0xc0));
+        bytes[idx + 60] = (byte)(((digits[8] >> 48) & 0x3f) |
+                                 ((digits[9] << 6) & 0xc0));
         bytes[idx + 61] = (byte)((digits[9] >> 2) & 0xff);
         bytes[idx + 62] = (byte)((digits[9] >> 10) & 0xff);
         bytes[idx + 63] = (byte)((digits[9] >> 18) & 0x7f);
@@ -1064,7 +926,7 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         final long c7 = s7 >> DIGIT_BITS;
         final long s8 = a8 + c7;
         final long c8 = s8 >> DIGIT_BITS;
-        final long s9 = a6 + c8;
+        final long s9 = a9 + c8;
 
         out[0] = s0 & DIGIT_MASK;
         out[1] = s1 & DIGIT_MASK;
@@ -1185,7 +1047,7 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         final long c7 = s7 >> DIGIT_BITS;
         final long s8 = a8 + c7;
         final long c8 = s8 >> DIGIT_BITS;
-        final long s9 = a6 + c8;
+        final long s9 = a9 + c8;
 
         out[0] = s0 & DIGIT_MASK;
         out[1] = s1 & DIGIT_MASK;
@@ -2148,7 +2010,7 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         final long m17 = a17 * b;
         final long m18 = a18 * b;
 
-        final long cin = self.carry_out();
+        final long cin = carryOut(a);
         final long d0 =
             m0 + ((m1 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + (cin * C_VAL);
         final long c0 = d0 >> DIGIT_BITS;
@@ -3098,7 +2960,7 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         squareDigits(sqval);
 
         // All the remaining digits are 1.
-        for(int i = 8; i < 508; i++) {
+        for(int i = 8; i < 511; i++) {
             squareDigits(sqval);
             mulDigits(digits, sqval, digits);
         }
@@ -3132,8 +2994,8 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
 
         // Fifth digit is 0.
 
-        // All digits up to 380 are 1.
-        for(int i = 5; i < 380; i++) {
+        // All the remaining digits are 1.
+        for(int i = 5; i < 508; i++) {
             squareDigits(sqval);
             mulDigits(digits, sqval, digits);
         }
@@ -3166,13 +3028,13 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         // Eighth digit is 0.
         squareDigits(sqval);
 
-        // All the remaining digits are 1.
+        // All digits up to 508 are 1.
         for(int i = 8; i < 508; i++) {
             mulDigits(digits, sqval, digits);
             squareDigits(sqval);
         }
 
-        // Digit 380 is 0.
+        // Digit 508 is 0.
         squareDigits(sqval);
 
         // Last two digits are 1.
