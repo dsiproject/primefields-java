@@ -1,9 +1,10 @@
 package net.metricspace.crypto.math.field;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-public class ModE222M117Test {
+public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
     private static final long[] TWO_DATA = new long[] { 2, 0, 0, 0 };
     private static final long[] M_TWO_DATA =
         new long[] { 0x03ffffffffffff89L, 0x03ffffffffffffffL,
@@ -125,147 +126,169 @@ public class ModE222M117Test {
         return ModE222M117.create(M_TWENTY_FIVE_DATA);
     }
 
-    @Test
-    public static final void testConstants() {
-        Assert.assertEquals(new ModE222M117(0), ModE222M117.zero());
-        Assert.assertEquals(new ModE222M117(1), ModE222M117.one());
-        Assert.assertEquals(new ModE222M117(-1), ModE222M117.mone());
-        Assert.assertEquals(new ModE222M117(2), two());
-        Assert.assertEquals(new ModE222M117(-2), mtwo());
-        Assert.assertEquals(new ModE222M117(3), three());
-        Assert.assertEquals(new ModE222M117(-3), mthree());
-        Assert.assertEquals(new ModE222M117(4), four());
-        Assert.assertEquals(new ModE222M117(-4), mfour());
-        Assert.assertEquals(new ModE222M117(5), five());
-        Assert.assertEquals(new ModE222M117(-5), mfive());
-        Assert.assertEquals(new ModE222M117(6), six());
-        Assert.assertEquals(new ModE222M117(-6), msix());
-        Assert.assertEquals(new ModE222M117(7), seven());
-        Assert.assertEquals(new ModE222M117(-7), mseven());
-        Assert.assertEquals(new ModE222M117(8), eight());
-        Assert.assertEquals(new ModE222M117(-8), meight());
-        Assert.assertEquals(new ModE222M117(9), nine());
-        Assert.assertEquals(new ModE222M117(-9), mnine());
-        Assert.assertEquals(new ModE222M117(16), sixteen());
-        Assert.assertEquals(new ModE222M117(25), twentyFive());
+    @Override
+    protected ModE222M117 unpack(final byte[] data) {
+        return new ModE222M117(data);
     }
 
-    private static final byte[][] PACK_UNPACK_TEST_CASES = new byte[][] {
-        new byte[] { (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
-                     (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00 },
-        new byte[] { (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
-                     (byte)0x00, (byte)0xff, (byte)0x00, (byte)0x3f },
-        new byte[] { (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
-                     (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0x0a },
-        new byte[] { (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
-                     (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x15 },
-        new byte[] { (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
-                     (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0x0a },
-        new byte[] { (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
-                     (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00 },
-        new byte[] { (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
-                     (byte)0x55, (byte)0xff, (byte)0x55, (byte)0x3f },
-        new byte[] { (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
-                     (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x15 }
+    private static final Object[][] TEST_CONSTANTS_TEST_CASES = new Object[][] {
+        new Object[] { new ModE222M117(0), ModE222M117.zero() },
+        new Object[] { new ModE222M117(1), ModE222M117.one() },
+        new Object[] { new ModE222M117(-1), ModE222M117.mone() },
+        new Object[] { new ModE222M117(2), two() },
+        new Object[] { new ModE222M117(-2), mtwo() },
+        new Object[] { new ModE222M117(3), three() },
+        new Object[] { new ModE222M117(-3), mthree() },
+        new Object[] { new ModE222M117(4), four() },
+        new Object[] { new ModE222M117(-4), mfour() },
+        new Object[] { new ModE222M117(5), five() },
+        new Object[] { new ModE222M117(-5), mfive() },
+        new Object[] { new ModE222M117(6), six() },
+        new Object[] { new ModE222M117(-6), msix() },
+        new Object[] { new ModE222M117(7), seven() },
+        new Object[] { new ModE222M117(-7), mseven() },
+        new Object[] { new ModE222M117(8), eight() },
+        new Object[] { new ModE222M117(-8), meight() },
+        new Object[] { new ModE222M117(9), nine() },
+        new Object[] { new ModE222M117(-9), mnine() },
+        new Object[] { new ModE222M117(16), sixteen() },
+        new Object[] { new ModE222M117(-16), msixteen() },
+        new Object[] { new ModE222M117(25), twentyFive() },
+        new Object[] { new ModE222M117(-25), mtwentyFive() }
     };
 
-    private static void packUnpackTestCase(final byte[] testcase) {
-        final ModE222M117 unpacked = new ModE222M117(testcase);
-        final byte[] packed = unpacked.packed();
-
-        for(int i = 0; i < ModE222M117.PACKED_BYTES; i++) {
-            Assert.assertEquals(packed[i], testcase[i]);
-        }
+    @DataProvider(name = "testConstants")
+    public Object[][] testConstantsProvider() {
+        return TEST_CONSTANTS_TEST_CASES;
     }
 
-    @Test
-    public static void packUnpackTest() {
-        for(int i = 0; i < PACK_UNPACK_TEST_CASES.length; i++) {
-            packUnpackTestCase(PACK_UNPACK_TEST_CASES[i]);
+    private static final Object[][] PACK_UNPACK_TEST_CASES = new Object [][] {
+        new Object[] {
+            new byte[] { (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
+                         (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00 }
+        },
+        new Object[] {
+            new byte[] { (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0xff,
+                         (byte)0x00, (byte)0xff, (byte)0x00, (byte)0x3f }
+        },
+        new Object[] {
+            new byte[] { (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0xaa,
+                         (byte)0x55, (byte)0xaa, (byte)0x55, (byte)0x2a }
+        },
+        new Object[] {
+            new byte[] { (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x55,
+                         (byte)0xaa, (byte)0x55, (byte)0xaa, (byte)0x15 }
+        },
+        new Object[] {
+            new byte[] { (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0xaa,
+                         (byte)0x00, (byte)0xaa, (byte)0x00, (byte)0x2a }
+        },
+        new Object[] {
+            new byte[] { (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00,
+                         (byte)0xaa, (byte)0x00, (byte)0xaa, (byte)0x00 }
+        },
+        new Object[] {
+            new byte[] { (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0xff,
+                         (byte)0x55, (byte)0xff, (byte)0x55, (byte)0x3f }
+        },
+        new Object[] {
+            new byte[] { (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x55,
+                         (byte)0xff, (byte)0x55, (byte)0xff, (byte)0x15 }
         }
-    }
-
-    private static final long[][] UNPACK_PACK_TEST_CASES = new long[][] {
-        new long[] { 0x03ffffffffffffffL, 0x0000000000000000L,
-                     0x03ffffffffffffffL, 0x0000000000000000L },
-        new long[] { 0x0000000000000000L, 0x03ffffffffffffffL,
-                     0x0000000000000000L, 0x0000ffffffffffffL },
-        new long[] { 0x02aaaaaaaaaaaaaaL, 0x0155555555555555L,
-                     0x02aaaaaaaaaaaaaaL, 0x0000555555555555L },
-        new long[] { 0x0155555555555555L, 0x02aaaaaaaaaaaaaaL,
-                     0x0155555555555555L, 0x0000aaaaaaaaaaaaL },
-        new long[] { 0x02aaaaaaaaaaaaaaL, 0x0000000000000000L,
-                     0x02aaaaaaaaaaaaaaL, 0x0000000000000000L },
-        new long[] { 0x0000000000000000L, 0x02aaaaaaaaaaaaaaL,
-                     0x0000000000000000L, 0x0000aaaaaaaaaaaaL },
-        new long[] { 0x03ffffffffffffffL, 0x0155555555555555L,
-                     0x03ffffffffffffffL, 0x0000555555555555L },
-        new long[] { 0x0155555555555555L, 0x03ffffffffffffffL,
-                     0x0155555555555555L, 0x0000ffffffffffffL }
     };
 
-    @Test
-    public static void unpackPackTest() {
-        for(int i = 0; i < UNPACK_PACK_TEST_CASES.length; i++) {
-            unpackPackTestCase(UNPACK_PACK_TEST_CASES[i]);
+    @DataProvider(name = "packUnpack")
+    public Object[][] packUnpackProvider() {
+        return PACK_UNPACK_TEST_CASES;
+    }
+
+    private static final Object[][] UNPACK_PACK_TEST_CASES = new Object[][] {
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x03ffffffffffffffL, 0x0000000000000000L,
+                             0x03ffffffffffffffL, 0x0000000000000000L })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x0000000000000000L, 0x03ffffffffffffffL,
+                             0x0000000000000000L, 0x0000ffffffffffffL })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x02aaaaaaaaaaaaaaL, 0x0155555555555555L,
+                             0x02aaaaaaaaaaaaaaL, 0x0000555555555555L })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x0155555555555555L, 0x02aaaaaaaaaaaaaaL,
+                             0x0155555555555555L, 0x0000aaaaaaaaaaaaL })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x02aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                             0x02aaaaaaaaaaaaaaL, 0x0000000000000000L })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x0000000000000000L, 0x02aaaaaaaaaaaaaaL,
+                             0x0000000000000000L, 0x0000aaaaaaaaaaaaL })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x03ffffffffffffffL, 0x0155555555555555L,
+                             0x03ffffffffffffffL, 0x0000555555555555L })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x0155555555555555L, 0x03ffffffffffffffL,
+                             0x0155555555555555L, 0x0000ffffffffffffL })
         }
+    };
+
+    @DataProvider(name = "unpackPack")
+    public Object[][] unpackPackProvider() {
+        return UNPACK_PACK_TEST_CASES;
     }
-
-    private static void unpackPackTestCase(final long[] testcase) {
-        final ModE222M117 expected = new ModE222M117(testcase);
-        final byte[] packed = expected.packed();
-        final ModE222M117 actual = new ModE222M117(packed);
-
-        Assert.assertEquals(actual, expected);
-    }
-
-    private static final int ZERO_IDX = 0;
-    private static final int ONE_IDX = 1;
-    private static final int MONE_IDX = 2;
-    private static final int TWO_IDX = 3;
-    private static final int MTWO_IDX = 4;
-    private static final int FOUR_IDX = 5;
-    private static final int MFOUR_IDX = 6;
 
     private static final ModE222M117[][] startTier = new ModE222M117[][] {
         new ModE222M117[] { ModE222M117.zero() },
@@ -278,114 +301,110 @@ public class ModE222M117Test {
     };
 
     @Test
-    public static void addTest() {
-        final ModE222M117[][] tierOne = Utils.addTier(startTier);
-        final ModE222M117[][] tierTwo = Utils.addTier(tierOne);
-        final ModE222M117[][] tierThree = Utils.addTier(tierTwo);
+    public void addTest() {
+        final ModE222M117[][] tierOne = addTier(startTier);
+        final ModE222M117[][] tierTwo = addTier(tierOne);
+        //final ModE222M117[][] tierThree = addTier(tierTwo);
     }
 
     @Test
-    public static void subTest() {
-        final ModE222M117[][] tierOne = Utils.subTier(startTier);
-        final ModE222M117[][] tierTwo = Utils.subTier(tierOne);
-        final ModE222M117[][] tierThree = Utils.subTier(tierTwo);
+    public void subTest() {
+        final ModE222M117[][] tierOne = subTier(startTier);
+        final ModE222M117[][] tierTwo = subTier(tierOne);
+        //final ModE222M117[][] tierThree = subTier(tierTwo);
     }
 
     @Test
-    public static void mulTest() {
-        final ModE222M117[][] tierOne = Utils.mulTier(startTier);
-        final ModE222M117[][] tierTwo = Utils.mulTier(tierOne);
-        final ModE222M117[][] tierThree = Utils.mulTier(tierTwo);
+    public void mulTest() {
+        final ModE222M117[][] tierOne = mulTier(startTier);
+        final ModE222M117[][] tierTwo = mulTier(tierOne);
+        //final ModE222M117[][] tierThree = mulTier(tierTwo);
     }
 
     @Test
-    public static void divTest() {
-        final ModE222M117[][] tierOne = Utils.divTier(startTier);
-        final ModE222M117[][] tierTwo = Utils.divTier(tierOne);
-        final ModE222M117[][] tierThree = Utils.divTier(tierTwo);
+    public void divTest() {
+        final ModE222M117[][] tierOne = divTier(startTier);
+        final ModE222M117[][] tierTwo = divTier(tierOne);
+        //final ModE222M117[][] tierThree = divTier(tierTwo);
     }
 
-    @Test
-    public static void squareTest() {
-        final ModE222M117 s0 = ModE222M117.zero();
-        final ModE222M117 s1 = ModE222M117.one();
-        final ModE222M117 s2 = two();
-        final ModE222M117 s3 = three();
-        final ModE222M117 s4 = four();
-        final ModE222M117 s5 = five();
-        final ModE222M117 sm1 = ModE222M117.mone();
-        final ModE222M117 sm2 = mtwo();
-        final ModE222M117 sm3 = mthree();
-        final ModE222M117 sm4 = mfour();
-        final ModE222M117 sm5 = mfive();
+    private static final Object[][] SQUARE_TEST_CASES = new Object[][] {
+        new Object[] { ModE222M117.zero(), ModE222M117.zero() },
+        new Object[] { ModE222M117.one(), ModE222M117.one() },
+        new Object[] { two(), four() },
+        new Object[] { three(), nine() },
+        new Object[] { four(), sixteen() },
+        new Object[] { five(), twentyFive() },
+        new Object[] { ModE222M117.mone(), ModE222M117.one() },
+        new Object[] { mtwo(), four() },
+        new Object[] { mthree(), nine() },
+        new Object[] { mfour(), sixteen() },
+        new Object[] { mfive(), twentyFive() },
+    };
 
-        s0.square();
-        s1.square();
-        s2.square();
-        s3.square();
-        s4.square();
-        s5.square();
-        sm1.square();
-        sm2.square();
-        sm3.square();
-        sm4.square();
-        sm5.square();
-
-        Assert.assertEquals(s0, ModE222M117.zero());
-        Assert.assertEquals(s1, ModE222M117.one());
-        Assert.assertEquals(s2, four());
-        Assert.assertEquals(s3, nine());
-        Assert.assertEquals(s4, sixteen());
-        Assert.assertEquals(s5, twentyFive());
-        Assert.assertEquals(sm1, ModE222M117.one());
-        Assert.assertEquals(sm2, four());
-        Assert.assertEquals(sm3, nine());
-        Assert.assertEquals(sm4, sixteen());
-        Assert.assertEquals(sm5, twentyFive());
+    @DataProvider(name = "square")
+    public Object[][] squareProvider() {
+        return SQUARE_TEST_CASES;
     }
 
-    @Test
-    public static void legendreTest() {
-        Assert.assertEquals(ModE222M117.zero().legendre(), 0);
-        Assert.assertEquals(ModE222M117.one().legendre(), 1);
-        Assert.assertEquals(two().legendre(), -1);
-        Assert.assertEquals(three().legendre(), -1);
-        Assert.assertEquals(four().legendre(), 1);
-        Assert.assertEquals(five().legendre(), 1);
-        Assert.assertEquals(six().legendre(), 1);
-        Assert.assertEquals(seven().legendre(), 1);
-        Assert.assertEquals(eight().legendre(), -1);
-        Assert.assertEquals(nine().legendre(), 1);
-        Assert.assertEquals(sixteen().legendre(), 1);
-        Assert.assertEquals(twentyFive().legendre(), 1);
-        Assert.assertEquals(ModE222M117.mone().legendre(), 1);
-        Assert.assertEquals(mtwo().legendre(), -1);
-        Assert.assertEquals(mthree().legendre(), -1);
-        Assert.assertEquals(mfour().legendre(), 1);
-        Assert.assertEquals(mfive().legendre(), 1);
-        Assert.assertEquals(msix().legendre(), 1);
-        Assert.assertEquals(mseven().legendre(), 1);
-        Assert.assertEquals(meight().legendre(), -1);
-        Assert.assertEquals(mnine().legendre(), 1);
-        Assert.assertEquals(msixteen().legendre(), 1);
-        Assert.assertEquals(mtwentyFive().legendre(), -1);
+    private static final Object[][] LEGENDRE_TEST_CASES = new Object[][] {
+        new Object[] { ModE222M117.zero(), new Integer(0) },
+        new Object[] { ModE222M117.one(), new Integer(1) },
+        new Object[] { two(), new Integer(-1) },
+        new Object[] { three(), new Integer(-1) },
+        new Object[] { four(), new Integer(1) },
+        new Object[] { five(), new Integer(-1) },
+        new Object[] { six(), new Integer(1) },
+        new Object[] { seven(), new Integer(1) },
+        new Object[] { eight(), new Integer(-1) },
+        new Object[] { nine(), new Integer(1) },
+        new Object[] { sixteen(), new Integer(1) },
+        new Object[] { twentyFive(), new Integer(1) },
+        new Object[] { ModE222M117.mone(), new Integer(-1) },
+        new Object[] { mtwo(), new Integer(1) },
+        new Object[] { mthree(), new Integer(1) },
+        new Object[] { mfour(), new Integer(-1) },
+        new Object[] { mfive(), new Integer(1) },
+        new Object[] { msix(), new Integer(-1) },
+        new Object[] { mseven(), new Integer(-1) },
+        new Object[] { meight(), new Integer(1) },
+        new Object[] { mnine(), new Integer(-1) },
+        new Object[] { msixteen(), new Integer(-1) },
+        new Object[] { mtwentyFive(), new Integer(-1) },
+    };
+
+    @DataProvider(name = "legendre", parallel = true)
+    public Object[][] legendreProvider() {
+        return LEGENDRE_TEST_CASES;
     }
 
-    @Test
-    public static void sqrtTest() {
-        final ModE222M117 s0 = ModE222M117.zero();
-        final ModE222M117 s1 = ModE222M117.one();
-        final ModE222M117 s16 = sixteen();
-        final ModE222M117 s25 = twentyFive();
+    private static final Object[][] SQRT_TEST_CASES = new Object[][] {
+        new Object[] { ModE222M117.zero(), ModE222M117.zero() },
+        new Object[] { ModE222M117.one(), ModE222M117.one() },
+        new Object[] { sixteen(), four() },
+        new Object[] { twentyFive(), mfive() },
+    };
 
-        s0.sqrt();
-        s1.sqrt();
-        s16.sqrt();
-        s25.sqrt();
+    @DataProvider(name = "sqrt", parallel = true)
+    public Object[][] sqrtProvider() {
+        return SQRT_TEST_CASES;
+    }
 
-        Assert.assertEquals(ModE222M117.zero(), s0);
-        Assert.assertEquals(ModE222M117.one(), s1);
-        Assert.assertEquals(mfour(), s16);
-        Assert.assertEquals(mfive(), s25);
+    private static final Object[][] INV_SQRT_TEST_CASES = new Object[][] {
+        new Object[] { ModE222M117.zero(), ModE222M117.zero() },
+        new Object[] { ModE222M117.one(), ModE222M117.one() },
+        new Object[] { sixteen(), mfour() },
+        new Object[] { twentyFive(), mfive() },
+    };
+
+    static {
+        for(int i = 0; i < INV_SQRT_TEST_CASES.length; i++) {
+            ((ModE222M117)INV_SQRT_TEST_CASES[i][1]).inv();
+        }
+    };
+
+    @DataProvider(name = "invSqrt", parallel = true)
+    public Object[][] invSqrtProvider() {
+        return INV_SQRT_TEST_CASES;
     }
 }
