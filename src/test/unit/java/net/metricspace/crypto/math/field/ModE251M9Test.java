@@ -408,24 +408,24 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
     private static final Object[][] LEGENDRE_TEST_CASES = new Object[][] {
         new Object[] { ModE251M9.zero(), new Integer(0) },
         new Object[] { ModE251M9.one(), new Integer(1) },
-        new Object[] { two(), new Integer(-1) },
-        new Object[] { three(), new Integer(-1) },
+        new Object[] { two(), new Integer(1) },
+        new Object[] { three(), new Integer(1) },
         new Object[] { four(), new Integer(1) },
-        new Object[] { five(), new Integer(-1) },
+        new Object[] { five(), new Integer(1) },
         new Object[] { six(), new Integer(1) },
-        new Object[] { seven(), new Integer(1) },
-        new Object[] { eight(), new Integer(-1) },
+        new Object[] { seven(), new Integer(-1) },
+        new Object[] { eight(), new Integer(1) },
         new Object[] { nine(), new Integer(1) },
         new Object[] { sixteen(), new Integer(1) },
         new Object[] { twentyFive(), new Integer(1) },
         new Object[] { ModE251M9.mone(), new Integer(-1) },
-        new Object[] { mtwo(), new Integer(1) },
-        new Object[] { mthree(), new Integer(1) },
+        new Object[] { mtwo(), new Integer(-1) },
+        new Object[] { mthree(), new Integer(-1) },
         new Object[] { mfour(), new Integer(-1) },
-        new Object[] { mfive(), new Integer(1) },
+        new Object[] { mfive(), new Integer(-1) },
         new Object[] { msix(), new Integer(-1) },
-        new Object[] { mseven(), new Integer(-1) },
-        new Object[] { meight(), new Integer(1) },
+        new Object[] { mseven(), new Integer(1) },
+        new Object[] { meight(), new Integer(-1) },
         new Object[] { mnine(), new Integer(-1) },
         new Object[] { msixteen(), new Integer(-1) },
         new Object[] { mtwentyFive(), new Integer(-1) },
@@ -440,7 +440,7 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
         new Object[] { ModE251M9.zero(), ModE251M9.zero() },
         new Object[] { ModE251M9.one(), ModE251M9.one() },
         new Object[] { sixteen(), four() },
-        new Object[] { twentyFive(), mfive() },
+        new Object[] { twentyFive(), five() },
     };
 
     @DataProvider(name = "sqrt", parallel = true)
@@ -451,8 +451,8 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
     private static final Object[][] INV_SQRT_TEST_CASES = new Object[][] {
         new Object[] { ModE251M9.zero(), ModE251M9.zero() },
         new Object[] { ModE251M9.one(), ModE251M9.one() },
-        new Object[] { sixteen(), mfour() },
-        new Object[] { twentyFive(), mfive() },
+        new Object[] { sixteen(), four() },
+        new Object[] { twentyFive(), five() },
     };
 
     static {

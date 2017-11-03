@@ -1033,19 +1033,19 @@ public final class ModE251M9 extends PrimeField<ModE251M9> {
         // Shift the high bits down into another n-bit number.
         final long h0_0 =
             ((d4 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-            ((d5 & HIGH_DIGIT_MASK) << 25);
+            ((d5 & HIGH_DIGIT_MASK) << 29);
         final long h1_0 =
             ((d5 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-            ((d6 & HIGH_DIGIT_MASK) << 25);
+            ((d6 & HIGH_DIGIT_MASK) << 29);
         final long h2_0 =
             ((d6 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-            ((d7 & HIGH_DIGIT_MASK) << 25);
+            ((d7 & HIGH_DIGIT_MASK) << 29);
         final long h3_0 =
             ((d7 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-            ((d8 & HIGH_DIGIT_MASK) << 25);
+            ((d8 & HIGH_DIGIT_MASK) << 29);
         final long h4_0 =
             ((d8 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-            (d9 << 25);
+            (d9 << 29);
 
         // Multiply by C
         final long hc0_0 = h0_0 * C_VAL;
@@ -1371,7 +1371,9 @@ public final class ModE251M9 extends PrimeField<ModE251M9> {
             c7;
         final long c8 = d8 >> DIGIT_BITS;
         final long d9 =
-            (m_8_9 >> MUL_DIGIT_BITS) + (m_9_8 >> MUL_DIGIT_BITS) + m_9_9 + c8;
+            (m_8_9 >> MUL_DIGIT_BITS) +
+            (m_9_8 >> MUL_DIGIT_BITS) + m_9_9 +
+            c8;
 
         // Modular reduction by a pseudo-mersenne prime of the form 2^n - c.
 
@@ -1384,15 +1386,15 @@ public final class ModE251M9 extends PrimeField<ModE251M9> {
 
         // Shift the high bits down into another n-bit number.
         final long h0_0 = ((d4 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-                   ((d5 & HIGH_DIGIT_MASK) << 25);
+                   ((d5 & HIGH_DIGIT_MASK) << 29);
         final long h1_0 = ((d5 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-                   ((d6 & HIGH_DIGIT_MASK) << 25);
+                   ((d6 & HIGH_DIGIT_MASK) << 29);
         final long h2_0 = ((d6 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-                   ((d7 & HIGH_DIGIT_MASK) << 25);
+                   ((d7 & HIGH_DIGIT_MASK) << 29);
         final long h3_0 = ((d7 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-                   ((d8 & HIGH_DIGIT_MASK) << 25);
+                   ((d8 & HIGH_DIGIT_MASK) << 29);
         final long h4_0 = ((d8 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-                   (d9 << 25);
+                   (d9 << 29);
 
         // Multiply by C
         final long hc0_0 = h0_0 * C_VAL;
@@ -1478,20 +1480,20 @@ public final class ModE251M9 extends PrimeField<ModE251M9> {
         squareDigits(digits);
         squareDigits(digits);
 
-        // Fourth digits is 1.
+        // Fourth digit is 1.
         final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
-        squareDigits(sqval);
 
-        // All digits up to 248 are 1.
-        for(int i = 4; i < 248; i++) {
-            mulDigits(digits, sqval, digits);
+        // All digits up to 249 are 1.
+        for(int i = 4; i < 249; i++) {
             squareDigits(sqval);
+            mulDigits(digits, sqval, digits);
         }
 
         // Digit 249 is 0.
         squareDigits(sqval);
 
         // Last digit is 1.
+        squareDigits(sqval);
         mulDigits(digits, sqval, digits);
     }
 
