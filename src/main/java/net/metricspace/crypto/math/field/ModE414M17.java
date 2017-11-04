@@ -2167,7 +2167,7 @@ public final class ModE414M17 extends PrimeField<ModE414M17> {
         final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
 
         // All the remaining digits are 1.
-        for(int i = 2; i < 412; i++) {
+        for(int i = 3; i < 412; i++) {
             squareDigits(sqval);
             mulDigits(digits, sqval, digits);
         }

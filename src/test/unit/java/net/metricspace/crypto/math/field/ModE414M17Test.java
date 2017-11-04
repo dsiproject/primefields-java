@@ -478,22 +478,22 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         new Object[] { ModE414M17.zero(), new Integer(0) },
         new Object[] { ModE414M17.one(), new Integer(1) },
         new Object[] { two(), new Integer(1) },
-        new Object[] { three(), new Integer(-1) },
+        new Object[] { three(), new Integer(1) },
         new Object[] { four(), new Integer(1) },
-        new Object[] { five(), new Integer(1) },
-        new Object[] { six(), new Integer(-1) },
-        new Object[] { seven(), new Integer(-1) },
+        new Object[] { five(), new Integer(-1) },
+        new Object[] { six(), new Integer(1) },
+        new Object[] { seven(), new Integer(1) },
         new Object[] { eight(), new Integer(1) },
         new Object[] { nine(), new Integer(1) },
         new Object[] { sixteen(), new Integer(1) },
         new Object[] { twentyFive(), new Integer(1) },
         new Object[] { ModE414M17.mone(), new Integer(-1) },
         new Object[] { mtwo(), new Integer(-1) },
-        new Object[] { mthree(), new Integer(1) },
+        new Object[] { mthree(), new Integer(-1) },
         new Object[] { mfour(), new Integer(-1) },
-        new Object[] { mfive(), new Integer(-1) },
-        new Object[] { msix(), new Integer(1) },
-        new Object[] { mseven(), new Integer(1) },
+        new Object[] { mfive(), new Integer(1) },
+        new Object[] { msix(), new Integer(-1) },
+        new Object[] { mseven(), new Integer(-1) },
         new Object[] { meight(), new Integer(-1) },
         new Object[] { mnine(), new Integer(-1) },
         new Object[] { msixteen(), new Integer(-1) },
@@ -509,7 +509,7 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         new Object[] { ModE414M17.zero(), ModE414M17.zero() },
         new Object[] { ModE414M17.one(), ModE414M17.one() },
         new Object[] { sixteen(), four() },
-        new Object[] { twentyFive(), five() },
+        new Object[] { twentyFive(), mfive() },
     };
 
     @DataProvider(name = "sqrt", parallel = true)
@@ -521,7 +521,7 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         new Object[] { ModE414M17.zero(), ModE414M17.zero() },
         new Object[] { ModE414M17.one(), ModE414M17.one() },
         new Object[] { sixteen(), four() },
-        new Object[] { twentyFive(), five() },
+        new Object[] { twentyFive(), mfive() },
     };
 
     static {
