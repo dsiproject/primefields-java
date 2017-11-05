@@ -111,7 +111,7 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      *
      * @see #digits
      */
-    static final int MUL_DIGIT_BITS = 28;
+    static final int MUL_DIGIT_BITS = 27;
 
     /**
      * Mask for a multiplication digit.
@@ -695,7 +695,9 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
                                  ((digits[9] << 6) & 0xc0));
         bytes[idx + 61] = (byte)((digits[9] >> 2) & 0xff);
         bytes[idx + 62] = (byte)((digits[9] >> 10) & 0xff);
-        bytes[idx + 63] = (byte)((digits[9] >> 18) & 0x7f);
+        bytes[idx + 63] = (byte)((digits[9] >> 18) & 0xff);
+        bytes[idx + 64] = (byte)((digits[9] >> 26) & 0xff);
+        bytes[idx + 65] = (byte)((digits[9] >> 34) & 0x01);
     }
 
     /**
@@ -2990,7 +2992,7 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
     }
 
     private static void sqrtPowerDigits(final long[] digits) {
-        // All the digits are 1.
+        // All the digits are 0 except for the last.
         for(int i = 0; i < 519; i++) {
             squareDigits(digits);
         }
@@ -3017,11 +3019,13 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
         mulDigits(digits, sqval, digits);
     }
 
-
     private static void legendrePowerDigits(final long[] digits) {
         // All the digits are 1.
-        for(int i = 0; i < 520; i++) {
-            squareDigits(digits);
+        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
+
+        for(int i = 1; i < 520; i++) {
+            squareDigits(sqval);
+            mulDigits(digits, sqval, digits);
         }
     }
 
