@@ -1,3 +1,34 @@
+/* Copyright (c) 2017, Eric McCorkle.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * * Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in
+ *   the documentation and/or other materials provided with the
+ *   distribution.
+ *
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package net.metricspace.crypto.math.field;
 
 import java.io.IOException;
@@ -11,8 +42,7 @@ import java.util.Arrays;
  * <p>
  * This field is the foundation of the E-222 curve.
  */
-public class ModE222M117 extends PrimeField<ModE222M117> {
-
+public final class ModE222M117 extends PrimeField<ModE222M117> {
     /**
      * Number of bits in a value.
      */
@@ -46,7 +76,7 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
      *
      * @see #digits
      */
-    static final int CARRY_BITS = 6;
+    static final int CARRY_BITS = 64 - DIGIT_BITS;
 
     /**
      * Mask for a regular digit.
@@ -61,6 +91,13 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
      * @see #digits
      */
     static final int HIGH_DIGIT_BITS = 48;
+
+    /**
+     * Number of bits in the highest digit.
+     *
+     * @see #digits
+     */
+    static final int HIGH_CARRY_BITS = 64 - HIGH_DIGIT_BITS;
 
     /**
      * Mask for the highest digit.
@@ -244,7 +281,7 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
      * {@inheritDoc}
      */
     @Override
-    public void add(final long[] b) {
+    protected void add(final long[] b) {
         addDigits(digits, b, digits);
     }
 
@@ -268,7 +305,7 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
      * {@inheritDoc}
      */
     @Override
-    public void sub(final long[] b) {
+    protected void sub(final long[] b) {
         subDigits(digits, b, digits);
     }
 
@@ -284,7 +321,7 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
      * {@inheritDoc}
      */
     @Override
-    public void mul(final long[] b) {
+    protected void mul(final long[] b) {
         mulDigits(digits, b, digits);
     }
 
@@ -327,7 +364,7 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
      * {@inheritDoc}
      */
     @Override
-    public void div(final long[] b) {
+    protected void div(final long[] b) {
         final long[] copied = Arrays.copyOf(b, NUM_DIGITS);
 
         invDigits(copied);
@@ -342,10 +379,7 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
         final long[] divisor = new long[NUM_DIGITS];
 
         initDigits(divisor, b);
-        System.err.println("Initialized to " + b + " = " + digitsToString(divisor));
-        System.err.println("Digits before divide " + digitsToString(digits));
         div(divisor);
-        System.err.println("Digits after divide " + digitsToString(digits));
     }
 
     /**
@@ -455,23 +489,7 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
      */
     @Override
     public void sqrt() {
-        // First digit is 1.
-        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
-
-        // Second digit is 1.
-        squareDigits(sqval);
-        mulDigits(digits, sqval, digits);
-
-        // Third, fourth, and fifth digits are 0.
-        squareDigits(sqval);
-        squareDigits(sqval);
-        squareDigits(sqval);
-
-        // All remaining digits are 1.
-        for (int i = 5; i < 220; i++) {
-            squareDigits(sqval);
-            mulDigits(digits, sqval, digits);
-        }
+        sqrtPowerDigits(digits);
     }
 
     /**
@@ -486,42 +504,13 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
      * MODULUS - 5) / 4}.
      * <p>
      * On this field, the exponent value is {@code
-     * 0x17ffffffffffffffffffffffffffffffffffffffffffffffffffffd3}.
+     * 0x2fffffffffffffffffffffffffffffffffffffffffffffffffffffa7}.
      *
      * @see #legendre
      */
     @Override
     public void invSqrt() {
-        // First digit is 1.
-        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
-
-        // Second digit is 1.
-        squareDigits(sqval);
-        mulDigits(digits, sqval, digits);
-
-        // Third and fourth digits are 0.
-        squareDigits(sqval);
-        squareDigits(sqval);
-
-        // Fifth digit is 1.
-        squareDigits(sqval);
-        mulDigits(digits, sqval, digits);
-
-        // Sixth digit is 0.
-        squareDigits(sqval);
-
-        // All digits up to 219 are 1.
-        for(int i = 7; i < 219; i++) {
-            squareDigits(sqval);
-            mulDigits(digits, sqval, digits);
-        }
-
-        // 219th digit is 0.
-        squareDigits(sqval);
-
-        // Last digit is 1.
-        squareDigits(sqval);
-        mulDigits(digits, sqval, digits);
+        invSqrtPowerDigits(digits);
     }
 
     /**
@@ -543,7 +532,6 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
      */
     @Override
     public byte legendre() {
-        // First digit is 1.
         final long[] out = Arrays.copyOf(digits, NUM_DIGITS);
 
         legendrePowerDigits(out);
@@ -557,6 +545,31 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
         return result;
     }
 
+    /**
+     * Get the residual carry-out value from the highest digit.
+     *
+     * @param digits The digits array.
+     * @return The residual carry-out value.
+     * @see #digits
+     */
+    private static short carryOut(final long[] digits) {
+        return (short)(digits[NUM_DIGITS - 1] >> HIGH_DIGIT_BITS);
+    }
+
+    /**
+     * Perform normalization on low-level representations.
+     *
+     * @param digits The low-level representation.
+     * @see #normalize
+     */
+    private static void normalizeDigits(final long[] digits) {
+        final long[] offset = Arrays.copyOf(MODULUS_DATA, NUM_DIGITS);
+        final long[] plusc = Arrays.copyOf(digits, NUM_DIGITS);
+
+        addDigits(plusc, (int)C_VAL, plusc);
+        mulDigits(offset, carryOut(plusc), offset);
+        subDigits(digits, offset, digits);
+    }
 
     private static void packDigits(final long[] digits,
                                    final byte[] bytes,
@@ -592,32 +605,6 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
         bytes[25 + idx] = (byte)((digits[3] >> 26) & 0xff);
         bytes[26 + idx] = (byte)((digits[3] >> 34) & 0xff);
         bytes[27 + idx] = (byte)((digits[3] >> 42) & 0x3f);
-    }
-
-    /**
-     * Get the residual carry-out value from the highest digit.
-     *
-     * @param digits The digits array.
-     * @return The residual carry-out value.
-     * @see #digits
-     */
-    private static short carryOut(final long[] digits) {
-        return (short)(digits[NUM_DIGITS - 1] >> HIGH_DIGIT_BITS);
-    }
-
-    /**
-     * Perform normalization on low-level representations.
-     *
-     * @param digits The low-level representation.
-     * @see #normalize
-     */
-    private static void normalizeDigits(final long[] digits) {
-        final long[] offset = Arrays.copyOf(MODULUS_DATA, NUM_DIGITS);
-        final long[] plusc = Arrays.copyOf(digits, NUM_DIGITS);
-
-        addDigits(plusc, (int)C_VAL, plusc);
-        mulDigits(offset, carryOut(plusc), offset);
-        subDigits(digits, offset, digits);
     }
 
     /**
@@ -849,9 +836,10 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
         final long m_7_6 = a7 * b6;
         final long m_7_7 = a7 * b7;
 
-        // Compute the 40-digit combined product using 64-bit operations.
-        final long d0 = m_0_0 + ((m_0_1 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
-                 ((m_1_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS);
+        // Compute the combined product using 64-bit operations.
+        final long d0 =
+            m_0_0 + ((m_0_1 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
+            ((m_1_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS);
         final long c0 = d0 >> DIGIT_BITS;
         final long d1 =
             (m_0_1 >> MUL_DIGIT_BITS) + m_0_2 +
@@ -917,7 +905,7 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
             ((m_6_5 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
             (m_7_2 >> MUL_DIGIT_BITS) + m_7_3 +
             ((m_7_4 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
-            c4;
+                 c4;
         final long c5 = d5 >> DIGIT_BITS;
         final long d6 =
             (m_4_7 >> MUL_DIGIT_BITS) +
@@ -926,10 +914,12 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
             ((m_6_7 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
             (m_7_4 >> MUL_DIGIT_BITS) + m_7_5 +
             ((m_7_6 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
-            c5;
+                 c5;
         final long c6 = d6 >> DIGIT_BITS;
         final long d7 =
-            (m_6_7 >> MUL_DIGIT_BITS) + (m_7_6 >> MUL_DIGIT_BITS) + m_7_7 + c6;
+            (m_6_7 >> MUL_DIGIT_BITS) +
+            (m_7_6 >> MUL_DIGIT_BITS) + m_7_7 +
+            c6;
 
         // Modular reduction by a pseudo-mersenne prime of the form 2^n - c.
 
@@ -941,16 +931,16 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
 
         // Shift the high bits down into another n-bit number.
         final long h0_0 = ((d3 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
-                   ((d4 & 0x000000000007ffffL) << 10);
+                          ((d4 & 0x000000000007ffffL) << 10);
         final long h1_0 = (d4 & 0x0000fffffff80000L) >> 19;
         final long h2_0 = ((d4 & 0x03ff000000000000L) >> HIGH_DIGIT_BITS) |
-                   ((d5 & 0x000000000007ffffL) << 10);
+                          ((d5 & 0x000000000007ffffL) << 10);
         final long h3_0 = (d5 & 0x0000fffffff80000L) >> 19;
         final long h4_0 = ((d5 & 0x03ff000000000000L) >> HIGH_DIGIT_BITS) |
-                   ((d6 & 0x000000000007ffffL) << 10);
+                          ((d6 & 0x000000000007ffffL) << 10);
         final long h5_0 = (d6 & 0x0000fffffff80000L) >> 19;
         final long h6_0 = ((d6 & 0x03ff000000000000L) >> HIGH_DIGIT_BITS) |
-                   ((d7 & 0x000000000007ffffL) << 10);
+                          ((d7 & 0x000000000007ffffL) << 10);
         final long h7_0 = d7 >> 19;
 
         // Multiply by C
@@ -965,14 +955,17 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
 
         final long hm0_0 = hc0_0 + ((hc1_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS);
         final long hmk0_0 = hm0_0 >> DIGIT_BITS;
-        final long hm1_0 = (hc1_0 >> MUL_DIGIT_BITS) + hc2_0 +
-                    ((hc3_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk0_0;
+        final long hm1_0 =
+            (hc1_0 >> MUL_DIGIT_BITS) + hc2_0 +
+            ((hc3_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk0_0;
         final long hmk1_0 = hm1_0 >> DIGIT_BITS;
-        final long hm2_0 = (hc3_0 >> MUL_DIGIT_BITS) + hc4_0 +
-                    ((hc5_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk1_0;
+        final long hm2_0 =
+            (hc3_0 >> MUL_DIGIT_BITS) + hc4_0 +
+            ((hc5_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk1_0;
         final long hmk2_0 = hm2_0 >> DIGIT_BITS;
-        final long hm3_0 = (hc5_0 >> MUL_DIGIT_BITS) + hc6_0 +
-                    ((hc7_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk2_0;
+        final long hm3_0 =
+            (hc5_0 >> MUL_DIGIT_BITS) + hc6_0 +
+            ((hc7_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk2_0;
 
         // Add h and l.
         final long kin_0 = hm3_0 >> HIGH_DIGIT_BITS;
@@ -1020,19 +1013,17 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
         final long m7 = a7 * b;
 
         final long cin = carryOut(a);
-        final long d0 =
-            m0 + ((m1 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + (cin * C_VAL);
+        final long d0 = m0 + ((m1 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
+                        (cin * C_VAL);
         final long c0 = d0 >> DIGIT_BITS;
-        final long d1 =
-            (m1 >> MUL_DIGIT_BITS) + m2 +
-            ((m3 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + c0;
+        final long d1 = (m1 >> MUL_DIGIT_BITS) + m2 +
+                        ((m3 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + c0;
         final long c1 = d1 >> DIGIT_BITS;
-        final long d2 =
-            (m3 >> MUL_DIGIT_BITS) + m4 +
-            ((m5 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + c1;
+        final long d2 = (m3 >> MUL_DIGIT_BITS) + m4 +
+                        ((m5 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + c1;
         final long c2 = d2 >> DIGIT_BITS;
-        final long d3 =
-            (m5 >> MUL_DIGIT_BITS) + m6 + (m7 << MUL_DIGIT_BITS) + c2;
+        final long d3 = (m5 >> MUL_DIGIT_BITS) + m6 +
+                        (m7 << MUL_DIGIT_BITS) + c2;
 
         out[0] = d0 & DIGIT_MASK;
         out[1] = d1 & DIGIT_MASK;
@@ -1240,14 +1231,17 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
 
         final long hm0_0 = hc0_0 + ((hc1_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS);
         final long hmk0_0 = hm0_0 >> DIGIT_BITS;
-        final long hm1_0 = (hc1_0 >> MUL_DIGIT_BITS) + hc2_0 +
-                    ((hc3_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk0_0;
+        final long hm1_0 =
+            (hc1_0 >> MUL_DIGIT_BITS) + hc2_0 +
+            ((hc3_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk0_0;
         final long hmk1_0 = hm1_0 >> DIGIT_BITS;
-        final long hm2_0 = (hc3_0 >> MUL_DIGIT_BITS) + hc4_0 +
-                    ((hc5_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk1_0;
+        final long hm2_0 =
+            (hc3_0 >> MUL_DIGIT_BITS) + hc4_0 +
+            ((hc5_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk1_0;
         final long hmk2_0 = hm2_0 >> DIGIT_BITS;
-        final long hm3_0 = (hc5_0 >> MUL_DIGIT_BITS) + hc6_0 +
-                    ((hc7_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk2_0;
+        final long hm3_0 =
+            (hc5_0 >> MUL_DIGIT_BITS) + hc6_0 +
+            ((hc7_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk2_0;
 
         // Add h and l.
         final long kin_0 = hm3_0 >> HIGH_DIGIT_BITS;
@@ -1266,10 +1260,7 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
     }
 
     /**
-     * Low-level digits multiplicative inverse (reciprocal).  This is
-     * computed by raising the number to the power {@code MODULUS -
-     * 2}.  In this field, the value of {@code MODULUS - 2} is {@code
-     * 0x3fffffffffffffffffffffffffffffffffffffffffffffffffffff89}.
+     * Low-level digits multiplicative inverse (reciprocal).
      *
      * @param digits The digits array to invert.
      */
@@ -1297,6 +1288,75 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
         }
     }
 
+    /**
+     * Low-level digits initialization from an {@code int}.
+     *
+     * @param digits The digits array to initalize.
+     * @param val The {@code int} from which to initialize.
+     */
+    private static void initDigits(final long[] digits,
+                                   final int val) {
+        Arrays.fill(digits, 0);
+        addDigits(digits, val, digits);
+        normalizeDigits(digits);
+    }
+
+    private static void sqrtPowerDigits(final long[] digits) {
+        // First digit is 1.
+        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
+
+        // Second digit is 1.
+        squareDigits(sqval);
+        mulDigits(digits, sqval, digits);
+
+        // Third, fourth, and fifth digits are 0.
+        squareDigits(sqval);
+        squareDigits(sqval);
+        squareDigits(sqval);
+
+        // All remaining digits are 1.
+        for (int i = 5; i < 220; i++) {
+            squareDigits(sqval);
+            mulDigits(digits, sqval, digits);
+        }
+    }
+
+    private static void invSqrtPowerDigits(final long[] digits) {
+        // First digit is 1.
+        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
+
+        // Second and third digits are 1.
+        squareDigits(sqval);
+        mulDigits(digits, sqval, digits);
+        squareDigits(sqval);
+        mulDigits(digits, sqval, digits);
+
+        // Fourth and fifth digits are 0.
+        squareDigits(sqval);
+        squareDigits(sqval);
+
+        // Sixth digit is 1.
+        squareDigits(sqval);
+        mulDigits(digits, sqval, digits);
+
+        // Seventh digit is 0.
+        squareDigits(sqval);
+
+        // All digits up to 220 are 1.
+        for(int i = 7; i < 220; i++) {
+            squareDigits(sqval);
+            mulDigits(digits, sqval, digits);
+        }
+
+        // 220th digit is 0.
+        squareDigits(sqval);
+
+        // Last digit is 1.
+        squareDigits(sqval);
+        mulDigits(digits, sqval, digits);
+    }
+
+
     private static void legendrePowerDigits(final long[] digits) {
         // First digit is 1.
         final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
@@ -1318,18 +1378,6 @@ public class ModE222M117 extends PrimeField<ModE222M117> {
             squareDigits(sqval);
             mulDigits(digits, sqval, digits);
         }
-    }
-
-    /**
-     * Low-level digits initialization from an {@code int}.
-     *
-     * @param digits The digits array to initalize.
-     * @param val The {@code int} from which to initialize.
-     */
-    private static void initDigits(final long[] digits,
-                                   final int val) {
-        Arrays.fill(digits, 0);
-        addDigits(digits, val, digits);
     }
 
     private static String digitsToString(final long[] digits) {

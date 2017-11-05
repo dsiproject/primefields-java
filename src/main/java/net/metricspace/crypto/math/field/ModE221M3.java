@@ -1404,7 +1404,6 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
         mulDigits(digits, sqval, digits);
     }
 
-
     private static void legendrePowerDigits(final long[] digits) {
         // First digit is zero
         squareDigits(digits);

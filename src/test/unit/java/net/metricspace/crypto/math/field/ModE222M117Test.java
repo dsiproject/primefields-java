@@ -393,7 +393,7 @@ public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
     private static final Object[][] INV_SQRT_TEST_CASES = new Object[][] {
         new Object[] { ModE222M117.zero(), ModE222M117.zero() },
         new Object[] { ModE222M117.one(), ModE222M117.one() },
-        new Object[] { sixteen(), mfour() },
+        new Object[] { sixteen(), four() },
         new Object[] { twentyFive(), mfive() },
     };
 
