@@ -965,7 +965,7 @@ public final class ModE222M117 extends PrimeField<ModE222M117> {
         final long hmk2_0 = hm2_0 >> DIGIT_BITS;
         final long hm3_0 =
             (hc5_0 >> MUL_DIGIT_BITS) + hc6_0 +
-            ((hc7_0 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + hmk2_0;
+            (hc7_0 << MUL_DIGIT_BITS) + hmk2_0;
 
         // Add h and l.
         final long kin_0 = hm3_0 >> HIGH_DIGIT_BITS;
