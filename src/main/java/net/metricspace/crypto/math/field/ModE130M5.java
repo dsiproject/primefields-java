@@ -145,7 +145,7 @@ public final class ModE130M5 extends PrimeField<ModE130M5> {
                      0x0000000000003fffL };
 
     /**
-     * Data for the modulus value {@code 2^222 - 117}.
+     * Data for the modulus value {@code 2^130 - 5}.
      */
     private static final long[] MODULUS_DATA =
         new long[] { 0x03fffffffffffffbL, 0x03ffffffffffffffL,
