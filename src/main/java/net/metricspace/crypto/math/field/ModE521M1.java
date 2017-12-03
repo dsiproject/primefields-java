@@ -150,7 +150,7 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
                      0x003fffffffffffffL, 0x00000007ffffffffL };
 
     /**
-     * Data for the modulus value {@code 2^255 - 19}.
+     * Data for the modulus value {@code 2^521 - 1}.
      */
     private static final long[] MODULUS_DATA =
         new long[] { 0x003fffffffffffffL, 0x003fffffffffffffL,
