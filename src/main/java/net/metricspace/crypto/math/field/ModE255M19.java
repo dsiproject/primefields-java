@@ -468,38 +468,38 @@ public final class ModE255M19 extends PrimeField1Mod4<ModE255M19> {
     @Override
     public void unpack(final byte[] bytes,
                        final int idx) {
-        digits[0] = ((long)bytes[0] & 0x00000000000000ffL) |
-                    (((long)bytes[1] << 8) & 0x000000000000ff00L) |
-                    (((long)bytes[2] << 16) & 0x0000000000ff0000L) |
-                    (((long)bytes[3] << 24) & 0x00000000ff000000L) |
-                    (((long)bytes[4] << 32) & 0x000000ff00000000L) |
-                    (((long)bytes[5] << 40) & 0x0000ff0000000000L) |
-                    (((long)bytes[6] << 48) & 0x00ff000000000000L);
-        digits[1] = ((long)bytes[7] & 0x00000000000000ffL) |
-                    (((long)bytes[8] << 8) & 0x000000000000ff00L) |
-                    (((long)bytes[9] << 16) & 0x0000000000ff0000L) |
-                    (((long)bytes[10] << 24) & 0x00000000ff000000L) |
-                    (((long)bytes[11] << 32) & 0x000000ff00000000L) |
-                    (((long)bytes[12] << 40) & 0x0000ff0000000000L) |
-                    (((long)bytes[13] << 48) & 0x00ff000000000000L);
-        digits[2] = ((long)bytes[14] & 0x00000000000000ffL) |
-                    (((long)bytes[15] << 8) & 0x000000000000ff00L) |
-                    (((long)bytes[16] << 16) & 0x0000000000ff0000L) |
-                    (((long)bytes[17] << 24) & 0x00000000ff000000L) |
-                    (((long)bytes[18] << 32) & 0x000000ff00000000L) |
-                    (((long)bytes[19] << 40) & 0x0000ff0000000000L) |
-                    (((long)bytes[20] << 48) & 0x00ff000000000000L);
-        digits[3] = ((long)bytes[21] & 0x00000000000000ffL) |
-                    (((long)bytes[22] << 8) & 0x000000000000ff00L) |
-                    (((long)bytes[23] << 16) & 0x0000000000ff0000L) |
-                    (((long)bytes[24] << 24) & 0x00000000ff000000L) |
-                    (((long)bytes[25] << 32) & 0x000000ff00000000L) |
-                    (((long)bytes[26] << 40) & 0x0000ff0000000000L) |
-                    (((long)bytes[27] << 48) & 0x00ff000000000000L);
-        digits[4] = ((long)bytes[28] & 0x00000000000000ffL) |
-                    (((long)bytes[29] << 8) & 0x000000000000ff00L) |
-                    (((long)bytes[30] << 16) & 0x0000000000ff0000L) |
-                    (((long)bytes[31] << 24) & 0x000000007f000000L);
+        digits[0] = ((long)bytes[0 + idx] & 0x00000000000000ffL) |
+                    (((long)bytes[1 + idx] << 8) & 0x000000000000ff00L) |
+                    (((long)bytes[2 + idx] << 16) & 0x0000000000ff0000L) |
+                    (((long)bytes[3 + idx] << 24) & 0x00000000ff000000L) |
+                    (((long)bytes[4 + idx] << 32) & 0x000000ff00000000L) |
+                    (((long)bytes[5 + idx] << 40) & 0x0000ff0000000000L) |
+                    (((long)bytes[6 + idx] << 48) & 0x00ff000000000000L);
+        digits[1] = ((long)bytes[7 + idx] & 0x00000000000000ffL) |
+                    (((long)bytes[8 + idx] << 8) & 0x000000000000ff00L) |
+                    (((long)bytes[9 + idx] << 16) & 0x0000000000ff0000L) |
+                    (((long)bytes[10 + idx] << 24) & 0x00000000ff000000L) |
+                    (((long)bytes[11 + idx] << 32) & 0x000000ff00000000L) |
+                    (((long)bytes[12 + idx] << 40) & 0x0000ff0000000000L) |
+                    (((long)bytes[13 + idx] << 48) & 0x00ff000000000000L);
+        digits[2] = ((long)bytes[14 + idx] & 0x00000000000000ffL) |
+                    (((long)bytes[15 + idx] << 8) & 0x000000000000ff00L) |
+                    (((long)bytes[16 + idx] << 16) & 0x0000000000ff0000L) |
+                    (((long)bytes[17 + idx] << 24) & 0x00000000ff000000L) |
+                    (((long)bytes[18 + idx] << 32) & 0x000000ff00000000L) |
+                    (((long)bytes[19 + idx] << 40) & 0x0000ff0000000000L) |
+                    (((long)bytes[20 + idx] << 48) & 0x00ff000000000000L);
+        digits[3] = ((long)bytes[21 + idx] & 0x00000000000000ffL) |
+                    (((long)bytes[22 + idx] << 8) & 0x000000000000ff00L) |
+                    (((long)bytes[23 + idx] << 16) & 0x0000000000ff0000L) |
+                    (((long)bytes[24 + idx] << 24) & 0x00000000ff000000L) |
+                    (((long)bytes[25 + idx] << 32) & 0x000000ff00000000L) |
+                    (((long)bytes[26 + idx] << 40) & 0x0000ff0000000000L) |
+                    (((long)bytes[27 + idx] << 48) & 0x00ff000000000000L);
+        digits[4] = ((long)bytes[28 + idx] & 0x00000000000000ffL) |
+                    (((long)bytes[29 + idx] << 8) & 0x000000000000ff00L) |
+                    (((long)bytes[30 + idx] << 16) & 0x0000000000ff0000L) |
+                    (((long)bytes[31 + idx] << 24) & 0x000000007f000000L);
     }
 
     /**
