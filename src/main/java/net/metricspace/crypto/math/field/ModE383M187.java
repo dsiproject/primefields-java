@@ -464,7 +464,6 @@ public final class ModE383M187 extends PrimeField1Mod4<ModE383M187> {
     @Override
     public void normalizedPack(final byte[] bytes,
                                final int idx) {
-        assert(bytes.length - idx >= PACKED_BYTES);
         packDigits(digits, bytes, idx);
     }
 

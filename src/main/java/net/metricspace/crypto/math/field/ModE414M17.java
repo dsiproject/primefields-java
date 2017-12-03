@@ -413,7 +413,6 @@ public final class ModE414M17 extends PrimeField<ModE414M17> {
     @Override
     public void normalizedPack(final byte[] bytes,
                                final int idx) {
-        assert(bytes.length - idx >= PACKED_BYTES);
         packDigits(digits, bytes, idx);
     }
 

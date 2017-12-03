@@ -459,7 +459,6 @@ public final class ModE255M19 extends PrimeField1Mod4<ModE255M19> {
     @Override
     public void normalizedPack(final byte[] bytes,
                                final int idx) {
-        assert(bytes.length - idx >= PACKED_BYTES);
         packDigits(digits, bytes, idx);
     }
 
