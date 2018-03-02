@@ -45,8 +45,6 @@ public abstract class PrimeField1Mod4StressTest<P extends PrimeField1Mod4<P>>
      * Test quartic residue properties of a number.  This tests that
      * {@code legendre(a) == 1} or {@code legendre(a) == -1}, and if
      * {@code legendre(a) == 1}, then {@code sqrt(a) ^ 2 == a}.
-     *
-     * @param a The number to test.
      */
     @Test(description = "Test properties of quartic residues")
     public void quarticResidueTest() {

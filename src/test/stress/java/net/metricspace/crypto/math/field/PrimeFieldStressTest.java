@@ -45,9 +45,6 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
 
     /**
      * Test {@code a + b - a == b}.
-     *
-     * @param a The LHS.
-     * @param b The RHS.
      */
     @Test(description = "Test that a + b - a == b")
     public void addSubTest() {
@@ -71,9 +68,6 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
 
     /**
      * Test {@code (a * b) / a == b}.
-     *
-     * @param a The LHS.
-     * @param b The RHS.
      */
     @Test(description = "Test that a * b / a == b")
     public void mulDivTest() {
@@ -96,8 +90,6 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
 
     /**
      * Test {@code a * a == a.square()}.
-     *
-     * @param a The number to test.
      */
     @Test(description = "Test that a * a == a.square()")
     public void mulSquareTest() {
@@ -118,8 +110,6 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
 
     /**
      * Test {@code a.invSqrt() == a.sqrt().inv()}.
-     *
-     * @param a The number to test.
      */
     @Test(description = "Test that a.invSqrt() == a.sqrt().inv()")
     public void invSqrtMulTest() {
@@ -147,8 +137,6 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
      * Test quadratic residue properties of a number.  This tests that
      * {@code legendre(a) == 1} or {@code legendre(a) == -1}, and if
      * {@code legendre(a) == 1}, then {@code sqrt(a) ^ 2 == a}.
-     *
-     * @param a The number to test.
      */
     @Test(description = "Test properties of quadratic residues")
     public void quadraticResidueTest() {
