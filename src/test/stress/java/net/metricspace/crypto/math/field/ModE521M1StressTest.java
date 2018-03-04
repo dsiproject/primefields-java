@@ -36,11 +36,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class ModE521M1StressTest extends PrimeFieldStressTest<ModE521M1> {
-    private static final int[] primes = new int[] {
-        2, 3, 71, 103, 809,
-        3907, 7919, 50821, 93719, 199933
-    };
-
     private static final ModE521M1[] values;
 
     static {
@@ -61,22 +56,7 @@ public class ModE521M1StressTest extends PrimeFieldStressTest<ModE521M1> {
             }
         }
 
-        for(int i = 0; i < primePowers[0].length; i++) {
-            for(int j = 0; j < primePowers[1].length; j++) {
-                for(int k = 0; k < primePowers[2].length; k++) {
-                    for(int l = 0; l < primePowers[3].length; l++) {
-                        final ModE521M1 val = primePowers[0][i].clone();
-                        final int idx = (1000 * i) + (100 * j) + (10 * k) + l;
-
-                        val.add(primePowers[1][j]);
-                        val.add(primePowers[2][k]);
-                        val.add(primePowers[3][l]);
-
-                        values[idx] = val;
-                    }
-                }
-            }
-        }
+        computeValues(primePowers, values);
     }
 
     public ModE521M1StressTest() {

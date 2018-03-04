@@ -31,23 +31,61 @@
  */
 package net.metricspace.crypto.math.field;
 
+import java.util.Arrays;
+
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 @Test(groups = "stress")
 public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
+    private static final int SMALL_RATIO = 100;
+
+    protected static final int[] primes = new int[] {
+        2, 3, 71, 103, 809,
+        3907, 7919, 50821, 93719, 199933
+    };
+
+    protected static final <T extends PrimeField<T>>
+        void computeValues(final T[][] primePowers,
+                           final T[] values) {
+        for(int i = 0; i < primePowers[0].length; i++) {
+            for(int j = 0; j < primePowers[1].length; j++) {
+                for(int k = 0; k < primePowers[2].length; k++) {
+                    for(int l = 0; l < primePowers[3].length; l++) {
+                        final T val = primePowers[0][i].clone();
+                        final int idx = (10 * 10 * 10 * i) +
+                            (10 * 10 * j) + (10 * k) + l;
+
+                        val.add(primePowers[1][j]);
+                        val.add(primePowers[2][k]);
+                        val.add(primePowers[3][l]);
+
+                        values[idx] = val;
+                    }
+                }
+            }
+        }
+    }
+
     protected final P[] argData;
+    protected final P[] smallData;
 
     protected PrimeFieldStressTest(final P[] argData) {
         this.argData = argData;
+        this.smallData = Arrays.copyOf(argData, (argData.length / 100) + 1);
+
+        for(int i = 0; i < argData.length / SMALL_RATIO; i++) {
+            smallData[i] = argData[(SMALL_RATIO * i)].clone();
+
+            for(int j = 0; j < argData.length && j < SMALL_RATIO; j++) {
+                smallData[i].add(argData[(SMALL_RATIO * i) + j]);
+            }
+        }
     }
 
     /**
      * Test {@code a + b - a == b}.
-     *
-     * @param a The LHS.
-     * @param b The RHS.
      */
     @Test(description = "Test that a + b - a == b")
     public void addSubTest() {
@@ -71,15 +109,12 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
 
     /**
      * Test {@code (a * b) / a == b}.
-     *
-     * @param a The LHS.
-     * @param b The RHS.
      */
     @Test(description = "Test that a * b / a == b")
     public void mulDivTest() {
-        for(int i = 0; i < argData.length; i++) {
-            for(int j = 0; j < argData.length; j++) {
-                doMulDivTest(argData[i], argData[j]);
+        for(int i = 0; i < smallData.length; i++) {
+            for(int j = 0; j < smallData.length; j++) {
+                doMulDivTest(smallData[i], smallData[j]);
             }
         }
     }
@@ -96,8 +131,6 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
 
     /**
      * Test {@code a * a == a.square()}.
-     *
-     * @param a The number to test.
      */
     @Test(description = "Test that a * a == a.square()")
     public void mulSquareTest() {
@@ -118,8 +151,6 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
 
     /**
      * Test {@code a.invSqrt() == a.sqrt().inv()}.
-     *
-     * @param a The number to test.
      */
     @Test(description = "Test that a.invSqrt() == a.sqrt().inv()")
     public void invSqrtMulTest() {
@@ -147,8 +178,6 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
      * Test quadratic residue properties of a number.  This tests that
      * {@code legendre(a) == 1} or {@code legendre(a) == -1}, and if
      * {@code legendre(a) == 1}, then {@code sqrt(a) ^ 2 == a}.
-     *
-     * @param a The number to test.
      */
     @Test(description = "Test properties of quadratic residues")
     public void quadraticResidueTest() {
