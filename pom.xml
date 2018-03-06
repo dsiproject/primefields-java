@@ -38,18 +38,11 @@
     <test.unit.testng.xml>${test.unit.resources}/testng.xml</test.unit.testng.xml>
     <target.dir>target</target.dir>
     <test.unit.classes>${target}/unit-test-classes</test.unit.classes>
-    <test.perf.srcs>src/test/perf/java</test.perf.srcs>
     <test.stress.dir>src/test/stress</test.stress.dir>
     <test.stress.srcs>${test.stress.dir}/java</test.stress.srcs>
     <test.stress.resources>${test.stress.dir}/resources</test.stress.resources>
     <test.stress.testng.xml>${test.stress.resources}/testng.xml</test.stress.testng.xml>
-    <benchmarks.name>benchmarks</benchmarks.name>
-    <benchmarks.jar>${target.dir}/${benchmarks.name}.jar</benchmarks.jar>
-    <jmh.version>1.19</jmh.version>
     <testng.version>6.1.1</testng.version>
-    <perf.classes.dir>${project.build.directory}/perf-classes</perf.classes.dir>
-    <assembly.dir>src/assembly</assembly.dir>
-    <assembly.perf>${assembly.dir}/perf-tests.xml</assembly.perf>
   </properties>
 
   <dependencies>
@@ -58,17 +51,6 @@
       <artifactId>testng</artifactId>
       <version>${testng.version}</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openjdk.jmh</groupId>
-      <artifactId>jmh-core</artifactId>
-      <version>${jmh.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openjdk.jmh</groupId>
-      <artifactId>jmh-generator-annprocess</artifactId>
-      <version>${jmh.version}</version>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -140,14 +122,12 @@
             <configuration>
               <sources>
                 <source>${test.stress.srcs}</source>
-                <source>${test.perf.srcs}</source>
               </sources>
             </configuration>
           </execution>
         </executions>
       </plugin>
 
-      <!-- Ordinary tests just run the unit test suite. -->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.14</version>
@@ -170,7 +150,6 @@
         </configuration>
       </plugin>
 
-      <!-- Integration are configured to generate coverage reports -->
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>2.12</version>
@@ -198,88 +177,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.2</version>
-        <executions>
-          <execution>
-            <id>copy-classes</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${perf.classes.dir}</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.build.outputDirectory}</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>copy-test-classes</id>
-            <phase>process-test-classes</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${perf.classes.dir}</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.build.testOutputDirectory}</directory>
-                  <includes>
-                    <include>**/perf/*.class</include>
-                    <include>**/perf/generated/*.class</include>
-                    <include>META-INF/*</include>
-                  </includes>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${perf.classes.dir}</outputDirectory>
-              <includeArtifactIds>jmh-core,jopt-simple,commons-math3</includeArtifactIds>
-              <overWriteReleases>false</overWriteReleases>
-              <overWriteSnapshots>false</overWriteSnapshots>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
-        <configuration>
-          <addClasspath>true</addClasspath>
-          <classesDirectory>${perf.classes.dir}</classesDirectory>
-          <classpathPrefix>/lib/</classpathPrefix>
-          <classifier>benchmarks</classifier>
-          <archive>
-            <manifest>
-              <mainClass>org.openjdk.jmh.Main</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
       </plugin>
     </plugins>
   </build>
