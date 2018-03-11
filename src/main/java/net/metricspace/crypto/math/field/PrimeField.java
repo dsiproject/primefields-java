@@ -41,6 +41,9 @@ import java.util.Arrays;
 /**
  * Common superclass for elements of a finite integer field, modulo a
  * prime number.
+ *
+ * @param <Val> The type of arguments to arithmetic functions,
+ *              typically the leaf subclass.
  */
 public abstract class PrimeField<Val extends PrimeField<Val>>
     implements Cloneable {
@@ -122,6 +125,41 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
         normalize();
 
         return signNormalized();
+    }
+
+    /**
+     * Mask this number by a given bit, which is expanded into a mask
+     * of either all {@code 0}s or {@code 1}s.  This bit is taken as a
+     * {@code long}, so as to avoid branches.
+     *
+     * @param bit Either {@code 0} or {@code 1}.
+     */
+    public void mask(final long bit) {
+        long mask = bit;
+
+        mask |= bit << 1;
+        mask |= bit << 2;
+        mask |= bit << 4;
+        mask |= bit << 8;
+        mask |= bit << 16;
+        mask |= bit << 32;
+
+        for(int i = 0; i < digits.length; i++) {
+            digits[i] &= mask;
+        }
+    }
+
+    /**
+     * Bitwise-or this number by another.  This is primarily used in
+     * conjunction with {@link #mask(long)} to select one of two
+     * numbers based on an input without the need for a branch.
+     *
+     * @param other The number to bitwise-or against this one.
+     */
+    public void or(final Val other) {
+        for(int i = 0; i < digits.length; i++) {
+            digits[i] |= other.digits[i];
+        }
     }
 
     /**
@@ -410,6 +448,13 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     public abstract Val clone();
 
     /**
+     * Get the number of bits in a value.
+     *
+     * @return The number of bits in a value.
+     */
+    public abstract int numBits();
+
+    /**
      * Overwrite the value of this number with a {@code long},
      * assuming {@code digits} is already zeroed-out.
      *
@@ -462,11 +507,38 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     public abstract long signNormalized();
 
     /**
-     * Add a {@code int} to this number.
+     * Get the lower bound on values that can be used in {@link
+     * #add(long)}.  This is determined by details of the internal
+     * representation, namely how many bits in each digit are reserved
+     * for carry.
      *
-     * @param b The {@code int} to add.
+     * @return The lower bound on values that can be used in {@link
+     *         #add(long)}.
      */
-    public abstract void add(final int b);
+    public abstract long addMin();
+
+    /**
+     * Get the upper bound on values that can be used in {@link
+     * #add(long)}.  This is determined by details of the internal
+     * representation, namely how many bits in each digit are reserved
+     * for carry.
+     *
+     * @return The upper bound on values that can be used in {@link
+     *         #add(long)}.
+     */
+    public abstract long addMax();
+
+    /**
+     * Add a {@code long} to this number.  The argument must be
+     * between {@link #addMin()} and {@link #addMax()}.
+     * <p>
+     * This operation is more efficient than {@link #add(PrimeField)}.
+     *
+     * @param b The {@code long} to add.
+     * @see #addMin()
+     * @see #addMax()
+     */
+    public abstract void add(final long b);
 
     /**
      * Add a raw internal representation to this number.
@@ -476,11 +548,16 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     protected abstract void add(final long[] b);
 
     /**
-     * Subtract a {@code int} from this number.
+     * Subtract a {@code long} from this number.  The argument must be
+     * between {@link #addMin()} and {@link #addMax()}.
+     * <p>
+     * This operation is more efficient than {@link #sub(PrimeField)}.
      *
-     * @param b The {@code int} to subtract.
+     * @param b The {@code long} to subtract.
+     * @see #addMin()
+     * @see #addMax()
      */
-    public abstract void sub(final int b);
+    public abstract void sub(final long b);
 
     /**
      * Subtract a raw internal representation from this number.
@@ -490,11 +567,39 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     protected abstract void sub(final long[] b);
 
     /**
-     * Multiply this number by a {@code short}.
+     * Get the lower bound on values that can be used in {@link
+     * #mul(int)}.  This is determined by details of the internal
+     * representation, namely how many bits in each digit are reserved
+     * for carry.
      *
-     * @param b The {@code short} by which to multiply.
+     * @return The lower bound on values that can be used in {@link
+     *         #mul(int)}.
      */
-    public abstract void mul(final short b);
+    public abstract int mulMin();
+
+    /**
+     * Get the upper bound on values that can be used in {@link
+     * #mul(int)}.  This is determined by details of the internal
+     * representation, namely how many bits in each digit are reserved
+     * for carry.
+     *
+     * @return The upper bound on values that can be used in {@link
+     *         #mul(int)}.
+     */
+    public abstract int mulMax();
+
+    /**
+     * Multiply this number by a {@code int}.  The argument must be
+     * between {@link #mulMin()} and {@link #mulMax()}.
+     * <p>
+     * This operation is considerably more efficient than {@link
+     * #mul(PrimeField)}.
+     *
+     * @param b The {@code int} by which to multiply.
+     * @see #mulMin()
+     * @see #mulMax()
+     */
+    public abstract void mul(final int b);
 
     /**
      * Multiply this number by a raw internal representation.
@@ -504,7 +609,9 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     protected abstract void mul(final long[] b);
 
     /**
-     * Divide this number by a {@code int}.
+     * Divide this number by a {@code int}.  This version is
+     * <i>not</i> generally more efficient than {@link
+     * #div(PrimeField)}.
      *
      * @param b The {@code int} by which to divide.
      */
@@ -614,4 +721,11 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      */
     public abstract void normalizedPack(final byte[] arr,
                                         final int idx);
+
+    /**
+     * Check if this number is equal to zero.
+     *
+     * @return Whether this number is equal to zero.
+     */
+    public abstract boolean isZero();
 }

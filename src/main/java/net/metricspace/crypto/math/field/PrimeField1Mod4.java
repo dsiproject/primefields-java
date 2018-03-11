@@ -36,6 +36,9 @@ package net.metricspace.crypto.math.field;
  * prime number {@code P} such that {@code P mod 4 = 1}.
  * <p>
  * This class exposes the quartic legendre symbol.
+ *
+ * @param <Val> The type of arguments to arithmetic functions,
+ *              typically the leaf subclass.
  */
 public abstract class PrimeField1Mod4<Val extends PrimeField1Mod4<Val>>
     extends PrimeField<Val> {
@@ -47,7 +50,7 @@ public abstract class PrimeField1Mod4<Val extends PrimeField1Mod4<Val>>
      * from an array without taking possession, use {@link #set}.
      *
      * @param digits The {@code digits} field.
-     * @see #set
+     * @see #set(long[])
      */
     protected PrimeField1Mod4(final long[] digits) {
         super(digits);

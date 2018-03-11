@@ -262,6 +262,46 @@ public final class ModE222M117 extends PrimeField<ModE222M117> {
      * {@inheritDoc}
      */
     @Override
+    public int numBits() {
+        return NUM_BITS;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long addMin() {
+        return 0xffffffffffffffffL & ~DIGIT_MASK;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long addMax() {
+        return DIGIT_MASK;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int mulMin() {
+        return 0xffffffff & ~MUL_DIGIT_MASK;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int mulMax() {
+        return MUL_DIGIT_MASK;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public long bitNormalized(final int n) {
         final int digit_idx = n / DIGIT_BITS;
         final int offset = n % DIGIT_BITS;
@@ -289,7 +329,7 @@ public final class ModE222M117 extends PrimeField<ModE222M117> {
      * {@inheritDoc}
      */
     @Override
-    public void add(final int b) {
+    public void add(final long b) {
         addDigits(digits, b, digits);
     }
 
@@ -313,7 +353,7 @@ public final class ModE222M117 extends PrimeField<ModE222M117> {
      * {@inheritDoc}
      */
     @Override
-    public void sub(final int b) {
+    public void sub(final long b) {
         subDigits(digits, b, digits);
     }
 
@@ -329,7 +369,7 @@ public final class ModE222M117 extends PrimeField<ModE222M117> {
      * {@inheritDoc}
      */
     @Override
-    public void mul(final short b) {
+    public void mul(final int b) {
         mulDigits(digits, b, digits);
     }
 
@@ -399,6 +439,14 @@ public final class ModE222M117 extends PrimeField<ModE222M117> {
         } else {
             return false;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isZero() {
+        return equals(zero());
     }
 
     /**
@@ -652,7 +700,7 @@ public final class ModE222M117 extends PrimeField<ModE222M117> {
      * @param out The digit array into which to write the result.
      */
     private static void addDigits(final long[] a,
-                                  final int b,
+                                  final long b,
                                   final long[] out) {
         final long a0 = a[0];
         final long a1 = a[1];
@@ -719,7 +767,7 @@ public final class ModE222M117 extends PrimeField<ModE222M117> {
      * @param out The digit array into which to write the result.
      */
     private static void subDigits(final long[] a,
-                                  final int b,
+                                  final long b,
                                   final long[] out) {
         final long a0 = a[0];
         final long a1 = a[1];
@@ -992,7 +1040,7 @@ public final class ModE222M117 extends PrimeField<ModE222M117> {
      * @param out The digit array into which to write the result.
      */
     private static void mulDigits(final long[] a,
-                                  final short b,
+                                  final int b,
                                   final long[] out) {
         final long a0 = a[0] & MUL_DIGIT_MASK;
         final long a1 = a[0] >> MUL_DIGIT_BITS;
