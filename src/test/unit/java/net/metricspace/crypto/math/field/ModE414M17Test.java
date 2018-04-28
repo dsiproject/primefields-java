@@ -31,6 +31,9 @@
  */
 package net.metricspace.crypto.math.field;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -192,6 +195,12 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         return new ModE414M17(data);
     }
 
+    @Override
+    protected ModE414M17 unpackStream(final InputStream data)
+        throws IOException {
+        return new ModE414M17(data);
+    }
+
     private static final Object[][] TEST_CONSTANTS_TEST_CASES = new Object[][] {
         new Object[] { new ModE414M17(0), ModE414M17.zero() },
         new Object[] { new ModE414M17(1), ModE414M17.one() },
@@ -218,13 +227,83 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         new Object[] { new ModE414M17(-25), mtwentyFive() }
     };
 
+    @Override
     @DataProvider(name = "testConstants")
     public Object[][] testConstantsProvider() {
         return TEST_CONSTANTS_TEST_CASES;
     }
 
+    private static final Object[][] SET_TEST_CASES = new Object[][] {
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x00ffffffffffffffL, 0x0000000000000000L,
+                             0x00ffffffffffffffL, 0x0000000000000000L,
+                             0x00ffffffffffffffL, 0x0000000000000000L,
+                             0x00ffffffffffffffL, 0x0000000000000000L })
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x0000000000000000L, 0x00ffffffffffffffL,
+                             0x0000000000000000L, 0x00ffffffffffffffL,
+                             0x0000000000000000L, 0x00ffffffffffffffL,
+                             0x0000000000000000L, 0x00000000003fffffL })
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x00aaaaaaaaaaaaaaL, 0x0055555555555555L,
+                             0x00aaaaaaaaaaaaaaL, 0x0055555555555555L,
+                             0x00aaaaaaaaaaaaaaL, 0x0055555555555555L,
+                             0x00aaaaaaaaaaaaaaL, 0x0000000000155555L })
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x0055555555555555L, 0x00aaaaaaaaaaaaaaL,
+                             0x0055555555555555L, 0x00aaaaaaaaaaaaaaL,
+                             0x0055555555555555L, 0x00aaaaaaaaaaaaaaL,
+                             0x0055555555555555L, 0x00000000002aaaaaL })
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x00aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                             0x00aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                             0x00aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                             0x00aaaaaaaaaaaaaaL, 0x0000000000000000L })
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x0000000000000000L, 0x00aaaaaaaaaaaaaaL,
+                             0x0000000000000000L, 0x00aaaaaaaaaaaaaaL,
+                             0x0000000000000000L, 0x00aaaaaaaaaaaaaaL,
+                             0x0000000000000000L, 0x00000000002aaaaaL })
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x00ffffffffffffffL, 0x0055555555555555L,
+                             0x00ffffffffffffffL, 0x0055555555555555L,
+                             0x00ffffffffffffffL, 0x0055555555555555L,
+                             0x00ffffffffffffffL, 0x0000000000155555L })
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x0055555555555555L, 0x00ffffffffffffffL,
+                             0x0055555555555555L, 0x00ffffffffffffffL,
+                             0x0055555555555555L, 0x00ffffffffffffffL,
+                             0x0055555555555555L, 0x00ffffffffffffffL })
+        }
+    };
 
-    private static final Object[][] PACK_UNPACK_TEST_CASES = new Object [][] {
+    @Override
+    protected ModE414M17 createEmpty() {
+        return new ModE414M17(0);
+    }
+
+    @Override
+    @DataProvider(name = "setEmpty")
+    public Object[][] setEmptyProvider() {
+        return SET_TEST_CASES;
+    }
+
+    private static final Object[][] UNPACK_PACK_TEST_CASES = new Object [][] {
         new Object[] {
             new byte[] { (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
                          (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
@@ -347,13 +426,13 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         }
     };
 
-    @DataProvider(name = "packUnpack")
-    public Object[][] packUnpackProvider() {
-        return PACK_UNPACK_TEST_CASES;
+    @Override
+    @DataProvider(name = "unpackPack")
+    public Object[][] unpackPackProvider() {
+        return UNPACK_PACK_TEST_CASES;
     }
 
-
-    private static final Object[][] UNPACK_PACK_TEST_CASES = new Object[][] {
+    private static final Object[][] PACK_UNPACK_TEST_CASES = new Object[][] {
         new Object[] {
             new ModE414M17(
                 new long[] { 0x00ffffffffffffffL, 0x0000000000000000L,
@@ -412,9 +491,35 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         }
     };
 
-    @DataProvider(name = "unpackPack")
-    public Object[][] unpackPackProvider() {
-        return UNPACK_PACK_TEST_CASES;
+    @Override
+    @DataProvider(name = "packUnpack")
+    public Object[][] packUnpackProvider() {
+        return PACK_UNPACK_TEST_CASES;
+    }
+
+    @DataProvider(name = "mask")
+    public Object[][] maskProvider() {
+        return PACK_UNPACK_TEST_CASES;
+    }
+
+    private static final Object[][] OR_TEST_CASES =
+        new Object[PACK_UNPACK_TEST_CASES.length *
+                   PACK_UNPACK_TEST_CASES.length][2];
+
+    static {
+        final int len = PACK_UNPACK_TEST_CASES.length;
+
+        for(int i = 0; i < len; i++) {
+            for(int j = 0; j < len; j++) {
+                OR_TEST_CASES[(i * len) + j][0] = PACK_UNPACK_TEST_CASES[i][0];
+                OR_TEST_CASES[(i * len) + j][1] = PACK_UNPACK_TEST_CASES[j][0];
+            }
+        }
+    };
+
+    @DataProvider(name = "or")
+    public Object[][] orProvider() {
+        return OR_TEST_CASES;
     }
 
     private static final ModE414M17[][] startTier = new ModE414M17[][] {
@@ -469,6 +574,7 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         new Object[] { mfive(), twentyFive() },
     };
 
+    @Override
     @DataProvider(name = "square")
     public Object[][] squareProvider() {
         return SQUARE_TEST_CASES;
@@ -500,6 +606,7 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         new Object[] { mtwentyFive(), new Integer(-1) },
     };
 
+    @Override
     @DataProvider(name = "legendre", parallel = true)
     public Object[][] legendreProvider() {
         return LEGENDRE_TEST_CASES;
@@ -512,6 +619,7 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         new Object[] { twentyFive(), mfive() },
     };
 
+    @Override
     @DataProvider(name = "sqrt", parallel = true)
     public Object[][] sqrtProvider() {
         return SQRT_TEST_CASES;
@@ -530,6 +638,7 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
         }
     };
 
+    @Override
     @DataProvider(name = "invSqrt", parallel = true)
     public Object[][] invSqrtProvider() {
         return INV_SQRT_TEST_CASES;

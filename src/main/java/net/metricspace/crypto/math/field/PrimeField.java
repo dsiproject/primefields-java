@@ -137,12 +137,12 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     public void mask(final long bit) {
         long mask = bit;
 
-        mask |= bit << 1;
-        mask |= bit << 2;
-        mask |= bit << 4;
-        mask |= bit << 8;
-        mask |= bit << 16;
-        mask |= bit << 32;
+        mask |= mask << 1;
+        mask |= mask << 2;
+        mask |= mask << 4;
+        mask |= mask << 8;
+        mask |= mask << 16;
+        mask |= mask << 32;
 
         for(int i = 0; i < digits.length; i++) {
             digits[i] &= mask;
@@ -292,7 +292,7 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     public void pack(final byte[] arr,
                      final int idx) {
         normalize();
-        normalizedPack(arr, 0);
+        normalizedPack(arr, idx);
     }
 
     /**

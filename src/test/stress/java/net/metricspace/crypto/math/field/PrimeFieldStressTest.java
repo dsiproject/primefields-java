@@ -96,15 +96,40 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
         }
     }
 
-
     private void doAddSubTest(final P a,
-                                     final P b) {
+                              final P b) {
         final P val = a.clone();
 
         val.add(b);
         val.sub(a);
 
         Assert.assertEquals(val, b);
+    }
+
+    /**
+     * Test {@code a + b.neg == a - b}.
+     */
+    @Test(description = "Test that a + b.neg == a - b")
+    public void subAddNegTest() {
+        for(int i = 0; i < argData.length; i++) {
+            for(int j = 0; j < argData.length; j++) {
+                doSubAddNegTest(argData[i], argData[j]);
+            }
+        }
+    }
+
+    private void doSubAddNegTest(final P a,
+                                 final P b) {
+        final P expected = a.clone();
+        final P actual = a.clone();
+        final P bclone = b.clone();
+
+        expected.sub(b);
+
+        bclone.neg();
+        actual.add(bclone);
+
+        Assert.assertEquals(expected, actual);
     }
 
     /**
@@ -120,7 +145,7 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
     }
 
     private void doMulDivTest(final P a,
-                                  final P b) {
+                              final P b) {
         final P val = a.clone();
 
         val.mul(b);

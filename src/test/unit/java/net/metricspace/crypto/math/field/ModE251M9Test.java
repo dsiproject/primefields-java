@@ -31,6 +31,9 @@
  */
 package net.metricspace.crypto.math.field;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -173,6 +176,12 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
         return new ModE251M9(data);
     }
 
+    @Override
+    protected ModE251M9 unpackStream(final InputStream data)
+        throws IOException {
+        return new ModE251M9(data);
+    }
+
     private static final Object[][] TEST_CONSTANTS_TEST_CASES = new Object[][] {
         new Object[] { new ModE251M9(0), ModE251M9.zero() },
         new Object[] { new ModE251M9(1), ModE251M9.one() },
@@ -199,12 +208,75 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
         new Object[] { new ModE251M9(-25), mtwentyFive() }
     };
 
+    @Override
     @DataProvider(name = "testConstants")
     public Object[][] testConstantsProvider() {
         return TEST_CONSTANTS_TEST_CASES;
     }
 
-    private static final Object[][] PACK_UNPACK_TEST_CASES = new Object [][] {
+    private static final Object[][] SET_TEST_CASES = new Object[][] {
+        new Object[] {
+            new ModE251M9(
+                new long[] { 0x03ffffffffffffffL, 0x0000000000000000L,
+                             0x03ffffffffffffffL, 0x0000000000000000L,
+                             0x0000000007ffffffL })
+        },
+        new Object[] {
+            new ModE251M9(
+                new long[] { 0x0000000000000000L, 0x03ffffffffffffffL,
+                             0x0000000000000000L, 0x03ffffffffffffffL,
+                             0x0000000000000000L })
+        },
+        new Object[] {
+            new ModE251M9(
+                new long[] { 0x02aaaaaaaaaaaaaaL, 0x0155555555555555L,
+                             0x02aaaaaaaaaaaaaaL, 0x0155555555555555L,
+                             0x0000000002aaaaaaL })
+        },
+        new Object[] {
+            new ModE251M9(
+                new long[] { 0x0155555555555555L, 0x02aaaaaaaaaaaaaaL,
+                             0x0155555555555555L, 0x02aaaaaaaaaaaaaaL,
+                             0x0000000005555555L })
+        },
+        new Object[] {
+            new ModE251M9(
+                new long[] { 0x02aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                             0x02aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                             0x0000000002aaaaaaL })
+        },
+        new Object[] {
+            new ModE251M9(
+                new long[] { 0x0000000000000000L, 0x02aaaaaaaaaaaaaaL,
+                             0x0000000000000000L, 0x02aaaaaaaaaaaaaaL,
+                             0x0000000000000000L })
+        },
+        new Object[] {
+            new ModE251M9(
+                new long[] { 0x03ffffffffffffffL, 0x0155555555555555L,
+                             0x03ffffffffffffffL, 0x0155555555555555L,
+                             0x0000000007ffffffL })
+        },
+        new Object[] {
+            new ModE251M9(
+                new long[] { 0x0155555555555555L, 0x03ffffffffffffffL,
+                             0x0155555555555555L, 0x03ffffffffffffffL,
+                             0x0000000005555555L })
+        }
+    };
+
+    @Override
+    protected ModE251M9 createEmpty() {
+        return new ModE251M9(0);
+    }
+
+    @Override
+    @DataProvider(name = "setEmpty")
+    public Object[][] setEmptyProvider() {
+        return SET_TEST_CASES;
+    }
+
+    private static final Object[][] UNPACK_PACK_TEST_CASES = new Object [][] {
         new Object[] {
             new byte[] { (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
                          (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
@@ -287,12 +359,13 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
         }
     };
 
-    @DataProvider(name = "packUnpack")
-    public Object[][] packUnpackProvider() {
-        return PACK_UNPACK_TEST_CASES;
+    @Override
+    @DataProvider(name = "unpackPack")
+    public Object[][] unpackPackProvider() {
+        return UNPACK_PACK_TEST_CASES;
     }
 
-    private static final Object[][] UNPACK_PACK_TEST_CASES = new Object[][] {
+    private static final Object[][] PACK_UNPACK_TEST_CASES = new Object[][] {
         new Object[] {
             new ModE251M9(
                 new long[] { 0x03ffffffffffffffL, 0x0000000000000000L,
@@ -343,9 +416,35 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
         }
     };
 
-    @DataProvider(name = "unpackPack")
-    public Object[][] unpackPackProvider() {
-        return UNPACK_PACK_TEST_CASES;
+    @Override
+    @DataProvider(name = "packUnpack")
+    public Object[][] packUnpackProvider() {
+        return PACK_UNPACK_TEST_CASES;
+    }
+
+    @DataProvider(name = "mask")
+    public Object[][] maskProvider() {
+        return PACK_UNPACK_TEST_CASES;
+    }
+
+    private static final Object[][] OR_TEST_CASES =
+        new Object[PACK_UNPACK_TEST_CASES.length *
+                   PACK_UNPACK_TEST_CASES.length][2];
+
+    static {
+        final int len = PACK_UNPACK_TEST_CASES.length;
+
+        for(int i = 0; i < len; i++) {
+            for(int j = 0; j < len; j++) {
+                OR_TEST_CASES[(i * len) + j][0] = PACK_UNPACK_TEST_CASES[i][0];
+                OR_TEST_CASES[(i * len) + j][1] = PACK_UNPACK_TEST_CASES[j][0];
+            }
+        }
+    };
+
+    @DataProvider(name = "or")
+    public Object[][] orProvider() {
+        return OR_TEST_CASES;
     }
 
     private static final ModE251M9[][] startTier = new ModE251M9[][] {
@@ -400,6 +499,7 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
         new Object[] { mfive(), twentyFive() },
     };
 
+    @Override
     @DataProvider(name = "square")
     public Object[][] squareProvider() {
         return SQUARE_TEST_CASES;
@@ -431,6 +531,7 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
         new Object[] { mtwentyFive(), new Integer(-1) },
     };
 
+    @Override
     @DataProvider(name = "legendre", parallel = true)
     public Object[][] legendreProvider() {
         return LEGENDRE_TEST_CASES;
@@ -443,6 +544,7 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
         new Object[] { twentyFive(), five() },
     };
 
+    @Override
     @DataProvider(name = "sqrt", parallel = true)
     public Object[][] sqrtProvider() {
         return SQRT_TEST_CASES;
@@ -461,6 +563,7 @@ public class ModE251M9Test extends PrimeFieldUnitTest<ModE251M9> {
         }
     };
 
+    @Override
     @DataProvider(name = "invSqrt", parallel = true)
     public Object[][] invSqrtProvider() {
         return INV_SQRT_TEST_CASES;

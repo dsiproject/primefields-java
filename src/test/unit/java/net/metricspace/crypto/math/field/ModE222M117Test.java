@@ -1,4 +1,38 @@
+/* Copyright (c) 2017, Eric McCorkle.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * * Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in
+ *   the documentation and/or other materials provided with the
+ *   distribution.
+ *
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived
+ *   from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package net.metricspace.crypto.math.field;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -131,6 +165,12 @@ public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
         return new ModE222M117(data);
     }
 
+    @Override
+    protected ModE222M117 unpackStream(final InputStream data)
+        throws IOException {
+        return new ModE222M117(data);
+    }
+
     private static final Object[][] TEST_CONSTANTS_TEST_CASES = new Object[][] {
         new Object[] { new ModE222M117(0), ModE222M117.zero() },
         new Object[] { new ModE222M117(1), ModE222M117.one() },
@@ -157,12 +197,67 @@ public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
         new Object[] { new ModE222M117(-25), mtwentyFive() }
     };
 
+    @Override
     @DataProvider(name = "testConstants")
     public Object[][] testConstantsProvider() {
         return TEST_CONSTANTS_TEST_CASES;
     }
 
-    private static final Object[][] PACK_UNPACK_TEST_CASES = new Object [][] {
+    private static final Object[][] SET_TEST_CASES = new Object[][] {
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x03ffffffffffffffL, 0x0000000000000000L,
+                             0x03ffffffffffffffL, 0x0000000000000000L })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x0000000000000000L, 0x03ffffffffffffffL,
+                             0x0000000000000000L, 0x0000ffffffffffffL })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x02aaaaaaaaaaaaaaL, 0x0155555555555555L,
+                             0x02aaaaaaaaaaaaaaL, 0x0000555555555555L })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x0155555555555555L, 0x02aaaaaaaaaaaaaaL,
+                             0x0155555555555555L, 0x0000aaaaaaaaaaaaL })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x02aaaaaaaaaaaaaaL, 0x0000000000000000L,
+                             0x02aaaaaaaaaaaaaaL, 0x0000000000000000L })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x0000000000000000L, 0x02aaaaaaaaaaaaaaL,
+                             0x0000000000000000L, 0x0000aaaaaaaaaaaaL })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x03ffffffffffffffL, 0x0155555555555555L,
+                             0x03ffffffffffffffL, 0x0000555555555555L })
+        },
+        new Object[] {
+            new ModE222M117(
+                new long[] { 0x0155555555555555L, 0x03ffffffffffffffL,
+                             0x0155555555555555L, 0x0000ffffffffffffL })
+        }
+    };
+
+    @Override
+    protected ModE222M117 createEmpty() {
+        return new ModE222M117(0);
+    }
+
+    @Override
+    @DataProvider(name = "setEmpty")
+    public Object[][] setEmptyProvider() {
+        return SET_TEST_CASES;
+    }
+
+    private static final Object[][] UNPACK_PACK_TEST_CASES = new Object [][] {
         new Object[] {
             new byte[] { (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
                          (byte)0xff, (byte)0x00, (byte)0xff, (byte)0x00,
@@ -237,12 +332,13 @@ public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
         }
     };
 
-    @DataProvider(name = "packUnpack")
-    public Object[][] packUnpackProvider() {
-        return PACK_UNPACK_TEST_CASES;
+    @Override
+    @DataProvider(name = "unpackPack")
+    public Object[][] unpackPackProvider() {
+        return UNPACK_PACK_TEST_CASES;
     }
 
-    private static final Object[][] UNPACK_PACK_TEST_CASES = new Object[][] {
+    private static final Object[][] PACK_UNPACK_TEST_CASES = new Object[][] {
         new Object[] {
             new ModE222M117(
                 new long[] { 0x03ffffffffffffffL, 0x0000000000000000L,
@@ -285,9 +381,35 @@ public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
         }
     };
 
-    @DataProvider(name = "unpackPack")
-    public Object[][] unpackPackProvider() {
-        return UNPACK_PACK_TEST_CASES;
+    @Override
+    @DataProvider(name = "packUnpack")
+    public Object[][] packUnpackProvider() {
+        return PACK_UNPACK_TEST_CASES;
+    }
+
+    @DataProvider(name = "mask")
+    public Object[][] maskProvider() {
+        return PACK_UNPACK_TEST_CASES;
+    }
+
+    private static final Object[][] OR_TEST_CASES =
+        new Object[PACK_UNPACK_TEST_CASES.length *
+                   PACK_UNPACK_TEST_CASES.length][2];
+
+    static {
+        final int len = PACK_UNPACK_TEST_CASES.length;
+
+        for(int i = 0; i < len; i++) {
+            for(int j = 0; j < len; j++) {
+                OR_TEST_CASES[(i * len) + j][0] = PACK_UNPACK_TEST_CASES[i][0];
+                OR_TEST_CASES[(i * len) + j][1] = PACK_UNPACK_TEST_CASES[j][0];
+            }
+        }
+    };
+
+    @DataProvider(name = "or")
+    public Object[][] orProvider() {
+        return OR_TEST_CASES;
     }
 
     private static final ModE222M117[][] startTier = new ModE222M117[][] {
@@ -342,6 +464,7 @@ public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
         new Object[] { mfive(), twentyFive() },
     };
 
+    @Override
     @DataProvider(name = "square")
     public Object[][] squareProvider() {
         return SQUARE_TEST_CASES;
@@ -373,6 +496,7 @@ public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
         new Object[] { mtwentyFive(), new Integer(-1) },
     };
 
+    @Override
     @DataProvider(name = "legendre", parallel = true)
     public Object[][] legendreProvider() {
         return LEGENDRE_TEST_CASES;
@@ -385,6 +509,7 @@ public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
         new Object[] { twentyFive(), mfive() },
     };
 
+    @Override
     @DataProvider(name = "sqrt", parallel = true)
     public Object[][] sqrtProvider() {
         return SQRT_TEST_CASES;
@@ -403,6 +528,7 @@ public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
         }
     };
 
+    @Override
     @DataProvider(name = "invSqrt", parallel = true)
     public Object[][] invSqrtProvider() {
         return INV_SQRT_TEST_CASES;
