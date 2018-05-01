@@ -338,7 +338,7 @@ public final class ModE130M5 extends PrimeField<ModE130M5> {
      */
     @Override
     public void neg() {
-        add(MODULUS_DATA);
+        subDigits(ZERO_DATA, digits, digits);
     }
 
     /**
@@ -708,7 +708,7 @@ public final class ModE130M5 extends PrimeField<ModE130M5> {
         final long b1 = b[1];
         final long b2 = b[2] & HIGH_DIGIT_MASK;
 
-        final long cin = carryOut(a) + carryOut(b);
+        final long cin = carryOut(a) - carryOut(b);
         final long s0 = a0 - b0 + (cin * C_VAL);
         final long c0 = s0 >> DIGIT_BITS;
         final long s1 = a1 - b1 + c0;
@@ -892,19 +892,29 @@ public final class ModE130M5 extends PrimeField<ModE130M5> {
         final long m4 = a4 * b;
 
         final long cin = carryOut(a);
-        final long d0 = m0 + ((m1 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
-                        (cin * C_VAL);
+        final long d0 =
+            m0 + ((m1 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
+            (cin * C_VAL * b);
         final long c0 = d0 >> DIGIT_BITS;
-        final long d1 = (m1 >> MUL_DIGIT_BITS) + m2 +
-                        ((m3 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
-                        c0;
+        final long d1 =
+            (m1 >> MUL_DIGIT_BITS) + m2 +
+            ((m3 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
+            c0;
         final long c1 = d1 >> DIGIT_BITS;
-        final long d2 = (m3 >> MUL_DIGIT_BITS) + m4 +
-                        c1;
+        final long d2 =
+            (m3 >> MUL_DIGIT_BITS) + m4 +
+            c1;
 
-        out[0] = d0 & DIGIT_MASK;
-        out[1] = d1 & DIGIT_MASK;
-        out[2] = d2;
+        final long kin = d2 >> HIGH_DIGIT_BITS;
+        final long s0 = (d0 & DIGIT_MASK) + (kin * C_VAL);
+        final long k0 = s0 >> DIGIT_BITS;
+        final long s1 = (d1 & DIGIT_MASK) + k0;
+        final long k1 = s1 >> DIGIT_BITS;
+        final long s2 = (d2 & HIGH_DIGIT_MASK) + k1;
+
+        out[0] = s0 & DIGIT_MASK;
+        out[1] = s1 & DIGIT_MASK;
+        out[2] = s2;
     }
 
     /**

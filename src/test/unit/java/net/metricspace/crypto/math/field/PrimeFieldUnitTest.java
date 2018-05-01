@@ -1922,7 +1922,7 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
         for(int i = 0; i < vals[MONE_IDX].length; i++) {
             final P val = vals[MONE_IDX][i].clone();
 
-            val.mul((short)-1);
+            val.mul(-1);
 
             out[ONE_IDX][idx++] = val;
             Assert.assertEquals(val, vals[ONE_IDX][0]);
