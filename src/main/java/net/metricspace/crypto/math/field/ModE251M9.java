@@ -340,7 +340,7 @@ public final class ModE251M9 extends PrimeField<ModE251M9> {
      */
     @Override
     public void neg() {
-        add(MODULUS_DATA);
+        subDigits(ZERO_DATA, digits, digits);
     }
 
     /**
@@ -758,7 +758,7 @@ public final class ModE251M9 extends PrimeField<ModE251M9> {
         final long b3 = b[3];
         final long b4 = b[4] & HIGH_DIGIT_MASK;
 
-        final long cin = carryOut(a) + carryOut(b);
+        final long cin = carryOut(a) - carryOut(b);
         final long s0 = a0 - b0 + (cin * C_VAL);
         final long c0 = s0 >> DIGIT_BITS;
         final long s1 = a1 - b1 + c0;
@@ -1139,8 +1139,7 @@ public final class ModE251M9 extends PrimeField<ModE251M9> {
         final long a5 = a[2] >> MUL_DIGIT_BITS;
         final long a6 = a[3] & MUL_DIGIT_MASK;
         final long a7 = a[3] >> MUL_DIGIT_BITS;
-        final long a8 = a[4] & MUL_DIGIT_MASK;
-        final long a9 = a[4] >> MUL_DIGIT_BITS;
+        final long a8 = a[4] & HIGH_DIGIT_MASK;
 
         final long m0 = a0 * b;
         final long m1 = a1 * b;
@@ -1151,11 +1150,11 @@ public final class ModE251M9 extends PrimeField<ModE251M9> {
         final long m6 = a6 * b;
         final long m7 = a7 * b;
         final long m8 = a8 * b;
-        final long m9 = a9 * b;
 
         final long cin = carryOut(a);
         final long d0 =
-            m0 + ((m1 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + (cin * C_VAL);
+            m0 + ((m1 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) +
+            (cin * C_VAL * b);
         final long c0 = d0 >> DIGIT_BITS;
         final long d1 =
             (m1 >> MUL_DIGIT_BITS) + m2 +
@@ -1170,13 +1169,24 @@ public final class ModE251M9 extends PrimeField<ModE251M9> {
             ((m7 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + c2;
         final long c3 = d3 >> DIGIT_BITS;
         final long d4 =
-            (m7 >> MUL_DIGIT_BITS) + m8 + (m9 << MUL_DIGIT_BITS) + c3;
+            (m7 >> MUL_DIGIT_BITS) + m8 + c3;
 
-        out[0] = d0 & DIGIT_MASK;
-        out[1] = d1 & DIGIT_MASK;
-        out[2] = d2 & DIGIT_MASK;
-        out[3] = d3 & DIGIT_MASK;
-        out[4] = d4;
+        final long kin = d4 >> HIGH_DIGIT_BITS;
+        final long s0 = (d0 & DIGIT_MASK) + (kin * C_VAL);
+        final long k0 = s0 >> DIGIT_BITS;
+        final long s1 = (d1 & DIGIT_MASK) + k0;
+        final long k1 = s1 >> DIGIT_BITS;
+        final long s2 = (d2 & DIGIT_MASK) + k1;
+        final long k2 = s2 >> DIGIT_BITS;
+        final long s3 = (d3 & DIGIT_MASK) + k2;
+        final long k3 = s3 >> DIGIT_BITS;
+        final long s4 = (d4 & HIGH_DIGIT_MASK) + k3;
+
+        out[0] = s0 & DIGIT_MASK;
+        out[1] = s1 & DIGIT_MASK;
+        out[2] = s2 & DIGIT_MASK;
+        out[3] = s3 & DIGIT_MASK;
+        out[4] = s4;
     }
 
     /**
