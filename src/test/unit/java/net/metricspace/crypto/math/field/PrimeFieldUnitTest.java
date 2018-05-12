@@ -31,6 +31,11 @@
  */
 package net.metricspace.crypto.math.field;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 
 import org.testng.Assert;
@@ -61,14 +66,77 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
         Assert.assertEquals(expected, actual);
     }
 
-    @DataProvider(name = "packUnpack")
-    public abstract Object[][] packUnpackProvider();
+    protected abstract P createEmpty();
+
+    @DataProvider(name = "setEmpty")
+    public abstract Object[][] setEmptyProvider();
+
+    @Test(dataProvider = "setEmpty",
+          description = "Test set functionality")
+    public void setEmptyTest(final P expected) {
+        final P actual = createEmpty();
+
+        actual.set(expected);
+
+        Assert.assertEquals(actual, expected);
+    }
 
     protected abstract P unpack(final byte[] data);
 
-    @Test(dataProvider = "packUnpack",
-          description = "Test packing then unpacking values")
-    public void packUnpackTest(final byte[] testcase) {
+    protected abstract P unpackStream(final InputStream stream)
+        throws IOException;
+
+    @DataProvider(name = "mask")
+    public abstract Object[][] maskProvider();
+
+    @Test(dataProvider = "mask",
+          description = "Test mask functionality")
+    public void maskTest(final P val) {
+        final P onemask = val.clone();
+        final P zeromask = val.clone();
+
+        onemask.mask(1);
+        zeromask.mask(0);
+
+        Assert.assertTrue(zeromask.isZero());
+        Assert.assertEquals(val, onemask);
+    }
+
+    @DataProvider(name = "or")
+    public abstract Object[][] orProvider();
+
+    @Test(dataProvider = "or",
+          description = "Test mask functionality")
+    public void orLeftTest(final P a, final P b) {
+        final P onemask = a.clone();
+        final P zeromask = b.clone();
+
+        onemask.mask(1);
+        zeromask.mask(0);
+        onemask.or(zeromask);
+
+        Assert.assertEquals(a, onemask);
+    }
+
+    @Test(dataProvider = "or",
+          description = "Test mask functionality")
+    public void orRightTest(final P a, final P b) {
+        final P zeromask = a.clone();
+        final P onemask = b.clone();
+
+        zeromask.mask(0);
+        onemask.mask(1);
+        zeromask.or(onemask);
+
+        Assert.assertEquals(b, zeromask);
+    }
+
+    @DataProvider(name = "unpackPack")
+    public abstract Object[][] unpackPackProvider();
+
+    @Test(dataProvider = "unpackPack",
+          description = "Test unpacking then packing values")
+    public void unpackPackTest(final byte[] testcase) {
         final P unpacked = unpack(testcase);
         final byte[] packed = unpacked.packed();
 
@@ -77,18 +145,84 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
         for(int i = 0; i < testcase.length; i++) {
             Assert.assertEquals(packed[i], testcase[i]);
         }
+
+        final byte[] target = new byte[packed.length + 2];
+
+        for(int i = 0; i < target.length; i++) {
+            target[i] = (byte)0xff;
+        }
+
+        unpacked.pack(target);
+
+        for(int i = 0; i < testcase.length; i++) {
+            Assert.assertEquals(target[i], testcase[i]);
+        }
+
+        Assert.assertEquals(target[testcase.length + 0], (byte)0xff);
+        Assert.assertEquals(target[testcase.length + 1], (byte)0xff);
+
+        for(int i = 0; i < target.length; i++) {
+            target[i] = (byte)0xff;
+        }
+
+        unpacked.pack(target, 1);
+
+        Assert.assertEquals(target[0], (byte)0xff);
+
+        for(int i = 0; i < testcase.length; i++) {
+            Assert.assertEquals(target[i + 1], testcase[i]);
+        }
+
+        Assert.assertEquals(target[testcase.length + 1], (byte)0xff);
     }
 
-    @DataProvider(name = "unpackPack")
-    public abstract Object[][] unpackPackProvider();
+    @Test(dataProvider = "unpackPack",
+          description = "Test unpacking from a stream")
+    public void unpackStreamTest(final byte[] testcase)
+        throws IOException {
+        final P unpacked = unpack(testcase);
+        final InputStream stream = new ByteArrayInputStream(testcase);
+        final P unpackedStream = unpackStream(stream);
+
+        Assert.assertEquals(unpackedStream, unpacked);
+    }
 
     @Test(dataProvider = "unpackPack",
-          description = "Test unpacking then packing values")
-    public void unpackPackTestCase(final P expected) {
+          description = "Test bit values")
+    public void bitTest(final byte[] testcase)
+        throws IOException {
+        final P unpacked = unpack(testcase);
+
+        for(int i = 0; i < unpacked.numBits(); i++) {
+            final int byteidx = i / 8;
+            final int bitidx = i % 8;
+            final int expected = (testcase[byteidx] >> bitidx) & 0x1;
+
+            Assert.assertEquals(unpacked.bit(i), expected);
+        }
+    }
+
+    @DataProvider(name = "packUnpack")
+    public abstract Object[][] packUnpackProvider();
+
+    @Test(dataProvider = "packUnpack",
+          description = "Test packing then unpacking values")
+    public void packUnpackTestCase(final P expected) {
         final byte[] packed = expected.packed();
         final P actual = unpack(packed);
 
         Assert.assertEquals(actual, expected);
+    }
+
+    @Test(dataProvider = "packUnpack",
+          description = "Test packing to a stream")
+    public void packStreamTestCase(final P expected)
+        throws IOException {
+        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        expected.pack(stream);
+
+        Assert.assertEquals(stream.toByteArray(), expected.packed());
     }
 
     @DataProvider(name = "square")
