@@ -1939,25 +1939,25 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         final long l9_0 = d9 & HIGH_DIGIT_MASK;
 
         // Shift the high bits down into another n-bit number.
-        final long h0_0 = ((d9 & DIGIT_MASK) >> 25) |
+        final long h0_0 = ((d9 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                    ((d10 & HIGH_DIGIT_MASK) << 29);
-        final long h1_0 = ((d10 & DIGIT_MASK) >> 25) |
+        final long h1_0 = ((d10 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                    ((d11 & HIGH_DIGIT_MASK) << 29);
-        final long h2_0 = ((d11 & DIGIT_MASK) >> 25) |
+        final long h2_0 = ((d11 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                    ((d12 & HIGH_DIGIT_MASK) << 29);
-        final long h3_0 = ((d12 & DIGIT_MASK) >> 25) |
+        final long h3_0 = ((d12 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                    ((d13 & HIGH_DIGIT_MASK) << 29);
-        final long h4_0 = ((d13 & DIGIT_MASK) >> 25) |
+        final long h4_0 = ((d13 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                    ((d14 & HIGH_DIGIT_MASK) << 29);
-        final long h5_0 = ((d14 & DIGIT_MASK) >> 25) |
+        final long h5_0 = ((d14 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                    ((d15 & HIGH_DIGIT_MASK) << 29);
-        final long h6_0 = ((d15 & DIGIT_MASK) >> 25) |
+        final long h6_0 = ((d15 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                    ((d16 & HIGH_DIGIT_MASK) << 29);
-        final long h7_0 = ((d16 & DIGIT_MASK) >> 25) |
+        final long h7_0 = ((d16 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                    ((d17 & HIGH_DIGIT_MASK) << 29);
-        final long h8_0 = ((d17 & DIGIT_MASK) >> 25) |
+        final long h8_0 = ((d17 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                    ((d18 & HIGH_DIGIT_MASK) << 29);
-        final long h9_0 = d18 >> 25;
+        final long h9_0 = d18 >> HIGH_DIGIT_BITS;
 
         // Multiply by C
         final long hc0_0 = h0_0 * C_VAL;
@@ -1972,7 +1972,7 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         final long hc9_0 = h9_0 * C_VAL;
 
         // Add h and l.
-        final long kin_0 = hc9_0 >> 25;
+        final long kin_0 = hc9_0 >> HIGH_DIGIT_BITS;
         final long s0_0 = l0_0 + hc0_0 + (kin_0 * C_VAL);
         final long k0_0 = s0_0 >> DIGIT_BITS;
         final long s1_0 = l1_0 + hc1_0 + k0_0;
@@ -2936,25 +2936,25 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         final long l9_0 = d9 & HIGH_DIGIT_MASK;
 
         // Shift the high bits down into another n-bit number.
-        final long h0_0 = ((d9 & DIGIT_MASK) >> 25) |
+        final long h0_0 = ((d9 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                           ((d10 & HIGH_DIGIT_MASK) << 29);
-        final long h1_0 = ((d10 & DIGIT_MASK) >> 25) |
+        final long h1_0 = ((d10 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                           ((d11 & HIGH_DIGIT_MASK) << 29);
-        final long h2_0 = ((d11 & DIGIT_MASK) >> 25) |
+        final long h2_0 = ((d11 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                           ((d12 & HIGH_DIGIT_MASK) << 29);
-        final long h3_0 = ((d12 & DIGIT_MASK) >> 25) |
+        final long h3_0 = ((d12 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                           ((d13 & HIGH_DIGIT_MASK) << 29);
-        final long h4_0 = ((d13 & DIGIT_MASK) >> 25) |
+        final long h4_0 = ((d13 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                           ((d14 & HIGH_DIGIT_MASK) << 29);
-        final long h5_0 = ((d14 & DIGIT_MASK) >> 25) |
+        final long h5_0 = ((d14 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                           ((d15 & HIGH_DIGIT_MASK) << 29);
-        final long h6_0 = ((d15 & DIGIT_MASK) >> 25) |
+        final long h6_0 = ((d15 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                           ((d16 & HIGH_DIGIT_MASK) << 29);
-        final long h7_0 = ((d16 & DIGIT_MASK) >> 25) |
+        final long h7_0 = ((d16 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                           ((d17 & HIGH_DIGIT_MASK) << 29);
-        final long h8_0 = ((d17 & DIGIT_MASK) >> 25) |
+        final long h8_0 = ((d17 & DIGIT_MASK) >> HIGH_DIGIT_BITS) |
                           ((d18 & HIGH_DIGIT_MASK) << 29);
-        final long h9_0 = d18 >> 25;
+        final long h9_0 = d18 >> HIGH_DIGIT_BITS;
 
         // Multiply by C
         final long hc0_0 = h0_0 * C_VAL;
@@ -2969,7 +2969,7 @@ public final class ModE511M187 extends PrimeField1Mod4<ModE511M187> {
         final long hc9_0 = h9_0 * C_VAL;
 
         // Add h and l.
-        final long kin_0 = hc9_0 >> 25;
+        final long kin_0 = hc9_0 >> HIGH_DIGIT_BITS;
         final long s0_0 = l0_0 + hc0_0 + (kin_0 * C_VAL);
         final long k0_0 = s0_0 >> DIGIT_BITS;
         final long s1_0 = l1_0 + hc1_0 + k0_0;
