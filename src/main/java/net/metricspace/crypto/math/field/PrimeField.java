@@ -38,6 +38,10 @@ import java.lang.Number;
 import java.lang.StringBuilder;
 import java.util.Arrays;
 
+import java.lang.AutoCloseable;
+
+import javax.security.auth.Destroyable;
+
 /**
  * Common superclass for elements of a finite integer field, modulo a
  * prime number.
@@ -46,7 +50,7 @@ import java.util.Arrays;
  *              typically the leaf subclass.
  */
 public abstract class PrimeField<Val extends PrimeField<Val>>
-    implements Cloneable {
+    implements Cloneable, Destroyable, AutoCloseable {
 
     /**
      * Mapping used in {@link #toString}.
@@ -439,6 +443,39 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
         normalize();
 
         return normalizedPacked();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() {
+        destroy();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void destroy() {
+        for(int i = 0; i < digits.length; i++) {
+            digits[i] = 0xffffffffffffffffL;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDestroyed() {
+        // Not constant-time, but this shouldn't matter.
+        for(int i = 0; i < digits.length; i++) {
+            if (digits[i] != 0xffffffffffffffffL) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
