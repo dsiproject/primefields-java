@@ -1000,6 +1000,7 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
     private static void mulDigits(final long[] a,
                                   final long[] b,
                                   final long[] out) {
+
         final long a0 = a[0] & MUL_DIGIT_MASK;
         final long a1 = a[0] >> MUL_DIGIT_BITS;
         final long a2 = a[1] & MUL_DIGIT_MASK;
@@ -2045,15 +2046,15 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
         final long d6 =
             (m11 >> MUL_DIGIT_BITS) + m12 +
             ((m13 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + c5;
-        final long c6 = d5 >> DIGIT_BITS;
+        final long c6 = d6 >> DIGIT_BITS;
         final long d7 =
             (m13 >> MUL_DIGIT_BITS) + m14 +
             ((m15 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + c6;
-        final long c7 = d6 >> DIGIT_BITS;
+        final long c7 = d7 >> DIGIT_BITS;
         final long d8 =
             (m15 >> MUL_DIGIT_BITS) + m16 +
             ((m17 & MUL_DIGIT_MASK) << MUL_DIGIT_BITS) + c7;
-        final long c8 = d7 >> DIGIT_BITS;
+        final long c8 = d8 >> DIGIT_BITS;
         final long d9 =
             (m17 >> MUL_DIGIT_BITS) + m18 +
             (m19 << MUL_DIGIT_BITS) + c8;
