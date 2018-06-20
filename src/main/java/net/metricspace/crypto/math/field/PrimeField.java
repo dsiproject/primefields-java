@@ -398,13 +398,51 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * @see #digits
      */
     public boolean normalizedEquals(final Val b) {
+        return normalizedEq(b) == 0;
+    }
+
+    /**
+     * Compare two numbers for equality.
+     * <p>
+     * This method normalizes the internal representation.
+     *
+     * @param b The number against which to compare.
+     * @return Whether or not this number equals {@code b}
+     * @see #normalize
+     * @see #digits
+     */
+    public long eq(final Val b) {
+        normalize();
+        b.normalize();
+
+        return normalizedEq(b);
+    }
+
+    /**
+     * Compare two numbers for equality.
+     * <p>
+     * This method assumes the internal representation is normalized.
+     *
+     * @param b The number against which to compare.
+     * @return Whether or not this number equals {@code b}
+     * @see #normalize
+     * @see #digits
+     */
+    public long normalizedEq(final Val b) {
         long out = 0;
 
         for(int i = 0; i < digits.length; i++) {
             out |= digits[i] ^ b.digits[i];
         }
 
-        return (out == 0);
+        out |= out >> 32;
+        out |= out >> 16;
+        out |= out >> 8;
+        out |= out >> 4;
+        out |= out >> 2;
+        out |= out >> 1;
+
+        return out & 0x1;
     }
 
     /**
@@ -443,6 +481,41 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
         normalize();
 
         return normalizedPacked();
+    }
+
+    /**
+     * Check if this number is equal to zero.
+     *
+     * @return Whether this number is equal to zero.
+     */
+    public long isZero() {
+        normalize();
+
+        return normalizedIsZero();
+    }
+
+    /**
+     * Check if this number is equal to zero.
+     * <p>
+     * This method assumes the internal representation is normalized.
+     *
+     * @return Whether this number is equal to zero.
+     */
+    public long normalizedIsZero() {
+        long out = 0;
+
+        for(int i = 0; i < digits.length; i++) {
+            out |= digits[i];
+        }
+
+        out |= out >> 32;
+        out |= out >> 16;
+        out |= out >> 8;
+        out |= out >> 4;
+        out |= out >> 2;
+        out |= out >> 1;
+
+        return out & 0x1;
     }
 
     /**
@@ -758,11 +831,4 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      */
     public abstract void normalizedPack(final byte[] arr,
                                         final int idx);
-
-    /**
-     * Check if this number is equal to zero.
-     *
-     * @return Whether this number is equal to zero.
-     */
-    public abstract boolean isZero();
 }
