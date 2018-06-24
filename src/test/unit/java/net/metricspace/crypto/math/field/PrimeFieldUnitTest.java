@@ -98,7 +98,7 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
         onemask.mask(1);
         zeromask.mask(0);
 
-        Assert.assertEquals(zeromask.isZero(), 0);
+        Assert.assertEquals(zeromask.isZero(), 1);
         Assert.assertEquals(val, onemask);
     }
 

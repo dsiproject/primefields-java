@@ -486,7 +486,7 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     /**
      * Check if this number is equal to zero.
      *
-     * @return Whether this number is equal to zero.
+     * @return {@code 1} if the number is zero, {@code 0} otherwise.
      */
     public long isZero() {
         normalize();
@@ -499,7 +499,7 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * <p>
      * This method assumes the internal representation is normalized.
      *
-     * @return Whether this number is equal to zero.
+     * @return {@code 1} if the number is zero, {@code 0} otherwise.
      */
     public long normalizedIsZero() {
         long out = 0;
@@ -515,7 +515,7 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
         out |= out >> 2;
         out |= out >> 1;
 
-        return out & 0x1;
+        return (out & 0x1) ^ 0x1;
     }
 
     /**
