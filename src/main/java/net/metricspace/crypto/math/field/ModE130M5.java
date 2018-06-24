@@ -445,14 +445,6 @@ public final class ModE130M5 extends PrimeField<ModE130M5> {
      * {@inheritDoc}
      */
     @Override
-    public boolean isZero() {
-        return equals(zero());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void normalizedPack(final byte[] bytes,
                                final int idx) {
         packDigits(digits, bytes, idx);
