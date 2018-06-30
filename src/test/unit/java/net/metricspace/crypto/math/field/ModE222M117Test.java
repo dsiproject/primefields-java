@@ -533,4 +533,72 @@ public class ModE222M117Test extends PrimeFieldUnitTest<ModE222M117> {
     public Object[][] invSqrtProvider() {
         return INV_SQRT_TEST_CASES;
     }
+
+    private static final Object[][] ABS_TEST_CASES = new Object[][] {
+        new Object[] { ModE222M117.zero(), ModE222M117.zero() },
+        new Object[] { ModE222M117.one(), ModE222M117.one() },
+        new Object[] { ModE222M117.mone(), ModE222M117.one() },
+        new Object[] { two(), two() },
+        new Object[] { mtwo(), two() },
+        new Object[] {
+            new ModE222M117(
+                 new long[] { 0x03ffffffffffffc5L, 0x03ffffffffffffffL,
+                              0x03ffffffffffffffL, 0x00007fffffffffffL }),
+            new ModE222M117(
+                 new long[] { 0x03ffffffffffffc5L, 0x03ffffffffffffffL,
+                              0x03ffffffffffffffL, 0x00007fffffffffffL }),
+        },
+        new Object[] {
+            new ModE222M117(
+                 new long[] { 0x03ffffffffffffc6L, 0x03ffffffffffffffL,
+                              0x03ffffffffffffffL, 0x00007fffffffffffL }),
+            new ModE222M117(
+                 new long[] { 0x03ffffffffffffc5L, 0x03ffffffffffffffL,
+                              0x03ffffffffffffffL, 0x00007fffffffffffL }),
+        },
+        new Object[] {
+            new ModE222M117(
+                 new long[] { 0x03ffffffffffffc7L, 0x03ffffffffffffffL,
+                              0x03ffffffffffffffL, 0x00007fffffffffffL }),
+            new ModE222M117(
+                 new long[] { 0x03ffffffffffffc4L, 0x03ffffffffffffffL,
+                              0x03ffffffffffffffL, 0x00007fffffffffffL }),
+        },
+    };
+
+    @DataProvider(name = "abs")
+    public Object[][] absProvider() {
+        return ABS_TEST_CASES;
+    }
+
+    private static final Object[][] SIGNUM_TEST_CASES = new Object[][] {
+        new Object[] { ModE222M117.zero(), 1 },
+        new Object[] { ModE222M117.one(), 1 },
+        new Object[] { ModE222M117.mone(), -1 },
+        new Object[] { two(), 1 },
+        new Object[] { mtwo(), -1 },
+        new Object[] {
+            new ModE222M117(
+                 new long[] { 0x03ffffffffffffc5L, 0x03ffffffffffffffL,
+                              0x03ffffffffffffffL, 0x00007fffffffffffL }),
+            1
+        },
+        new Object[] {
+            new ModE222M117(
+                 new long[] { 0x03ffffffffffffc6L, 0x03ffffffffffffffL,
+                              0x03ffffffffffffffL, 0x00007fffffffffffL }),
+            -1
+        },
+        new Object[] {
+            new ModE222M117(
+                 new long[] { 0x03ffffffffffffc7L, 0x03ffffffffffffffL,
+                              0x03ffffffffffffffL, 0x00007fffffffffffL }),
+            -1
+        },
+    };
+
+    @DataProvider(name = "signum")
+    public Object[][] signumProvider() {
+        return SIGNUM_TEST_CASES;
+    }
 }

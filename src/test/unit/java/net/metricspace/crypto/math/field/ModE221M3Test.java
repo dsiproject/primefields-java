@@ -560,4 +560,57 @@ public class ModE221M3Test extends PrimeField1Mod4UnitTest<ModE221M3> {
     public Object[][] invSqrtProvider() {
         return INV_SQRT_TEST_CASES;
     }
+    private static final Object[][] ABS_TEST_CASES = new Object[][] {
+        new Object[] { ModE221M3.zero(), ModE221M3.zero() },
+        new Object[] { ModE221M3.one(), ModE221M3.one() },
+        new Object[] { ModE221M3.mone(), ModE221M3.one() },
+        new Object[] { two(), two() },
+        new Object[] { mtwo(), two() },
+        new Object[] {
+            new ModE221M3(
+                new long[] { 0x03fffffffffffffeL, 0x03ffffffffffffffL,
+                             0x03ffffffffffffffL, 0x00003fffffffffffL }),
+            new ModE221M3(
+                new long[] { 0x03fffffffffffffeL, 0x03ffffffffffffffL,
+                             0x03ffffffffffffffL, 0x00003fffffffffffL }),
+        },
+        new Object[] {
+            new ModE221M3(
+                new long[] { 0x03ffffffffffffffL, 0x03ffffffffffffffL,
+                             0x03ffffffffffffffL, 0x00003fffffffffffL }),
+            new ModE221M3(
+                new long[] { 0x03fffffffffffffeL, 0x03ffffffffffffffL,
+                             0x03ffffffffffffffL, 0x00003fffffffffffL }),
+        },
+    };
+
+    @DataProvider(name = "abs")
+    public Object[][] absProvider() {
+        return ABS_TEST_CASES;
+    }
+
+    private static final Object[][] SIGNUM_TEST_CASES = new Object[][] {
+        new Object[] { ModE221M3.zero(), 1 },
+        new Object[] { ModE221M3.one(), 1 },
+        new Object[] { ModE221M3.mone(), -1 },
+        new Object[] { two(), 1 },
+        new Object[] { mtwo(), -1 },
+        new Object[] {
+            new ModE221M3(
+                new long[] { 0x03fffffffffffffeL, 0x03ffffffffffffffL,
+                             0x03ffffffffffffffL, 0x00003fffffffffffL }),
+            1
+        },
+        new Object[] {
+            new ModE221M3(
+                new long[] { 0x03ffffffffffffffL, 0x03ffffffffffffffL,
+                             0x03ffffffffffffffL, 0x00003fffffffffffL }),
+            -1
+        },
+    };
+
+    @DataProvider(name = "signum")
+    public Object[][] signumProvider() {
+        return SIGNUM_TEST_CASES;
+    }
 }

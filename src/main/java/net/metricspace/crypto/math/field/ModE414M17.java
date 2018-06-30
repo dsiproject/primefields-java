@@ -158,6 +158,15 @@ public final class ModE414M17 extends PrimeField<ModE414M17> {
                      0x00ffffffffffffffL, 0x00000000003fffffL };
 
     /**
+     * Data for the value {@code (MODULUS - 1) / 2 + C}.
+     */
+    private static final long[] ABS_DATA =
+        new long[] { 0x0000000000000008L, 0x0000000000000000L,
+                     0x0000000000000000L, 0x0000000000000000L,
+                     0x0000000000000000L, 0x0000000000000000L,
+                     0x0000000000000000L, 0x0000000000200000L };
+
+    /**
      * Create a {@code ModE414M17} initialized to {@code 0}.
      *
      * @return A {@code ModE414M17} initialized to {@code 0}.
@@ -319,8 +328,12 @@ public final class ModE414M17 extends PrimeField<ModE414M17> {
      * {@inheritDoc}
      */
     @Override
-    public long signNormalized() {
-        return bit(NUM_BITS - 1);
+    public byte sign() {
+        final long[] scratch = Arrays.copyOf(digits, NUM_DIGITS);
+
+        addDigits(scratch, ABS_DATA, scratch);
+
+        return (byte)carryOut(scratch);
     }
 
     /**

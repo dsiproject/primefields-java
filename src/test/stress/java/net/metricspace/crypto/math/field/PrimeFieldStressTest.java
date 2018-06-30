@@ -242,6 +242,7 @@ public abstract class PrimeFieldStressTest<P extends PrimeField<P>> {
             final P val = a.clone();
 
             val.abs();
+
             Assert.assertEquals(val, a);
         } else {
             Assert.assertEquals(signval, 1);

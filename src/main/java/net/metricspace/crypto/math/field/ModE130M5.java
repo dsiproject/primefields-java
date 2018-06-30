@@ -152,6 +152,13 @@ public final class ModE130M5 extends PrimeField<ModE130M5> {
                      0x0000000000003fffL };
 
     /**
+     * Data for the value {@code (MODULUS - 1) / 2 + C}.
+     */
+    private static final long[] ABS_DATA =
+        new long[] { 0x0000000000000002L, 0x0000000000000000L,
+                     0x0000000000002000L };
+
+    /**
      * Create a {@code ModE130M5} initialized to {@code 0}.
      *
      * @return A {@code ModE130M5} initialized to {@code 0}.
@@ -313,8 +320,12 @@ public final class ModE130M5 extends PrimeField<ModE130M5> {
      * {@inheritDoc}
      */
     @Override
-    public long signNormalized() {
-        return bit(NUM_BITS - 1);
+    public byte sign() {
+        final long[] scratch = Arrays.copyOf(digits, NUM_DIGITS);
+
+        addDigits(scratch, ABS_DATA, scratch);
+
+        return (byte)carryOut(scratch);
     }
 
     /**
@@ -875,7 +886,7 @@ public final class ModE130M5 extends PrimeField<ModE130M5> {
         final long a1 = a[0] >> MUL_DIGIT_BITS;
         final long a2 = a[1] & MUL_DIGIT_MASK;
         final long a3 = a[1] >> MUL_DIGIT_BITS;
-        final long a4 = a[2] & MUL_DIGIT_MASK;
+        final long a4 = a[2] & HIGH_DIGIT_MASK;
 
         final long m0 = a0 * b;
         final long m1 = a1 * b;

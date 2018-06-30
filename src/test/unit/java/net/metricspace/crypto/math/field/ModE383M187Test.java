@@ -652,4 +652,90 @@ public class ModE383M187Test extends PrimeField1Mod4UnitTest<ModE383M187> {
     public Object[][] invSqrtProvider() {
         return INV_SQRT_TEST_CASES;
     }
+
+    private static final Object[][] ABS_TEST_CASES = new Object[][] {
+        new Object[] { ModE383M187.zero(), ModE383M187.zero() },
+        new Object[] { ModE383M187.one(), ModE383M187.one() },
+        new Object[] { ModE383M187.mone(), ModE383M187.one() },
+        new Object[] { two(), two() },
+        new Object[] { mtwo(), two() },
+        new Object[] {
+            new ModE383M187(
+                new long[] { 0x00ffffffffffffa2L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00003fffffffffffL }),
+            new ModE383M187(
+                new long[] { 0x00ffffffffffffa2L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00003fffffffffffL }),
+        },
+        new Object[] {
+            new ModE383M187(
+                new long[] { 0x00ffffffffffffa3L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00003fffffffffffL }),
+            new ModE383M187(
+                new long[] { 0x00ffffffffffffa2L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00003fffffffffffL }),
+        },
+        new Object[] {
+            new ModE383M187(
+                new long[] { 0x00ffffffffffffa4L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00003fffffffffffL }),
+            new ModE383M187(
+                new long[] { 0x00ffffffffffffa1L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00003fffffffffffL }),
+        },
+    };
+
+    @DataProvider(name = "abs")
+    public Object[][] absProvider() {
+        return ABS_TEST_CASES;
+    }
+
+    private static final Object[][] SIGNUM_TEST_CASES = new Object[][] {
+        new Object[] { ModE383M187.zero(), 1 },
+        new Object[] { ModE383M187.one(), 1 },
+        new Object[] { ModE383M187.mone(), -1 },
+        new Object[] { two(), 1 },
+        new Object[] { mtwo(), -1 },
+        new Object[] {
+            new ModE383M187(
+                new long[] { 0x00ffffffffffffa2L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00003fffffffffffL }),
+            1
+        },
+        new Object[] {
+            new ModE383M187(
+                new long[] { 0x00ffffffffffffa3L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00003fffffffffffL }),
+            -1
+        },
+        new Object[] {
+            new ModE383M187(
+                new long[] { 0x00ffffffffffffa4L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00003fffffffffffL }),
+            -1
+        },
+    };
+
+    @DataProvider(name = "signum")
+    public Object[][] signumProvider() {
+        return SIGNUM_TEST_CASES;
+    }
 }

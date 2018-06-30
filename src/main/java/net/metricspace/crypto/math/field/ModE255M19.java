@@ -162,6 +162,14 @@ public final class ModE255M19 extends PrimeField1Mod4<ModE255M19> {
                      0x000000003fffffffL };
 
     /**
+     * Data for the value {@code (MODULUS - 1) / 2 + C}.
+     */
+    private static final long[] ABS_DATA =
+        new long[] { 0x0000000000000009L, 0x0000000000000000L,
+                     0x0000000000000000L, 0x0000000000000000L,
+                     0x0000000040000000L };
+
+    /**
      * The value {@code 2 ^ ((MODULUS - 1) / 4) - 1}.  Used in the
      * computation of square roots.  The value of this is one less
      * than {@code
@@ -365,8 +373,12 @@ public final class ModE255M19 extends PrimeField1Mod4<ModE255M19> {
      * {@inheritDoc}
      */
     @Override
-    public long signNormalized() {
-        return bit(NUM_BITS - 1);
+    public byte sign() {
+        final long[] scratch = Arrays.copyOf(digits, NUM_DIGITS);
+
+        addDigits(scratch, ABS_DATA, scratch);
+
+        return (byte)carryOut(scratch);
     }
 
     /**

@@ -86,6 +86,35 @@ public abstract class PrimeFieldUnitTest<P extends PrimeField<P>> {
     protected abstract P unpackStream(final InputStream stream)
         throws IOException;
 
+    @DataProvider(name = "abs")
+    public abstract Object[][] absProvider();
+
+    @Test(dataProvider = "abs",
+          description = "Test abs functionality")
+    public void absTest(final P val,
+                        final P expected) {
+        final P absval = val.clone();
+
+        absval.abs();
+
+        Assert.assertEquals(absval, expected);
+    }
+
+    @DataProvider(name = "signum")
+    public abstract Object[][] signumProvider();
+
+    @Test(dataProvider = "signum",
+          description = "Test signum and sign functionality")
+    public void absTest(final P val,
+                        final Integer expected) {
+        final int signum = val.signum();
+        final int sign = val.sign();
+        final int expectedsign = expected == 1 ? 0 : 1;
+
+        Assert.assertEquals(sign, expectedsign);
+        Assert.assertEquals(signum, expected.intValue());
+    }
+
     @DataProvider(name = "mask")
     public abstract Object[][] maskProvider();
 
