@@ -119,19 +119,6 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     }
 
     /**
-     * Get the sign of the number.  A number {@code n mod p} is
-     * considered "positive" if it lies in {@code [0, (n - 1) / 2]},
-     * negative otherwise.
-     *
-     * @return The sign of the number.
-     */
-    public long sign() {
-        normalize();
-
-        return signNormalized();
-    }
-
-    /**
      * Mask this number by a given bit, which is expanded into a mask
      * of either all {@code 0}s or {@code 1}s.  This bit is taken as a
      * {@code long}, so as to avoid branches.
@@ -167,30 +154,23 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     }
 
     /**
-     * Take the abstract value of the number.
-     * <p>
-     * This method assumes the internal representation is normalized.
+     * Take the absolute value of the number.
      *
-     * @see #abs
      * @see #sign
      */
     public void abs() {
-        final int signbit = (int)sign();
-        final short mulval = (short)((-signbit * 2) + 1);
-
-        mul(mulval);
+        mul(signum());
     }
 
     /**
-     * Take the abstract value of the number.
+     * Return a {@code 1} or {@code -1} depending on the sign of the
+     * number.
      *
-     * @see #sign
+     * @return {@code 1} if the number is positive or {@code -1} if it
+     *         is negative.
      */
-    public void absNormalized() {
-        final int signbit = (int)signNormalized();
-        final short mulval = (short)((-signbit * 2) + 1);
-
-        mul(mulval);
+    public byte signum() {
+        return (byte)(1 - (sign() * 2));
     }
 
     /**
@@ -604,17 +584,15 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      */
     public abstract long bitNormalized(final int n);
 
+
     /**
      * Get the sign of the number.  A number {@code n mod p} is
      * considered "positive" if it lies in {@code [0, (n - 1) / 2]},
      * negative otherwise.
-     * <p>
-     * This method assumes the internal representation is normalized.
      *
      * @return The sign of the number.
-     * @see #sign
      */
-    public abstract long signNormalized();
+    public abstract byte sign();
 
     /**
      * Get the lower bound on values that can be used in {@link

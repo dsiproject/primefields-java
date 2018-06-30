@@ -643,4 +643,90 @@ public class ModE414M17Test extends PrimeFieldUnitTest<ModE414M17> {
     public Object[][] invSqrtProvider() {
         return INV_SQRT_TEST_CASES;
     }
+
+    private static final Object[][] ABS_TEST_CASES = new Object[][] {
+        new Object[] { ModE414M17.zero(), ModE414M17.zero() },
+        new Object[] { ModE414M17.one(), ModE414M17.one() },
+        new Object[] { ModE414M17.mone(), ModE414M17.one() },
+        new Object[] { two(), two() },
+        new Object[] { mtwo(), two() },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x00fffffffffffff7L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00000000001fffffL }),
+            new ModE414M17(
+                new long[] { 0x00fffffffffffff7L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00000000001fffffL }),
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x00fffffffffffff8L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00000000001fffffL }),
+            new ModE414M17(
+                new long[] { 0x00fffffffffffff7L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00000000001fffffL }),
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x00fffffffffffff9L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00000000001fffffL }),
+            new ModE414M17(
+                new long[] { 0x00fffffffffffff6L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00000000001fffffL }),
+        },
+    };
+
+    @DataProvider(name = "abs")
+    public Object[][] absProvider() {
+        return ABS_TEST_CASES;
+    }
+
+    private static final Object[][] SIGNUM_TEST_CASES = new Object[][] {
+        new Object[] { ModE414M17.zero(), 1 },
+        new Object[] { ModE414M17.one(), 1 },
+        new Object[] { ModE414M17.mone(), -1 },
+        new Object[] { two(), 1 },
+        new Object[] { mtwo(), -1 },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x00fffffffffffff7L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00000000001fffffL }),
+            1
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x00fffffffffffff8L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00000000001fffffL }),
+            -1
+        },
+        new Object[] {
+            new ModE414M17(
+                new long[] { 0x00fffffffffffff9L, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00ffffffffffffffL,
+                             0x00ffffffffffffffL, 0x00000000001fffffL }),
+            -1
+        },
+    };
+
+    @DataProvider(name = "signum")
+    public Object[][] signumProvider() {
+        return SIGNUM_TEST_CASES;
+    }
 }

@@ -160,6 +160,16 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
                      0x003fffffffffffffL, 0x00000007ffffffffL };
 
     /**
+     * Data for the value {@code (MODULUS - 1) / 2 + C}.
+     */
+    private static final long[] ABS_DATA =
+        new long[] { 0x0000000000000000L, 0x0000000000000000L,
+                     0x0000000000000000L, 0x0000000000000000L,
+                     0x0000000000000000L, 0x0000000000000000L,
+                     0x0000000000000000L, 0x0000000000000000L,
+                     0x0000000000000000L, 0x0000000400000000L };
+
+    /**
      * Create a {@code ModE521M1} initialized to {@code 0}.
      *
      * @return A {@code ModE521M1} initialized to {@code 0}.
@@ -321,8 +331,12 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      * {@inheritDoc}
      */
     @Override
-    public long signNormalized() {
-        return bit(NUM_BITS - 1);
+    public byte sign() {
+        final long[] scratch = Arrays.copyOf(digits, NUM_DIGITS);
+
+        addDigits(scratch, ABS_DATA, scratch);
+
+        return (byte)carryOut(scratch);
     }
 
     /**

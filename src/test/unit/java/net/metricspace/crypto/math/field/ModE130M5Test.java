@@ -518,4 +518,72 @@ public class ModE130M5Test extends PrimeFieldUnitTest<ModE130M5> {
     public Object[][] invSqrtProvider() {
         return INV_SQRT_TEST_CASES;
     }
+
+    private static final Object[][] ABS_TEST_CASES = new Object[][] {
+        new Object[] { ModE130M5.zero(), ModE130M5.zero() },
+        new Object[] { ModE130M5.one(), ModE130M5.one() },
+        new Object[] { ModE130M5.mone(), ModE130M5.one() },
+        new Object[] { two(), two() },
+        new Object[] { mtwo(), two() },
+        new Object[] {
+            new ModE130M5(
+                new long[] { 0x03fffffffffffffdL, 0x03ffffffffffffffL,
+                             0x0000000000001fffL }),
+            new ModE130M5(
+                new long[] { 0x03fffffffffffffdL, 0x03ffffffffffffffL,
+                             0x0000000000001fffL }),
+        },
+        new Object[] {
+            new ModE130M5(
+                new long[] { 0x03fffffffffffffeL, 0x03ffffffffffffffL,
+                             0x0000000000001fffL }),
+            new ModE130M5(
+                new long[] { 0x03fffffffffffffdL, 0x03ffffffffffffffL,
+                             0x0000000000001fffL }),
+        },
+        new Object[] {
+            new ModE130M5(
+                new long[] { 0x03ffffffffffffffL, 0x03ffffffffffffffL,
+                             0x0000000000001fffL }),
+            new ModE130M5(
+                new long[] { 0x03fffffffffffffcL, 0x03ffffffffffffffL,
+                             0x0000000000001fffL }),
+        },
+    };
+
+    @DataProvider(name = "abs")
+    public Object[][] absProvider() {
+        return ABS_TEST_CASES;
+    }
+
+    private static final Object[][] SIGNUM_TEST_CASES = new Object[][] {
+        new Object[] { ModE130M5.zero(), 1 },
+        new Object[] { ModE130M5.one(), 1 },
+        new Object[] { ModE130M5.mone(), -1 },
+        new Object[] { two(), 1 },
+        new Object[] { mtwo(), -1 },
+        new Object[] {
+            new ModE130M5(
+                new long[] { 0x03fffffffffffffdL, 0x03ffffffffffffffL,
+                             0x0000000000001fffL }),
+            1
+        },
+        new Object[] {
+            new ModE130M5(
+                new long[] { 0x03fffffffffffffeL, 0x03ffffffffffffffL,
+                             0x0000000000001fffL }),
+            -1
+        },
+        new Object[] {
+            new ModE130M5(
+                new long[] { 0x03ffffffffffffffL, 0x03ffffffffffffffL,
+                             0x0000000000001fffL }),
+            -1
+        },
+    };
+
+    @DataProvider(name = "signum")
+    public Object[][] signumProvider() {
+        return SIGNUM_TEST_CASES;
+    }
 }
