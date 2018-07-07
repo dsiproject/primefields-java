@@ -46,11 +46,87 @@ import javax.security.auth.Destroyable;
  * Common superclass for elements of a finite integer field, modulo a
  * prime number.
  *
- * @param <Val> The type of arguments to arithmetic functions,
+ * @param <V> The type of arguments to arithmetic functions,
  *              typically the leaf subclass.
  */
-public abstract class PrimeField<Val extends PrimeField<Val>>
+public abstract class PrimeField<V extends PrimeField<V>>
     implements Cloneable, Destroyable, AutoCloseable {
+    /**
+     * Scratchpad objects.  These serve two related purposes.  First,
+     * they provide pre-allocated space for carrying out computations,
+     * thereby preventing allocations.  As elliptic curve operations
+     * can consist of thousands of field operations, this eliminates a
+     * very large number of allocations.
+     * <p>
+     * Additionally, this prevents potentially sensitive information
+     * from being scribbled all over the heap in the form of discarded
+     * objects, and keeps all computation within a confined memory
+     * space.
+     * <p>
+     * Scratchpads implement {@link AutoCloseable}, with {@link
+     * Scratchpad#close} overwriting all data.  This means they can be
+     * used in try-with-resources blocks, which is the recommended use
+     * pattern.
+     */
+    public static class Scratchpad implements AutoCloseable, Destroyable {
+        final long[] d0;
+        final long[] d1;
+        final long[] d2;
+
+        Scratchpad(final long[] d0,
+                   final long[] d1,
+                   final long[] d2) {
+            this.d0 = d0;
+            this.d1 = d1;
+            this.d2 = d2;
+        }
+
+        /**
+         * Overwrite all sensitive information by calling {@link
+         * #destroy()}.
+         */
+        @Override
+        public void close() {
+            destroy();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void destroy() {
+            Arrays.fill(d0, 0xffffffffffffffffL);
+            Arrays.fill(d1, 0xffffffffffffffffL);
+            Arrays.fill(d2, 0xffffffffffffffffL);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isDestroyed() {
+            // Not constant-time, but this shouldn't matter.
+            for(int i = 0; i < d0.length; i++) {
+                if (d0[i] != 0xffffffffffffffffL) {
+                    return false;
+                }
+            }
+
+            for(int i = 0; i < d1.length; i++) {
+                if (d1[i] != 0xffffffffffffffffL) {
+                    return false;
+                }
+            }
+
+            for(int i = 0; i < d2.length; i++) {
+                if (d2[i] != 0xffffffffffffffffL) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
 
     /**
      * Mapping used in {@link #toString}.
@@ -147,7 +223,7 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      *
      * @param other The number to bitwise-or against this one.
      */
-    public void or(final Val other) {
+    public void or(final V other) {
         for(int i = 0; i < digits.length; i++) {
             digits[i] |= other.digits[i];
         }
@@ -163,6 +239,16 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     }
 
     /**
+     * Take the absolute value of the number.
+     *
+     * @param scratch The scratchpad to use.
+     * @see #sign
+     */
+    public void abs(final Scratchpad scratch) {
+        mul(signum(scratch));
+    }
+
+    /**
      * Return a {@code 1} or {@code -1} depending on the sign of the
      * number.
      *
@@ -170,43 +256,155 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      *         is negative.
      */
     public byte signum() {
-        return (byte)(1 - (sign() * 2));
+        try(final Scratchpad scratch = scratchpad()) {
+            return signum(scratch);
+        }
     }
 
     /**
-     * Add a {@code Val} to this number.
+     * Return a {@code 1} or {@code -1} depending on the sign of the
+     * number.
      *
-     * @param b The {@code Val} to add.
+     * @param scratch The scratchpad to use.
+     * @return {@code 1} if the number is positive or {@code -1} if it
+     *         is negative.
      */
-    public void add(final Val b) {
+    public byte signum(final Scratchpad scratch) {
+        return (byte)(1 - (sign(scratch) * 2));
+    }
+
+    /**
+     * Add a {@code V} to this number.
+     *
+     * @param b The {@code V} to add.
+     */
+    public void add(final V b) {
         add(b.digits);
     }
 
     /**
-     * Subtract a {@code Val} from this number.
+     * Subtract a {@code V} from this number.
      *
-     * @param b The {@code Val} to subtract.
+     * @param b The {@code V} to subtract.
      */
-    public void sub(final Val b) {
+    public void sub(final V b) {
         sub(b.digits);
     }
 
     /**
-     * Multiply this number by a {@code Val}.
+     * Multiply this number by a {@code V}.
      *
-     * @param b The {@code Val} by which to multiply.
+     * @param b The {@code V} by which to multiply.
      */
-    public void mul(final Val b) {
+    public void mul(final V b) {
         mul(b.digits);
     }
 
     /**
-     * Multiply this number by a {@code Val}.
+     * Multiply this number by a {@code V}.
      *
-     * @param b The {@code Val} by which to multiply.
+     * @param b The {@code V} by which to multiply.
      */
-    public void div(final Val b) {
-        div(b.digits);
+    public void div(final V b) {
+        try(final Scratchpad scratch = scratchpad()) {
+            div(b, scratch);
+        }
+    }
+
+    /**
+     * Divide this number by a {@code int}.  This version is
+     * <i>not</i> generally more efficient than {@link
+     * #div(PrimeField)}.
+     *
+     * @param b The {@code int} by which to divide.
+     */
+    public void div(final int b) {
+        try(final Scratchpad scratch = scratchpad()) {
+            div(b, scratch);
+        }
+    }
+
+    /**
+     * Take the reciprocal of the number.
+     */
+    public void inv() {
+        try(final Scratchpad scratch = scratchpad()) {
+            inv(scratch);
+        }
+    }
+
+    /**
+     * Multiply this number by a {@code V}.
+     *
+     * @param scratch The scratchpad to use.
+     * @param b The {@code V} by which to multiply.
+     */
+    public void div(final V b,
+                    final Scratchpad scratch) {
+        div(b.digits, scratch);
+    }
+
+    /**
+     * Get the sign of the number.  A number {@code n mod p} is
+     * considered "positive" if it lies in {@code [0, (n - 1) / 2]},
+     * negative otherwise.
+     *
+     * @return The sign of the number.
+     */
+    public byte sign() {
+        try(final Scratchpad scratch = scratchpad()) {
+            return sign(scratch);
+        }
+    }
+
+    /**
+     * Compute the (quadratic) Legendre symbol on this number.
+     * <p>
+     * A number {@code n} is a <i>quadratic residue</i> {@code mod p}
+     * if there exists some {@code m} such that {@code m * m = n mod
+     * p} (that is, {@code n} has a square root {@code mod p}).
+     * <p>
+     * The (quadratic) Legendre symbol on {@code n mod p} evaluates to
+     * {@code 1} if the value is a quadratic residue {@code mod p},
+     * and {@code -1} if not.
+     *
+     * @return {@code 1} if the value is a quadratic residue, {@code -1} if not.
+     */
+    public byte legendre() {
+        try(final Scratchpad scratch = scratchpad()) {
+            return legendre(scratch);
+        }
+    }
+
+    /**
+     * Square root the number.
+     * <p>
+     * As per the laws of modular arithmetic, this only has meaning if
+     * the value is a quadratic residue; otherwise, the result is
+     * invalid.
+     *
+     * @see #legendre
+     */
+    public void sqrt() {
+        try(final Scratchpad scratch = scratchpad()) {
+            sqrt(scratch);
+        }
+    }
+
+    /**
+     * Square root the number and then invert it.  This computes
+     * {@code 1/sqrt(n)}.
+     * <p>
+     * As per the laws of modular arithmetic, this only has meaning if
+     * the value is a quadratic residue; otherwise, the result is
+     * invalid.
+     *
+     * @see #legendre
+     */
+    public void invSqrt() {
+        try(final Scratchpad scratch = scratchpad()) {
+            invSqrt(scratch);
+        }
     }
 
     /**
@@ -218,9 +416,7 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      */
     protected void set(final long[] digits,
                        final int idx) {
-        for(int i = 0; i < this.digits.length; i++) {
-            this.digits[i] = digits[i + idx];
-        }
+        System.arraycopy(digits, idx, this.digits, 0, this.digits.length);
     }
 
     /**
@@ -233,11 +429,11 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     }
 
     /**
-     * Overwrite the value of this number from a {@code Val}.
+     * Overwrite the value of this number from a {@code V}.
      *
-     * @param b The {@code Val} to copy.
+     * @param b The {@code V} to copy.
      */
-    public void set(final Val b) {
+    public void set(final V b) {
         set(b.digits);
     }
 
@@ -260,8 +456,9 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * @see #normalize
      */
     public void pack(final byte[] arr) {
-        normalize();
-        normalizedPack(arr, 0);
+        try(final Scratchpad scratch = scratchpad()) {
+            pack(arr, 0, scratch);
+        }
     }
 
     /**
@@ -275,7 +472,25 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      */
     public void pack(final byte[] arr,
                      final int idx) {
-        normalize();
+        try(final Scratchpad scratch = scratchpad()) {
+            pack(arr, idx, scratch);
+        }
+    }
+
+    /**
+     * Write a little-endian representation into an array at a specific index.
+     * <p>
+     * This method normalizes the internal representation.
+     *
+     * @param scratch The scratchpad to use.
+     * @param arr Array into which to write.
+     * @param idx Index at which to start.
+     * @see #normalize
+     */
+    public void pack(final byte[] arr,
+                     final int idx,
+                     final Scratchpad scratch) {
+        normalize(scratch);
         normalizedPack(arr, idx);
     }
 
@@ -288,7 +503,23 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      */
     public void pack(final OutputStream stream)
         throws IOException {
-        normalize();
+        try(final Scratchpad scratch = scratchpad()) {
+            pack(stream, scratch);
+        }
+    }
+
+    /**
+     * Write a little-endian representation as a byte array to an
+     * {@link java.io.OutputStream}.
+     *
+     * @param stream The {@link java.io.OutputStream} to which to write.
+     * @param scratch The scratchpad to use.
+     * @throws java.io.IOException If an error occurred while writing data.
+     */
+    public void pack(final OutputStream stream,
+                     final Scratchpad scratch)
+        throws IOException {
+        normalize(scratch);
         normalizedPack(stream);
     }
 
@@ -345,7 +576,19 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      */
     @Override
     public String toString() {
-        normalize();
+        try(final Scratchpad scratch = scratchpad()) {
+            return toString(scratch);
+        }
+    }
+
+    /**
+     * Get the readable {@code String} represenation.
+     *
+     * @param scratch The scratchpad to use.
+     * @return The readable {@code String} represenation.
+     */
+    public String toString(final Scratchpad scratch) {
+        normalize(scratch);
 
         return normalizedToString();
     }
@@ -360,9 +603,27 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * @see #normalize
      * @see #digits
      */
-    public boolean equals(final Val b) {
-        normalize();
-        b.normalize();
+    public boolean equals(final V b) {
+        try(final Scratchpad scratch = scratchpad()) {
+            return equals(b, scratch);
+        }
+    }
+
+    /**
+     * Compare two numbers for equality.
+     * <p>
+     * This method normalizes the internal representation.
+     *
+     * @param b The number against which to compare.
+     * @param scratch The scratchpad to use.
+     * @return Whether or not this number equals {@code b}
+     * @see #normalize
+     * @see #digits
+     */
+    public boolean equals(final V b,
+                          final Scratchpad scratch) {
+        normalize(scratch);
+        b.normalize(scratch);
 
         return normalizedEquals(b);
     }
@@ -377,7 +638,7 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * @see #normalize
      * @see #digits
      */
-    public boolean normalizedEquals(final Val b) {
+    public boolean normalizedEquals(final V b) {
         return normalizedEq(b) == 0;
     }
 
@@ -391,11 +652,54 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * @see #normalize
      * @see #digits
      */
-    public long eq(final Val b) {
-        normalize();
-        b.normalize();
+    public long eq(final V b) {
+        try(final Scratchpad scratch = scratchpad()) {
+            return eq(b, scratch);
+        }
+    }
+
+    /**
+     * Compare two numbers for equality.
+     * <p>
+     * This method normalizes the internal representation.
+     *
+     * @param b The number against which to compare.
+     * @param scratch The scratchpad to use.
+     * @return Whether or not this number equals {@code b}
+     * @see #normalize
+     * @see #digits
+     */
+    public long eq(final V b,
+                   final Scratchpad scratch) {
+        normalize(scratch);
+        b.normalize(scratch);
 
         return normalizedEq(b);
+    }
+
+    /**
+     * Normalize the internal representation.
+     * <p>
+     * This normalizes the internal digits representation, ensuring
+     * that no residual operations need to be performed, and that the
+     * internal representation stores a fully reduced value.
+     * <p>
+
+     * It is not necessary to perform normalization prior to
+     * arithmetic operations, and the {@link #equals}, {@link
+     * #toString}, and {@link #pack} perform it automatically.  The
+     * {@link #normalizedEquals}, {@link #normalizedToString}, and
+     * {@link #normalizedPack} methods assume normalization has
+     * already been done.
+     *
+     * @see #normalizedPack
+     * @see #normalizedEquals
+     * @see #normalizedToString
+     */
+    public void normalize() {
+        try(final Scratchpad scratch = scratchpad()) {
+            normalize(scratch);
+        }
     }
 
     /**
@@ -408,7 +712,7 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * @see #normalize
      * @see #digits
      */
-    public long normalizedEq(final Val b) {
+    public long normalizedEq(final V b) {
         long out = 0;
 
         for(int i = 0; i < digits.length; i++) {
@@ -458,7 +762,21 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * @return The little-endian byte array.
      */
     public byte[] packed() {
-        normalize();
+        try(final Scratchpad scratch = scratchpad()) {
+            return packed(scratch);
+        }
+    }
+
+    /**
+     * Generate a little-endian representation as a byte array.
+     * <p>
+     * This method assumes the internal representation is normalized.
+     *
+     * @param scratch The scratchpad to use.
+     * @return The little-endian byte array.
+     */
+    public byte[] packed(final Scratchpad scratch) {
+        normalize(scratch);
 
         return normalizedPacked();
     }
@@ -469,7 +787,19 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * @return {@code 1} if the number is zero, {@code 0} otherwise.
      */
     public long isZero() {
-        normalize();
+        try(final Scratchpad scratch = scratchpad()) {
+            return isZero(scratch);
+        }
+    }
+
+    /**
+     * Check if this number is equal to zero.
+     *
+     * @param scratch The scratchpad to use.
+     * @return {@code 1} if the number is zero, {@code 0} otherwise.
+     */
+    public long isZero(final Scratchpad scratch) {
+        normalize(scratch);
 
         return normalizedIsZero();
     }
@@ -511,9 +841,7 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      */
     @Override
     public void destroy() {
-        for(int i = 0; i < digits.length; i++) {
-            digits[i] = 0xffffffffffffffffL;
-        }
+        Arrays.fill(digits, 0xffffffffffffffffL);
     }
 
     /**
@@ -532,10 +860,20 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
     }
 
     /**
+     * Get a scratchpad.  This is a mechanism designed to avoid
+     * repeated allocation of scalar values.  Sequences of operations
+     * should obtain a scratchpad, pass it into all operations, then
+     * destroy it when through.
+     *
+     * @return A scratchpad.
+     */
+    public abstract Scratchpad scratchpad();
+
+    /**
      * {@inheritDoc}
      */
     @Override
-    public abstract Val clone();
+    public abstract V clone();
 
     /**
      * Get the number of bits in a value.
@@ -567,11 +905,12 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * {@link #normalizedPack} methods assume normalization has
      * already been done.
      *
+     * @param scratch The scratchpad to use.
      * @see #normalizedPack
      * @see #normalizedEquals
      * @see #normalizedToString
      */
-    public abstract void normalize();
+    public abstract void normalize(final Scratchpad scratch);
 
     /**
      * Get the {@code n}th bit of the number.
@@ -590,9 +929,10 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * considered "positive" if it lies in {@code [0, (n - 1) / 2]},
      * negative otherwise.
      *
+     * @param scratch The scratchpad to use.
      * @return The sign of the number.
      */
-    public abstract byte sign();
+    public abstract byte sign(final Scratchpad scratch);
 
     /**
      * Get the lower bound on values that can be used in {@link
@@ -702,15 +1042,19 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * #div(PrimeField)}.
      *
      * @param b The {@code int} by which to divide.
+     * @param scratch The scratchpad to use.
      */
-    public abstract void div(final int b);
+    public abstract void div(final int b,
+                             final Scratchpad scratch);
 
     /**
      * Divide this number by a raw internal representation.
      *
      * @param b The internal representation by which to divide.
+     * @param scratch The scratchpad to use.
      */
-    protected abstract void div(final long[] b);
+    protected abstract void div(final long[] b,
+                                final Scratchpad scratch);
 
     /**
      * Negate the number.
@@ -719,8 +1063,10 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
 
     /**
      * Take the reciprocal of the number.
+     *
+     * @param scratch The scratchpad to use.
      */
-    public abstract void inv();
+    public abstract void inv(final Scratchpad scratch);
 
     /**
      * Square this number.
@@ -740,9 +1086,10 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * {@code 1} if the value is a quadratic residue {@code mod p},
      * and {@code -1} if not.
      *
+     * @param scratch The scratchpad to use.
      * @return {@code 1} if the value is a quadratic residue, {@code -1} if not.
      */
-    public abstract byte legendre();
+    public abstract byte legendre(final Scratchpad scratch);
 
     /**
      * Square root the number.
@@ -751,9 +1098,10 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * the value is a quadratic residue; otherwise, the result is
      * invalid.
      *
+     * @param scratch The scratchpad to use.
      * @see #legendre
      */
-    public abstract void sqrt();
+    public abstract void sqrt(final Scratchpad scratch);
 
     /**
      * Square root the number and then invert it.  This computes
@@ -763,9 +1111,10 @@ public abstract class PrimeField<Val extends PrimeField<Val>>
      * the value is a quadratic residue; otherwise, the result is
      * invalid.
      *
+     * @param scratch The scratchpad to use.
      * @see #legendre
      */
-    public abstract void invSqrt();
+    public abstract void invSqrt(final Scratchpad scratch);
 
     /**
      * Generate a little-endian representation as a byte array.

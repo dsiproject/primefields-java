@@ -43,6 +43,16 @@ import java.util.Arrays;
  * This field is the foundation of the E-521 curve.
  */
 public final class ModE521M1 extends PrimeField<ModE521M1> {
+    private static final ThreadLocal<Scratchpad> scratchpads =
+        new ThreadLocal<Scratchpad>() {
+            @Override
+            public Scratchpad initialValue() {
+                return new Scratchpad(new long[NUM_DIGITS],
+                                      new long[NUM_DIGITS],
+                                      new long[NUM_DIGITS]);
+            }
+        };
+
     /**
      * Number of bits in a value.
      */
@@ -280,6 +290,14 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      * {@inheritDoc}
      */
     @Override
+    public Scratchpad scratchpad() {
+        return scratchpads.get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int numBits() {
         return NUM_BITS;
     }
@@ -331,12 +349,10 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      * {@inheritDoc}
      */
     @Override
-    public byte sign() {
-        final long[] scratch = Arrays.copyOf(digits, NUM_DIGITS);
+    public byte sign(final Scratchpad scratch) {
+        addDigits(digits, ABS_DATA, scratch.d0);
 
-        addDigits(scratch, ABS_DATA, scratch);
-
-        return (byte)carryOut(scratch);
+        return (byte)carryOut(scratch.d0);
     }
 
     /**
@@ -408,10 +424,12 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      * the number to the power {@code MODULUS - 2}.  In this field,
      * the value of {@code MODULUS - 2} is {@code
      * 0x1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffd}.
+     *
+     * @param scratch The scratchpad to use.
      */
     @Override
-    public void inv() {
-        invDigits(digits);
+    public void inv(final Scratchpad scratch) {
+        invDigits(digits, scratch);
     }
 
     /**
@@ -426,29 +444,34 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      * {@inheritDoc}
      */
     @Override
-    protected void div(final long[] b) {
-        final long[] copied = Arrays.copyOf(b, NUM_DIGITS);
+    protected void div(final long[] b,
+                       final Scratchpad scratch) {
+        final long[] divisor = scratch.d2;
 
-        invDigits(copied);
-        mul(copied);
+        System.arraycopy(b, 0, divisor, 0, NUM_DIGITS);
+        invDigits(divisor, scratch);
+        mul(divisor);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void div(final int b) {
-        final long[] divisor = new long[NUM_DIGITS];
+    public void div(final int b,
+                    final Scratchpad scratch) {
+        final long[] divisor = scratch.d2;
 
         initDigits(divisor, b);
-        div(divisor);
+        invDigits(divisor, scratch);
+        mul(divisor);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void normalize() {
-        normalizeDigits(digits);
+    @Override
+    public void normalize(final Scratchpad scratch) {
+        normalizeDigits(digits, scratch);
     }
 
     /**
@@ -589,11 +612,12 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      * formula).  On this field, this value is {@code
      * 0x08000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000}.
      *
+     * @param scratch The scratchpad to use.
      * @see #legendre
      */
     @Override
-    public void sqrt() {
-        sqrtPowerDigits(digits);
+    public void sqrt(final Scratchpad scratch) {
+        sqrtPowerDigits(digits, scratch);
     }
 
     /**
@@ -610,11 +634,12 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      * On this field, the exponent value is {@code
      * 0x17ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe}.
      *
+     * @param scratch The scratchpad to use.
      * @see #legendre
      */
     @Override
-    public void invSqrt() {
-        invSqrtPowerDigits(digits);
+    public void invSqrt(final Scratchpad scratch) {
+        invSqrtPowerDigits(digits, scratch);
     }
 
     /**
@@ -632,21 +657,41 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      * (MODULUS - 1) / 2}.  On this field, this value is {@code
      * 0x0ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff}.
      *
+     * @param scratch The scratchpad to use.
      * @return {@code 1} if the value is a quadratic residue, {@code -1} if not.
      */
     @Override
-    public byte legendre() {
-        final long[] out = Arrays.copyOf(digits, NUM_DIGITS);
+    public byte legendre(final Scratchpad scratch) {
+        System.arraycopy(digits, 0, scratch.d2, 0, NUM_DIGITS);
 
-        legendrePowerDigits(out);
-        normalizeDigits(out);
+        legendrePowerDigits(scratch.d2, scratch);
+        normalizeDigits(scratch.d2, scratch);
 
-        final long low = (out[0] << CARRY_BITS) >>> CARRY_BITS;
+        final long low = (scratch.d2[0] << CARRY_BITS) >>> CARRY_BITS;
         final byte sign = (byte)(low >>> (DIGIT_BITS - 1));
         final byte offset = (byte)(C_VAL * sign);
         final byte result = (byte)(low + offset);
 
         return result;
+    }
+
+    /**
+     * Perform normalization on low-level representations.
+     *
+     * @param digits The low-level representation.
+     * @param scratch The scratchpad to use.
+     * @see #normalize
+     */
+    private static void normalizeDigits(final long[] digits,
+                                        final Scratchpad scratch) {
+        final long[] offset = scratch.d0;
+        final long[] plusc = scratch.d1;
+
+        System.arraycopy(MODULUS_DATA, 0, offset, 0, NUM_DIGITS);
+        System.arraycopy(digits, 0, plusc, 0, NUM_DIGITS);
+        addDigits(plusc, C_VAL, plusc);
+        mulDigits(offset, carryOut(plusc), offset);
+        subDigits(digits, offset, digits);
     }
 
     /**
@@ -658,21 +703,6 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      */
     private static short carryOut(final long[] digits) {
         return (short)(digits[NUM_DIGITS - 1] >> HIGH_DIGIT_BITS);
-    }
-
-    /**
-     * Perform normalization on low-level representations.
-     *
-     * @param digits The low-level representation.
-     * @see #normalize
-     */
-    private static void normalizeDigits(final long[] digits) {
-        final long[] offset = Arrays.copyOf(MODULUS_DATA, NUM_DIGITS);
-        final long[] plusc = Arrays.copyOf(digits, NUM_DIGITS);
-
-        addDigits(plusc, (int)C_VAL, plusc);
-        mulDigits(offset, carryOut(plusc), offset);
-        subDigits(digits, offset, digits);
     }
 
     private static void packDigits(final long[] digits,
@@ -3049,10 +3079,14 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
      * Low-level digits multiplicative inverse (reciprocal).
      *
      * @param digits The digits array to invert.
+     * @param scratch The scratchpad to use.
      */
-    private static void invDigits(final long[] digits) {
+    private static void invDigits(final long[] digits,
+                                  final Scratchpad scratch) {
         // First digit is 1.
-        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
+        final long[] sqval = scratch.d0;
+
+        System.arraycopy(digits, 0, sqval, 0, NUM_DIGITS);
 
         // Second digit is 0.
         squareDigits(sqval);
@@ -3076,19 +3110,23 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
         addDigits(digits, val, digits);
     }
 
-    private static void sqrtPowerDigits(final long[] digits) {
+    private static void sqrtPowerDigits(final long[] digits,
+                                        final Scratchpad scratch) {
         // All the digits are 0 except for the last.
         for(int i = 0; i < 519; i++) {
             squareDigits(digits);
         }
     }
 
-    private static void invSqrtPowerDigits(final long[] digits) {
+    private static void invSqrtPowerDigits(final long[] digits,
+                                           final Scratchpad scratch) {
         // First digit is 0.
         squareDigits(digits);
 
         // Second digit is 1.
-        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
+        final long[] sqval = scratch.d0;
+
+        System.arraycopy(digits, 0, sqval, 0, NUM_DIGITS);
 
         // All digits up to 519 are 1.
         for(int i = 2; i < 519; i++) {
@@ -3104,23 +3142,16 @@ public final class ModE521M1 extends PrimeField<ModE521M1> {
         mulDigits(digits, sqval, digits);
     }
 
-    private static void legendrePowerDigits(final long[] digits) {
+    private static void legendrePowerDigits(final long[] digits,
+                                            final Scratchpad scratch) {
         // All the digits are 1.
-        final long[] sqval = Arrays.copyOf(digits, NUM_DIGITS);
+        final long[] sqval = scratch.d0;
+
+        System.arraycopy(digits, 0, sqval, 0, NUM_DIGITS);
 
         for(int i = 1; i < 520; i++) {
             squareDigits(sqval);
             mulDigits(digits, sqval, digits);
         }
-    }
-
-    private static String digitsToString(final long[] digits) {
-        final long[] digitscpy = Arrays.copyOf(digits, NUM_DIGITS);
-        final byte[] bytes = new byte[PACKED_BYTES];
-
-        normalizeDigits(digitscpy);
-        packDigits(digitscpy, bytes, 0);
-
-        return PrimeField.packedToString(bytes);
     }
 }
