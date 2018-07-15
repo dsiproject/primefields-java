@@ -47,9 +47,7 @@ public final class ModE255M19 extends PrimeField1Mod4<ModE255M19> {
         new ThreadLocal<Scratchpad>() {
             @Override
             public Scratchpad initialValue() {
-                return new Scratchpad(new long[NUM_DIGITS],
-                                      new long[NUM_DIGITS],
-                                      new long[NUM_DIGITS]);
+                return new Scratchpad(NUM_DIGITS);
             }
         };
 
@@ -72,7 +70,7 @@ public final class ModE255M19 extends PrimeField1Mod4<ModE255M19> {
      *
      * @see #digits
      */
-    static final int NUM_DIGITS = 5;
+    public static final int NUM_DIGITS = 5;
 
     /**
      * Number of bits in a regular digit.

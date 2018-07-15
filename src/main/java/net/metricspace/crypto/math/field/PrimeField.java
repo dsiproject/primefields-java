@@ -73,9 +73,20 @@ public abstract class PrimeField<V extends PrimeField<V>>
         final long[] d1;
         final long[] d2;
 
-        Scratchpad(final long[] d0,
-                   final long[] d1,
-                   final long[] d2) {
+        /**
+         * Initialize a {@code Scratchpad} by creating the digit
+         * scratch space.
+         *
+         * @param len The length of the digit arrays (should be {@code
+         *            NUM_DIGITS} in the various subclasses).
+         */
+        protected Scratchpad(final int len) {
+            this(new long[len], new long[len], new long[len]);
+        }
+
+        private Scratchpad(final long[] d0,
+                           final long[] d1,
+                           final long[] d2) {
             this.d0 = d0;
             this.d1 = d1;
             this.d2 = d2;
