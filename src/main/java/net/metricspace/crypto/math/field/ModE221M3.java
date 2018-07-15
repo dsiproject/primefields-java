@@ -47,9 +47,7 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
         new ThreadLocal<Scratchpad>() {
             @Override
             public Scratchpad initialValue() {
-                return new Scratchpad(new long[NUM_DIGITS],
-                                      new long[NUM_DIGITS],
-                                      new long[NUM_DIGITS]);
+                return new Scratchpad(NUM_DIGITS);
             }
         };
 
@@ -72,7 +70,7 @@ public final class ModE221M3 extends PrimeField1Mod4<ModE221M3> {
      *
      * @see #digits
      */
-    static final int NUM_DIGITS = 4;
+    public static final int NUM_DIGITS = 4;
 
     /**
      * Number of bits in a regular digit.
