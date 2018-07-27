@@ -34,6 +34,7 @@ package net.metricspace.crypto.math.field;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.SecureRandom;
 import java.util.Arrays;
 
 /**
@@ -263,6 +264,22 @@ public final class ModE222M117 extends PrimeField<ModE222M117> {
     public ModE222M117(final InputStream stream) throws IOException {
         this();
         unpack(stream);
+    }
+
+    /**
+     * Initialize a {@code ModE222M117} from a random source.
+     *
+     * @param random The {@link java.security.SecureRandom} to use as
+     *               a random source.
+     */
+    public ModE222M117(final SecureRandom random) {
+        super(random.longs(NUM_DIGITS).toArray());
+
+        for(int i = 0; i < NUM_DIGITS - 1; i++) {
+            digits[i] &= DIGIT_MASK;
+        }
+
+        digits[NUM_DIGITS - 1] &= HIGH_DIGIT_MASK;
     }
 
     /**
