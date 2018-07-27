@@ -33,6 +33,7 @@ package net.metricspace.crypto.math.field;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.SecureRandom;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -812,5 +813,12 @@ public class ModE511M187Test extends PrimeField1Mod4UnitTest<ModE511M187> {
     @DataProvider(name = "signum")
     public Object[][] signumProvider() {
         return SIGNUM_TEST_CASES;
+    }
+
+    @Test(description = "Test creation from random")
+    public void testRandom() {
+        final ModE511M187 n = new ModE511M187(new SecureRandom());
+
+        Assert.assertEquals(n.isZero(), 0);
     }
 }
